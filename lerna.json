@@ -1,0 +1,14 @@
+{
+  "packages": ["packages/*"],
+  "version": "independent",
+  "npmClient": "yarn",
+  "commend": {
+    "publish": {
+      "ignoreChanges": ["ignored-file", "*.md"],
+      "registry": "https://github.com/song111/shinemo-cli"
+    },
+    "bootstrap": {
+      "npmClientArgs": ["--no-package-lock"]
+    }
+  }
+}

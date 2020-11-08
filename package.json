@@ -1,0 +1,28 @@
+{
+  "name": "shinemo-cli",
+  "version": "0.0.1",
+  "description": "前端开发脚手架",
+  "main": "index.js",
+  "repository": "https://github.com/song111/shinemo-cli.git",
+  "author": "1352411860@qq.com <songjun@broada.com>",
+  "license": "MIT",
+  "scripts": {
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.1.2"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
+    ]
+  }
+}

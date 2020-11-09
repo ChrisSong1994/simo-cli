@@ -1,8 +1,19 @@
 {
-  "name": "cli",
+  "name": "simo-cli",
   "version": "0.0.1",
   "description": "命令行工具 ",
   "main": "index.ts",
   "author": "chrissong",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsc -p tsconfig.json --watch --sourceMap",
+    "build": "rimraf lib && tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "yargs": "^16.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.6",
+    "@types/yargs": "^15.0.9"
+  }
 }

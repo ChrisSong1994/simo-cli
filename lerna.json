@@ -5,7 +5,7 @@
   "commend": {
     "publish": {
       "ignoreChanges": ["ignored-file", "*.md"],
-      "registry": "https://github.com/song111/shinemo-cli"
+      "registry": "https://github.com/song111/simo-cli"
     },
     "bootstrap": {
       "npmClientArgs": ["--no-package-lock"]

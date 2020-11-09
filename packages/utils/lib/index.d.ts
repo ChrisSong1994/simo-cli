@@ -1,2 +1,3 @@
 import logger from './src/logger';
-export { logger };
+import updateNotifier from './src/updateNotifier';
+export { logger, updateNotifier };

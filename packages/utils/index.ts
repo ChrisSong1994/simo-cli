@@ -1,4 +1,4 @@
 import logger from './src/logger';
-import yargs from 'yargs';
+import updateNotifier from './src/updateNotifier';
 
-export { logger, yargs };
+export { logger, updateNotifier };

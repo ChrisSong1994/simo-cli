@@ -11,4 +11,12 @@ export default class Api {
   //   加载webpack config
 
   // 格式化配置参数
+<<<<<<< HEAD
+=======
+
+
+  
+
+
+>>>>>>> bb47201f42e3a2c211b98b37780175c73d9a1d35
 }

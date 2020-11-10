@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"version":3,"file":"api.js","sourceRoot":"","sources":["../../src/api.ts"],"names":[],"mappings":";AAAA,gCAAgC;;AAEhC,MAAqB,GAAG;IAGtB,YAAY,IAAY,EAAE,OAAY;QACpC,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;QACjB,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;IACzB,CAAC;CAKF;AAXD,sBAWC"}
+=======
+{"version":3,"file":"api.js","sourceRoot":"","sources":["../../src/api.ts"],"names":[],"mappings":";AAAA,gCAAgC;;AAEhC,MAAqB,GAAG;IAGtB,YAAY,IAAY,EAAE,OAAY;QACpC,IAAI,CAAC,IAAI,GAAG,IAAI,CAAC;QACjB,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC;IACzB,CAAC;CAUF;AAhBD,sBAgBC"}
+>>>>>>> bb47201f42e3a2c211b98b37780175c73d9a1d35

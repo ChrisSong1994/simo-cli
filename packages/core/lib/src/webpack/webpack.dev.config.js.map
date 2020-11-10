@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"version":3,"file":"webpack.dev.config.js","sourceRoot":"","sources":["../../../src/webpack/webpack.dev.config.ts"],"names":[],"mappings":";;AAAA,kBAAe,CAAC,GAAQ,EAAE,EAAE;IAC1B,GAAG,CAAC,YAAY,CAAC,CAAC,MAAW,EAAE,EAAE,GAAE,CAAC,CAAC,CAAC;AACxC,CAAC,CAAC"}
+=======
+{"version":3,"file":"webpack.dev.config.js","sourceRoot":"","sources":["../../../src/webpack/webpack.dev.config.ts"],"names":[],"mappings":";;AAAA,kBAAe,CAAC,GAAQ,EAAE,EAAE;IACxB,GAAG,CAAC,YAAY,CAAC,CAAC,MAAW,EAAE,EAAE,GAAE,CAAC,CAAC,CAAC;AACxC,CAAC,CAAC"}
+>>>>>>> bb47201f42e3a2c211b98b37780175c73d9a1d35

@@ -4,5 +4,9 @@
     "outDir": "./lib" /* Redirect output structure to the directory. */
   },
   "exclude": ["node_modules", "lib"],
+<<<<<<< HEAD
   "include": ["src", "./index.ts"]
+=======
+  "include": ["src","./index.ts"]
+>>>>>>> bb47201f42e3a2c211b98b37780175c73d9a1d35
 }

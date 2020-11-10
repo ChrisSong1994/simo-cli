@@ -1,16 +1,18 @@
-import yargs from 'yargs'
-import Cli from '../../cli'
-import {init} from '/Users/songjun/WorkSpace/学习/git/modules/simo-cli/packages/core/lib'
+import Cli from '../../cli';
+import { init } from '@chrissong/simo-core';
 
-export default  (cli:Cli)=>{
-cli.register('init <project-name>','初始化项目',(yargs:yargs)=>{
-    yargs.positional('name', {
+export default (cli: Cli) => {
+  cli.register(
+    'init <name>',
+    '初始化项目',
+    (yargs: any) => {
+      yargs.option('name', {
         type: 'string',
-        describe: '项目名称'
+        describe: '项目名称',
       });
-},(argv: any)=>{
-    // init(cli,argv)
-
-    console.log(cli,argv)
-})
-}
+    },
+    (argv: any) => {
+      init(cli, argv);
+    },
+  );
+};

@@ -3,5 +3,6 @@
   "compilerOptions": {
     "outDir": "./lib" /* Redirect output structure to the directory. */
   },
-  "exclude": ["node_modules", "lib"]
+  "exclude": ["node_modules", "lib"],
+  "include": ["src","./index.ts"]
 }

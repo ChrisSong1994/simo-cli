@@ -1,5 +1,5 @@
 {
-  "name": "simo-cli",
+  "name": "@chrissong/simo-cli",
   "version": "0.0.1",
   "description": "命令行工具 ",
   "main": "index.ts",

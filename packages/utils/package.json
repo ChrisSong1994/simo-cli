@@ -1,5 +1,5 @@
 {
-  "name": "simo-utils",
+  "name": "@chrissong/simo-utils",
   "version": "0.0.1",
   "description": "工具库",
   "author": "chrissong",
@@ -16,6 +16,8 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "detect-port": "^1.3.0",
+    "dotenv": "^8.2.0",
+    "dotenv-expand": "^5.1.0",
     "execa": "^4.1.0",
     "fs-extra": "^9.0.1",
     "lodash": "^4.17.20",

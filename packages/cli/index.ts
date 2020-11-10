@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import Cli from './cli';
-import { logger } from '/Users/songjun/WorkSpace/学习/git/modules/simo-cli/packages/utils/lib';
+import { logger } from '@chrissong/simo-utils';
 
 yargs
   .strict(true)
@@ -16,6 +16,6 @@ yargs
     process.exit(1);
   });
 
-debugger;
 //   初始化命令行工具
 const cli = new Cli(process.cwd());
+cli.parse(process.argv.slice(2));

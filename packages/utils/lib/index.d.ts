@@ -1,3 +1,4 @@
 import logger from './src/logger';
 import updateNotifier from './src/updateNotifier';
-export { logger, updateNotifier };
+import loadEnv from './src/loadEnv';
+export { logger, updateNotifier, loadEnv };

@@ -2,7 +2,6 @@
   "name": "simo",
   "version": "0.0.1",
   "description": "a simple method of develop front project",
-  "main": "index.js",
   "repository": "https://github.com/song111/simo-cli.git",
   "author": "1352411860@qq.com <songjun@broada.com>",
   "license": "MIT",

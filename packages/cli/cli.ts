@@ -82,9 +82,11 @@ export default class Cli {
   private processMonitor() {
     const handleExit = (signal: SignKeyObjectInput) => {
       logger.done(`🙋 接受到信号：${signal} 即将退出程序...`);
+
       this.subprocess.forEach((subprocess) => {
         if (!subprocess.killed) subprocess.kill();
       });
+      
       process.exit(0);
     };
     process.on('SIGINT', handleExit);
@@ -98,9 +100,11 @@ export default class Cli {
     if (!/^[\w]+$/.test(name)) {
       throw new Error(`命令名称 ${chalk.redBright(name)} 不合法，只能是字母、数字、下划线`);
     }
+
     if (this.commands[name]) {
       throw new Error(`命令 ${chalk.redBright(name)} 已经被占用`);
     }
+
     yargs.command(cmd, desc, ...args);
     this.commands[name] = { cmd, desc, ...args };
   }

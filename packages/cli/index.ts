@@ -18,4 +18,5 @@ yargs
 
 //   初始化命令行工具
 const cli = new Cli(process.cwd());
+
 cli.parse(process.argv.slice(2));

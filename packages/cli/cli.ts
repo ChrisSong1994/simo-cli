@@ -111,7 +111,7 @@ export default class Cli {
 
   // 解析命令
   public parse(argv: any[]) {
-    debugger;
+    debugger
     this.argv = argv;
     if (this.argv.length) {
       yargs.parse(this.argv);

@@ -8,7 +8,6 @@ const path_1 = __importDefault(require("path"));
 const fkill_1 = __importDefault(require("fkill"));
 const chokidar_1 = __importDefault(require("chokidar"));
 const createServer = (cli) => {
-    debugger;
     return cli
         .fork(path_1.default.resolve(__dirname, './server'), cli.argv, {
         cwd: cli.root,
@@ -19,7 +18,7 @@ const createServer = (cli) => {
 };
 exports.default = (cli) => {
     simo_utils_1.logger.log('🚀  正在启动开发服务,请稍等...');
-    debugger;
+    //  创建服务
     let serverprocess = createServer(cli);
     // 监听配置文件修改
     const watcher = chokidar_1.default.watch([

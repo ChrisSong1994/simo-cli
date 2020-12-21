@@ -4,7 +4,6 @@ import fkill from 'fkill';
 import chokidar from 'chokidar';
 
 const createServer = (cli: any) => {
-  debugger;
   return cli
     .fork(path.resolve(__dirname, './server'), cli.argv, {
       cwd: cli.root,
@@ -17,7 +16,7 @@ const createServer = (cli: any) => {
 export default (cli: any) => {
   logger.log('🚀  正在启动开发服务,请稍等...');
 
-  debugger;
+  //  创建服务
   let serverprocess = createServer(cli);
 
   // 监听配置文件修改

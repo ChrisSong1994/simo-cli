@@ -10,6 +10,7 @@ const chalk_1 = __importDefault(require("chalk"));
 const child_process_1 = require("child_process");
 const simo_utils_1 = require("@chrissong/simo-utils");
 const lodash_1 = __importDefault(require("lodash"));
+const fkill_1 = __importDefault(require("fkill"));
 const init_1 = __importDefault(require("./src/init"));
 const server_1 = __importDefault(require("./src/server"));
 const build_1 = __importDefault(require("./src/build"));
@@ -48,7 +49,6 @@ class Cli {
     }
     // 创建子进程执行
     fork(path, argv, options) {
-        debugger;
         const subprocess = child_process_1.fork(path, argv, {
             env: this.env,
             execArgv: [`--inspect-brk=127.0.0.1:${process.debugPort + 1}`],
@@ -60,6 +60,15 @@ class Cli {
         });
         this.subprocess.push(subprocess);
         return subprocess;
+    }
+    /**
+     * 退出进程
+     * @param {Number} code
+     **/
+    async exit(code) {
+        const subPIds = this.subprocess.map((subp) => subp.pid);
+        await fkill_1.default(subPIds, { force: true, tree: true });
+        process.exit(code);
     }
     // 进程监听
     processMonitor() {
@@ -89,7 +98,6 @@ class Cli {
     }
     // 解析命令
     parse(argv) {
-        debugger;
         this.argv = argv;
         if (this.argv.length) {
             yargs_1.default.parse(this.argv);

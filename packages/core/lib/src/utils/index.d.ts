@@ -1,4 +1,2 @@
-declare const _default: {
-    getSimoConfig: (cwd: string) => any;
-};
-export default _default;
+export { default as getSimoConfig } from './getSimoConfig';
+export { default as verifyConfig } from './verifyConfig';

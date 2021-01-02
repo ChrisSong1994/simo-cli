@@ -1,3 +1,3 @@
 import { OptionType } from '../../type';
-declare const server: ({ env, argv, cwd, simoConfig }: OptionType) => void;
+declare const server: (options: OptionType) => Promise<any>;
 export default server;

@@ -9,6 +9,7 @@
     "dev": "lerna run dev --parallel",
     "build": "lerna run build",
     "bootstrap": "lerna bootstrap",
+    "changelog": "lerna-changelog",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
   },
   "devDependencies": {
@@ -31,7 +32,6 @@
     ]
   },
   "dependencies": {
-    "husky": "^4.3.0",
-    "update-notifier": "^5.0.1"
+    "husky": "^4.3.0"
   }
 }

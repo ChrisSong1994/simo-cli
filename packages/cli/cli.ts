@@ -6,6 +6,8 @@ import { ChildProcess, fork, ForkOptions } from 'child_process';
 import { logger } from '@chrissong/simo-utils';
 import { SignKeyObjectInput } from 'crypto';
 import _ from 'lodash';
+import fkill from 'fkill';
+
 import init from './src/init';
 import server from './src/server';
 import build from './src/build';
@@ -63,7 +65,6 @@ export default class Cli {
 
   // 创建子进程执行
   public fork(path: string, argv: string[], options: ForkOptions) {
-    debugger;
     const subprocess = fork(path, argv, {
       env: this.env,
       execArgv: [`--inspect-brk=127.0.0.1:${process.debugPort + 1}`], // 开发模式
@@ -78,6 +79,16 @@ export default class Cli {
     return subprocess;
   }
 
+  /**
+   * 退出进程
+   * @param {Number} code
+   **/
+  public async exit(code: number) {
+    const subPIds = this.subprocess.map((subp) => subp.pid);
+    await fkill(subPIds, { force: true, tree: true });
+    process.exit(code);
+  }
+
   // 进程监听
   private processMonitor() {
     const handleExit = (signal: SignKeyObjectInput) => {
@@ -86,7 +97,7 @@ export default class Cli {
       this.subprocess.forEach((subprocess) => {
         if (!subprocess.killed) subprocess.kill();
       });
-      
+
       process.exit(0);
     };
     process.on('SIGINT', handleExit);
@@ -111,7 +122,6 @@ export default class Cli {
 
   // 解析命令
   public parse(argv: any[]) {
-    debugger
     this.argv = argv;
     if (this.argv.length) {
       yargs.parse(this.argv);

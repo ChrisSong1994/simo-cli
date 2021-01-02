@@ -1,5 +1,6 @@
 import yargs from 'yargs';
-import { loadEnv } from '@chrissong/simo-utils';
+import process from 'process';
+import { loadEnv, logger } from '@chrissong/simo-utils';
 
 import command from './command';
 import exec from './exec';
@@ -9,7 +10,6 @@ const { cmd, desc, builder } = command;
 
 yargs
   .command(cmd, desc, builder, (argv) => {
-    debugger;
     const cwd = process.cwd();
     //   加载环境变量
     loadEnv(cwd);
@@ -20,6 +20,11 @@ yargs
     });
 
     // 执行开发服务
-    exec({ env, argv, cwd, simoConfig: getSimoConfig(cwd) });
+    exec({ env, argv, cwd, simoConfig: getSimoConfig(cwd) }).catch((err) => {
+      logger.log(err);
+      if (process.send) {  // 只存在于子进程当中
+        process.send('EXIT_WITH_ERROR');
+      }
+    });
   })
   .parse(process.argv.slice(2));

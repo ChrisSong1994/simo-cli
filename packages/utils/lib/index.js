@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -22,7 +22,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fs = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.logger = void 0;
+exports.parallelToSerial = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.logger = exports.deepmerge = exports.open = exports.fs = void 0;
+const fs_extra_1 = __importDefault(require("fs-extra"));
+exports.fs = fs_extra_1.default;
+const open_1 = __importDefault(require("open"));
+exports.open = open_1.default;
+const deepmerge_1 = __importDefault(require("deepmerge"));
+exports.deepmerge = deepmerge_1.default;
 const logger_1 = __importDefault(require("./src/logger"));
 exports.logger = logger_1.default;
 const updateNotifier_1 = __importDefault(require("./src/updateNotifier"));
@@ -31,6 +37,6 @@ const loadEnv_1 = __importDefault(require("./src/loadEnv"));
 exports.loadEnv = loadEnv_1.default;
 const spinner = __importStar(require("./src/spinner"));
 exports.spinner = spinner;
-const fs_extra_1 = __importDefault(require("fs-extra"));
-exports.fs = fs_extra_1.default;
+const parallelToSerial_1 = __importDefault(require("./src/parallelToSerial"));
+exports.parallelToSerial = parallelToSerial_1.default;
 //# sourceMappingURL=index.js.map

@@ -17,6 +17,11 @@ export default class Cli {
     private init;
     private resolvePackages;
     fork(path: string, argv: string[], options: ForkOptions): ChildProcess;
+    /**
+     * 退出进程
+     * @param {Number} code
+     **/
+    exit(code: number): Promise<void>;
     private processMonitor;
     register(cmd: string, desc: string, ...args: any): void;
     parse(argv: any[]): void;

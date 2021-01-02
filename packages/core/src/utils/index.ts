@@ -1,3 +1,2 @@
-import getSimoConfig from './getSimoConfig';
-
-export default { getSimoConfig };
+export { default as getSimoConfig } from './getSimoConfig';
+export { default as verifyConfig } from './verifyConfig';

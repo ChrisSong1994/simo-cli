@@ -15,7 +15,11 @@ export default (api: any) => {
 
     // loader 配置
     // babel-loader
-    config.module.rule('compile').test(/\.(js|mjs|jsx|ts|tsx)$/).use('babel').loader('babel-loader');
+    config.module
+      .rule('compile')
+      .test(/\.(js|mjs|jsx|ts|tsx)$/)
+      .use('babel')
+      .loader('babel-loader');
 
     config.module
       .rule('images')

@@ -15,7 +15,11 @@ exports.default = (api) => {
         config.output.path(api.resolve('build')).publicPath('./');
         // loader 配置
         // babel-loader
-        config.module.rule('compile').test(/\.(js|mjs|jsx|ts|tsx)$/).use('babel').loader('babel-loader');
+        config.module
+            .rule('compile')
+            .test(/\.(js|mjs|jsx|ts|tsx)$/)
+            .use('babel')
+            .loader('babel-loader');
         config.module
             .rule('images')
             .test(/\.(png|jpe?g|gif|webp|ico)(\?.*)?$/)

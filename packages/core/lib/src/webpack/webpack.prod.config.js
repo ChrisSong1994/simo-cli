@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = (api) => {
     api.chainWebpack((config) => {
-        if (api.mode() !== 'production')
+        if (api.mode !== 'production')
             return;
         /**
          * 配置模式与devtool

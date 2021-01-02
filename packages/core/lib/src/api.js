@@ -123,12 +123,12 @@ class Api {
     use(config) {
         return (plugin) => {
             const api = {
-                env: () => this.env,
-                pkg: () => this.pkg,
-                mode: () => this.mode,
-                argv: () => this.argv,
-                simoConfig: () => this.simoConfig,
-                context: () => this.context,
+                env: this.env,
+                pkg: this.pkg,
+                mode: this.mode,
+                argv: this.argv,
+                simoConfig: this.simoConfig,
+                context: this.context,
                 resolve: (dir) => this.resolve(dir),
                 chainWebpack: (callback) => callback(config),
             };

@@ -1,6 +1,6 @@
 export default (api: any) => {
   api.chainWebpack((config: any) => {
-    if (api.mode() !== 'production') return;
+    if (api.mode !== 'production') return;
 
     /**
      * 配置模式与devtool

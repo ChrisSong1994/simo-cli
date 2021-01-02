@@ -134,12 +134,12 @@ export default class Api {
   use(config: WebpackChain) {
     return (plugin: any) => {
       const api = {
-        env: () => this.env,
-        pkg: () => this.pkg,
-        mode: () => this.mode,
-        argv: () => this.argv,
-        simoConfig: () => this.simoConfig,
-        context: () => this.context,
+        env: this.env,
+        pkg: this.pkg,
+        mode: this.mode,
+        argv: this.argv,
+        simoConfig: this.simoConfig,
+        context: this.context,
         resolve: (dir: string) => this.resolve(dir),
         chainWebpack: (callback: (v: WebpackChain) => void) => callback(config),
       };

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cssLoader_1 = __importDefault(require("./cssLoader"));
 exports.default = (api) => {
     api.chainWebpack((config) => {
-        if (api.mode() !== 'development')
+        if (api.mode !== 'development')
             return;
         // 加载样式
         cssLoader_1.default(config, {

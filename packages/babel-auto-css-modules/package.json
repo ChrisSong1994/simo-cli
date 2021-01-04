@@ -1,0 +1,26 @@
+{
+  "name": "@chrissong/babel-auto-css-modules",
+  "version": "0.0.1",
+  "description": "css auto mudules",
+  "author": "chrissong",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "dev": "tsc -p tsconfig.json --watch --sourceMap",
+    "build": "rimraf lib && tsc -p tsconfig.json",
+    "test":"jest"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.12.3"
+  },
+  "devDependencies": {
+    "@babel/traverse": "^7.12.12",
+    "@babel/types": "^7.12.12",
+    "@types/babel__core": "^7.1.12",
+    "@types/babel__traverse": "^7.11.0"
+  }
+}

@@ -15,8 +15,16 @@ export default (api: any) => {
 
     // loader 配置
     // babel-loader
-    config.module.rule('compile').test(/\.(js|mjs|jsx|ts|tsx)$/).use('babel').loader('babel-loader');
+    config.module
+      .rule('compile')
+      .test(/\.(js|mjs|jsx|ts|tsx)$/)
+      .use('babel')
+      .loader('babel-loader')
+      .options({
+        presets: [require.resolve('@chrissong/babel-preset-simo')],
+      });
 
+    // 图片
     config.module
       .rule('images')
       .test(/\.(png|jpe?g|gif|webp|ico)(\?.*)?$/)
@@ -36,12 +44,34 @@ export default (api: any) => {
         },
       });
 
+    // 单独抽出svg 文件
+    config.module
+      .rule('svg')
+      .test(/\.(svg)(\?.*)?$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'))
+      .options({
+        name: 'static/[name].[hash:8].[ext]',
+        esModule: false,
+      });
+
+    // 字体文件
+    config.module
+      .rule('fonts')
+      .test(/\.(eot|woff|woff2|ttf)(\?.*)?$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'))
+      .options({
+        name: 'static/[name].[hash:8].[ext]',
+        esModule: false,
+      });
+
     // 模版
     config
       .plugin('html-template')
       .use(HtmlWebpackTemplate, [
         {
-          template: path.resolve(api.context(), './public/index.html'),
+          template: path.resolve(api.context, './public/index.html'),
         },
       ])
       .end();

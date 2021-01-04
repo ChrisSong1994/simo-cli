@@ -13,11 +13,18 @@
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@types/jest": "^26.0.19",
     "@types/node": "^14.14.6",
     "chalk": "^4.1.0",
+    "husky": "^4.3.6",
+    "jest": "^26.6.3",
     "lerna": "^3.22.1",
     "lint-staged": "^10.5.1",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "ts-jest": "^26.4.4",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
   },
   "gitHooks": {
     "pre-commit": "lint-staged",
@@ -30,8 +37,5 @@
     "*.ts?(x)": [
       "prettier --parser=typescript --write"
     ]
-  },
-  "dependencies": {
-    "husky": "^4.3.0"
   }
 }

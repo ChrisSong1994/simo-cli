@@ -10,7 +10,7 @@
     "build": "lerna run build",
     "bootstrap": "lerna bootstrap",
     "changelog": "lerna-changelog",
-    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
+    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,css,md,json}'"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

@@ -5,6 +5,10 @@
   "repository": "https://github.com/song111/simo-cli.git",
   "author": "1352411860@qq.com <songjun@broada.com>",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "lerna run dev --parallel",
     "build": "lerna run build",

@@ -3,6 +3,7 @@ import cssLoader from './cssLoader';
 export default (api: any) => {
   api.chainWebpack((config: any) => {
     if (api.mode !== 'development') return;
+    const {port,host,proxy } = api.simoConfig
 
     // 加载样式
     cssLoader(config, {
@@ -16,7 +17,7 @@ export default (api: any) => {
     /**
      * 配置模式与devtool
      */
-    config.watch(true).mode('development');
+    config.watch(false).mode('development');
 
     /**
      * devServer

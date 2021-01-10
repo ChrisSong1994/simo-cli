@@ -9,6 +9,7 @@ const api_1 = __importDefault(require("../api"));
 const build = async (options) => {
     const api = new api_1.default('production', options);
     const config = await api.resolveWebpackConfig();
+    debugger;
     return new Promise((resolve, reject) => {
         webpack_1.default(config, (err, stats) => {
             if (err)

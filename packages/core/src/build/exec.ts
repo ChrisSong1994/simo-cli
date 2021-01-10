@@ -1,4 +1,4 @@
-import webpack, { Configuration } from 'webpack';
+import webpack from 'webpack';
 import { loadEnv, logger } from '@chrissong/simo-utils';
 
 import { OptionType } from '../../type';
@@ -6,7 +6,8 @@ import Api from '../api';
 
 const build = async (options: OptionType) => {
   const api = new Api('production', options);
-  const config: Configuration = await api.resolveWebpackConfig();
+  const config: any = await api.resolveWebpackConfig();
+  debugger
 
   return new Promise<any>((resolve, reject) => {
     webpack(config, (err, stats) => {

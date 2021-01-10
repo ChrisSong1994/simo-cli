@@ -2,6 +2,8 @@ import path from 'path';
 import WebpackChain from 'webpack-chain';
 import HtmlWebpackTemplate from 'html-webpack-plugin';
 
+import { IAlias } from 'packages/core/type';
+
 export default (api: any) => {
   api.chainWebpack((config: WebpackChain) => {
     const env = api.env;
@@ -13,15 +15,33 @@ export default (api: any) => {
     // output配置
     config.output.path(api.resolve('build')).publicPath('./');
 
+    // resolve 配置
+    config.resolve;
+    if (alias) {
+      Object.keys(alias).forEach((key) => {
+        config.resolve.alias.set(key, alias[key]);
+      });
+    }
+
     // loader 配置
-    // babel-loader
     config.module
       .rule('compile')
       .test(/\.(js|mjs|jsx|ts|tsx)$/)
-      .use('babel')
+      .exclude.add(api.resolve('node_modules'))
+      .end()
+      .use('babel-loader')
       .loader('babel-loader')
       .options({
-        presets: [require.resolve('@chrissong/babel-preset-simo')],
+        presets: [
+          [
+            require.resolve('@chrissong/babel-preset-simo'),
+            {
+              env: true,
+              react: true,
+              typescript: true,
+            },
+          ],
+        ],
       });
 
     // 图片

@@ -8,6 +8,7 @@ exports.default = (api) => {
     api.chainWebpack((config) => {
         if (api.mode !== 'development')
             return;
+        const { port, host, proxy } = api.simoConfig;
         // 加载样式
         cssLoader_1.default(config, {
             isProd: false,
@@ -19,7 +20,7 @@ exports.default = (api) => {
         /**
          * 配置模式与devtool
          */
-        config.watch(true).mode('development');
+        config.watch(false).mode('development');
         /**
          * devServer
          */

@@ -10,7 +10,7 @@ export interface SimoConfigIntf {
 
 export type ObjType = {
   [key: string]: any;
-} | null;
+}
 
 export type OptionType = {
   env: ObjType;
@@ -26,3 +26,7 @@ export type StyleLoaderOption = {
   chunkFilename: string;
   publicPath: string;
 };
+
+export interface IAlias {
+  [key: string]: string;
+}

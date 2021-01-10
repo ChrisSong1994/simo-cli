@@ -8,7 +8,7 @@ const ora_1 = __importDefault(require("ora"));
 const chalk_1 = __importDefault(require("chalk"));
 const spinner = ora_1.default();
 let lastMsg = null;
-exports.start = (symbol, msg) => {
+const start = (symbol, msg) => {
     if (!msg) {
         msg = symbol;
         symbol = chalk_1.default.green('🍺');
@@ -26,7 +26,8 @@ exports.start = (symbol, msg) => {
     };
     spinner.start();
 };
-exports.stop = (persist) => {
+exports.start = start;
+const stop = (persist) => {
     if (lastMsg && persist !== false) {
         spinner.stopAndPersist({
             symbol: lastMsg.symbol,
@@ -38,10 +39,13 @@ exports.stop = (persist) => {
     }
     lastMsg = null;
 };
-exports.resume = () => {
+exports.stop = stop;
+const resume = () => {
     spinner.start();
 };
-exports.pause = () => {
+exports.resume = resume;
+const pause = () => {
     spinner.stop();
 };
+exports.pause = pause;
 //# sourceMappingURL=spinner.js.map

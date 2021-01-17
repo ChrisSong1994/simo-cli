@@ -1,24 +1,50 @@
-import WebpackChain from 'webpack-chain';
+import WebpackChain, { DevServer } from 'webpack-chain';
 import Webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
-export interface SimoConfigIntf {
-  baseURL: string;
-  chainWebpack: (v: WebpackChain) => void;
+export interface IObj {
   [key: string]: any;
 }
 
-export type ObjType = {
-  [key: string]: any;
+// webpack 链式调用实例
+export interface IWebpackConfig extends WebpackChain {
+  devServer?: DevServer;
 }
 
+export interface IPages {
+  [key: string]: {
+    entry: string;
+    template: string;
+  };
+}
+
+// simo 配置
+export interface ISimoConfig extends IObj {
+  useTypescript?: boolean;
+  base?: string;
+  port?: number;
+  host?: string;
+  report?: boolean;
+  inlineLimit?: number;
+  outputPath?: string;
+  publicPath?: string;
+  target?: string;
+  alias?: IObj;
+  proxy?: IPages;
+  devtool?: string;
+  externals?: string[] | IObj;
+  chainWebpack: (v: IWebpackConfig) => void;
+}
+
+// 开发服务和打包参数
 export type OptionType = {
-  env: ObjType;
-  argv: ObjType;
+  env: IObj;
+  argv: IObj;
   cwd: string;
-  simoConfig: SimoConfigIntf;
+  simoConfig: ISimoConfig;
 };
 
+// 样式配置
 export type StyleLoaderOption = {
   isProd: Boolean;
   sourceMap: Boolean;
@@ -27,6 +53,3 @@ export type StyleLoaderOption = {
   publicPath: string;
 };
 
-export interface IAlias {
-  [key: string]: string;
-}

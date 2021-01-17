@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
-const optimize_css_assets_webpack_plugin_1 = __importDefault(require("optimize-css-assets-webpack-plugin"));
-const postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
+var mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
+var optimize_css_assets_webpack_plugin_1 = __importDefault(require("optimize-css-assets-webpack-plugin"));
+var postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
 /**
  * @param {*} webpackConfig webpack-chain配置对象
  * @param {*} param
@@ -15,8 +15,9 @@ const postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
  * chunkFilename  生成文件路径
  * publicPath 资源文件路径publicPath，以output文件夹为根路径
  */
-exports.default = (config, { isProd, sourceMap, filename, chunkFilename, publicPath }) => {
-    const cssnanoOptions = {
+exports.default = (function (config, _a) {
+    var isProd = _a.isProd, sourceMap = _a.sourceMap, filename = _a.filename, chunkFilename = _a.chunkFilename, publicPath = _a.publicPath;
+    var cssnanoOptions = {
         preset: [
             'default',
             {
@@ -26,13 +27,14 @@ exports.default = (config, { isProd, sourceMap, filename, chunkFilename, publicP
         ],
     };
     // 创建样式规则
-    function createCSSRule({ lang, test, loader, options }) {
-        const baseRule = config.module.rule(lang).test(test);
+    function createCSSRule(_a) {
+        var lang = _a.lang, test = _a.test, loader = _a.loader, options = _a.options;
+        var baseRule = config.module.rule(lang).test(test);
         // 匹配 *.module.* 样式文件
-        const extModulesRule = baseRule.oneOf('css-modules').resourceQuery(/modules/);
+        var extModulesRule = baseRule.oneOf('css-modules').resourceQuery(/modules/);
         applyLoaders(extModulesRule, true);
         // 普通样式文件
-        const normalRule = baseRule.oneOf('normal');
+        var normalRule = baseRule.oneOf('normal');
         applyLoaders(normalRule, false);
         // 执行样式loader
         function applyLoaders(rule, modules) {
@@ -42,22 +44,27 @@ exports.default = (config, { isProd, sourceMap, filename, chunkFilename, publicP
             else {
                 rule.use('style-loader').loader('style-loader');
             }
-            const cssLoaderOptions = {
-                modules,
-                sourceMap,
+            var cssLoaderOptions = {
+                modules: modules,
+                sourceMap: sourceMap,
                 importLoaders: 1 + (isProd ? 1 : 0),
             };
             rule.use('css-loader').loader('css-loader').options(cssLoaderOptions);
-            if (isProd) {
-                rule.use('cssnano').loader('postcss-loader').options({
-                    sourceMap,
-                });
-            }
-            else {
-                rule.use('postcss-loader').loader('postcss-loader').options({ sourceMap });
-            }
+            rule
+                .use('postcss-loader')
+                .loader('postcss-loader')
+                .options({
+                sourceMap: sourceMap,
+                postcssOptions: {
+                    plugins: [
+                        // https://github.com/luisrudge/postcss-flexbugs-fixes
+                        require('postcss-flexbugs-fixes'),
+                        require('autoprefixer'),
+                    ],
+                },
+            });
             if (loader) {
-                rule.use(loader).loader(loader).options(Object.assign({ sourceMap }, options));
+                rule.use(loader).loader(loader).options(Object.assign({ sourceMap: sourceMap }, options));
             }
         }
     }
@@ -69,7 +76,7 @@ exports.default = (config, { isProd, sourceMap, filename, chunkFilename, publicP
      * */
     if (isProd) {
         // inject CSS extraction plugin
-        config.plugin('extract-css').use(mini_css_extract_plugin_1.default, [{ filename, chunkFilename }]);
+        config.plugin('extract-css').use(mini_css_extract_plugin_1.default, [{ filename: filename, chunkFilename: chunkFilename }]);
         /**
          * 压缩css
          */
@@ -82,5 +89,5 @@ exports.default = (config, { isProd, sourceMap, filename, chunkFilename, publicP
             },
         ]);
     }
-};
+});
 //# sourceMappingURL=cssLoader.js.map

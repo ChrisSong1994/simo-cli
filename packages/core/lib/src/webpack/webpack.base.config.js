@@ -3,23 +3,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const path_1 = __importDefault(require("path"));
-const html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
-exports.default = (api) => {
-    api.chainWebpack((config) => {
-        const env = api.env;
-        const { alias, pages = {} } = api.simoConfig;
+var path_1 = __importDefault(require("path"));
+var webpack_1 = require("webpack");
+var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
+exports.default = (function (api) {
+    api.chainWebpack(function (config) {
+        var env = api.env, simoConfig = api.simoConfig, context = api.context;
+        var alias = simoConfig.alias, pages = simoConfig.pages, outputPath = simoConfig.outputPath, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, useTypescript = simoConfig.useTypescript;
         // 设置context
-        config.context(api.context).target('web');
+        config.context(context).target('web');
         // output配置
-        config.output.path(api.resolve('build')).publicPath('./');
+        config.output.path(api.resolve(outputPath)).publicPath(publicPath);
         // resolve 配置
-        config.resolve;
-        if (alias) {
-            Object.keys(alias).forEach((key) => {
-                config.resolve.alias.set(key, alias[key]);
+        config.resolve
+            .when(alias, function (config) {
+            Object.keys(alias).forEach(function (key) {
+                config.alias.set(key, api.resolve(alias[key]));
             });
-        }
+        })
+            .extensions.merge(['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.wasm']);
         // loader 配置
         config.module
             .rule('compile')
@@ -29,13 +31,14 @@ exports.default = (api) => {
             .use('babel-loader')
             .loader('babel-loader')
             .options({
+            cacheDirectory: true,
             presets: [
                 [
                     require.resolve('@chrissong/babel-preset-simo'),
                     {
                         env: true,
                         react: true,
-                        typescript: true,
+                        typescript: useTypescript,
                     },
                 ],
             ],
@@ -47,9 +50,8 @@ exports.default = (api) => {
             .use('url-loader')
             .loader(require.resolve('url-loader'))
             .options({
-            limit: api.simoConfig.inlineLimit || 10000,
+            limit: inlineLimit || 10000,
             name: 'static/[name].[hash:8].[ext]',
-            // require 图片的时候不用加 .default
             esModule: false,
             fallback: {
                 loader: require.resolve('file-loader'),
@@ -79,15 +81,31 @@ exports.default = (api) => {
             name: 'static/[name].[hash:8].[ext]',
             esModule: false,
         });
-        // 模版
-        config
-            .plugin('html-template')
-            .use(html_webpack_plugin_1.default, [
-            {
-                template: path_1.default.resolve(api.context, './public/index.html'),
-            },
-        ])
-            .end();
+        // 插件配置
+        /**
+         * 编译进度
+         * */
+        config.plugin('progress').use(webpack_1.ProgressPlugin);
+        // 模版加载
+        config.when(pages, function (config) {
+            var _loop_1 = function (key) {
+                var _a = pages[key], entry = _a.entry, template = _a.template;
+                if (Array.isArray(entry)) {
+                    entry.forEach(function (en) { return config.entry(key).add(en); });
+                }
+                else {
+                    config.entry(key).add(entry);
+                }
+                config.plugin("html-template-" + key).use(html_webpack_plugin_1.default, [
+                    {
+                        template: path_1.default.resolve(context, template),
+                    },
+                ]);
+            };
+            for (var key in pages) {
+                _loop_1(key);
+            }
+        });
     });
-};
+});
 //# sourceMappingURL=webpack.base.config.js.map

@@ -2,11 +2,14 @@ import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
+import {  IWebpackConfig } from '../../type';
 import cssLoader from './cssLoader';
 
 export default (api: any) => {
-  api.chainWebpack((config: any) => {
+  api.chainWebpack((config: IWebpackConfig) => {
     if (api.mode !== 'production') return;
+
+    const { report } = api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
@@ -31,20 +34,21 @@ export default (api: any) => {
     /**
      * 依赖打包大小分析
      */
-    config.plugin('bundle-analyzer').use(BundleAnalyzerPlugin);
+    config.when(report, (config: IWebpackConfig) => {
+      config.plugin('bundle-analyzer').use(BundleAnalyzerPlugin);
+    });
 
     /**
      * 删除打包文件
      * */
     config.plugin('clean-webpack-plugin').use(CleanWebpackPlugin);
 
-
     /**
-     * 不输出优化提示
+     * 当文件过大时，不输出优化提示
      */
-    config.performance.merge({
-      hints: false,
-    });
+    config.performance.hints(false);
+
+    config.optimization.noEmitOnErrors(true);
 
     /**
      * 设置压缩代码

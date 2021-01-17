@@ -1,27 +1,29 @@
 import path from 'path';
+import { DefinePlugin, ProgressPlugin, IgnorePlugin } from 'webpack';
 import WebpackChain from 'webpack-chain';
 import HtmlWebpackTemplate from 'html-webpack-plugin';
 
-import { IAlias } from 'packages/core/type';
+import { IWebpackConfig } from '../../type';
 
 export default (api: any) => {
-  api.chainWebpack((config: WebpackChain) => {
-    const env = api.env;
-    const { alias, pages = {} } = api.simoConfig;
+  api.chainWebpack((config: IWebpackConfig) => {
+    const { env, simoConfig, context } = api;
+    const { alias, pages, outputPath, publicPath, inlineLimit, useTypescript } = simoConfig;
 
     // 设置context
-    config.context(api.context).target('web');
+    config.context(context).target('web');
 
     // output配置
-    config.output.path(api.resolve('build')).publicPath('./');
+    config.output.path(api.resolve(outputPath)).publicPath(publicPath);
 
     // resolve 配置
-    config.resolve;
-    if (alias) {
-      Object.keys(alias).forEach((key) => {
-        config.resolve.alias.set(key, alias[key]);
-      });
-    }
+    config.resolve
+      .when(alias, (config) => {
+        Object.keys(alias).forEach((key) => {
+          config.alias.set(key, api.resolve(alias[key]));
+        });
+      })
+      .extensions.merge(['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.wasm']);
 
     // loader 配置
     config.module
@@ -32,13 +34,14 @@ export default (api: any) => {
       .use('babel-loader')
       .loader('babel-loader')
       .options({
+        cacheDirectory: true,
         presets: [
           [
             require.resolve('@chrissong/babel-preset-simo'),
             {
               env: true,
               react: true,
-              typescript: true,
+              typescript: useTypescript,
             },
           ],
         ],
@@ -51,10 +54,9 @@ export default (api: any) => {
       .use('url-loader')
       .loader(require.resolve('url-loader'))
       .options({
-        limit: api.simoConfig.inlineLimit || 10000,
+        limit: inlineLimit || 10000,
         name: 'static/[name].[hash:8].[ext]',
-        // require 图片的时候不用加 .default
-        esModule: false,
+        esModule: false, // require 图片的时候不用加 .default
         fallback: {
           loader: require.resolve('file-loader'),
           options: {
@@ -86,14 +88,29 @@ export default (api: any) => {
         esModule: false,
       });
 
-    // 模版
-    config
-      .plugin('html-template')
-      .use(HtmlWebpackTemplate, [
-        {
-          template: path.resolve(api.context, './public/index.html'),
-        },
-      ])
-      .end();
+    // 插件配置
+    /**
+     * 编译进度
+     * */
+    config.plugin('progress').use(ProgressPlugin);
+
+    // 模版加载
+    config.when(pages, (config: WebpackChain) => {
+      for (let key in pages) {
+        const { entry, template } = pages[key];
+
+        if (Array.isArray(entry)) {
+          entry.forEach((en) => config.entry(key).add(en));
+        } else {
+          config.entry(key).add(entry);
+        }
+
+        config.plugin(`html-template-${key}`).use(HtmlWebpackTemplate, [
+          {
+            template: path.resolve(context, template),
+          },
+        ]);
+      }
+    });
   });
 };

@@ -6,13 +6,13 @@ export default {
       .option('open', {
         alias: 'o',
         type: 'boolean',
-        default: false,
+        default: true,
         describe: '是否自动打开浏览器',
       })
       .option('port', {
         alias: 'p',
         type: 'number',
-        default: 8000,
+        default: 8080,
         requiresArg: true,
         describe: '指定 devServer 端口号',
       });

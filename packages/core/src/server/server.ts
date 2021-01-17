@@ -22,7 +22,8 @@ yargs
     // 执行开发服务
     exec({ env, argv, cwd, simoConfig: getSimoConfig(cwd) }).catch((err) => {
       logger.log(err);
-      if (process.send) {  // 只存在于子进程当中
+      if (process.send) {
+        // 只存在于子进程当中
         process.send('EXIT_WITH_ERROR');
       }
     });

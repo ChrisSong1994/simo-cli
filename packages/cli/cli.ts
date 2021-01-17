@@ -8,15 +8,15 @@ import { SignKeyObjectInput } from 'crypto';
 import _ from 'lodash';
 import fkill from 'fkill';
 
-import init from './src/init';
+import create from './src/create';
 import server from './src/server';
 import build from './src/build';
 
-const defaultPlugins: any[] = [init, server, build];
+const defaultPlugins: any[] = [create, server, build];
 
 interface Commonds {
   [propName: string]: {
-    cmd: string;
+    cwd: string;
     desc: string;
   };
 }
@@ -28,7 +28,7 @@ interface Commonds {
  * */
 export default class Cli {
   private plugins: any[]; //
-  private root: string; // 项目跟路径
+  private cwd: string; // 项目跟路径
   private subprocess: ChildProcess[];
   private pkg: any;
   private env: NodeJS.ProcessEnv;
@@ -37,7 +37,7 @@ export default class Cli {
 
   constructor(cwd: string, argv: any = []) {
     this.plugins = defaultPlugins;
-    this.root = cwd;
+    this.cwd = cwd;
     this.argv = argv;
     this.subprocess = [];
     this.commands = {};
@@ -54,12 +54,13 @@ export default class Cli {
 
   // 读取项目package.json
   private resolvePackages() {
-    const pkgPath = path.resolve(this.root, 'package.json');
-    if (fs.existsSync(pkgPath)) {
+    const pkgPath = path.resolve(this.cwd, 'package.json');
+    if (!fs.existsSync(pkgPath)) return {};
+    try {
       return require(pkgPath);
-    } else {
+    } catch (err) {
       logger.error(`读取${pkgPath}失败！`);
-      process.exit(1);
+      return {};
     }
   }
 

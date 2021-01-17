@@ -5,6 +5,6 @@ export default (cli: Cli) => {
   const { cmd, desc, builder } = serverComd;
 
   cli.register(cmd, desc, builder, (argv: any) => {
-    server(cli);
+    server(cli, argv);
   });
 };

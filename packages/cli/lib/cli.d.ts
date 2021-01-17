@@ -7,7 +7,7 @@ import { ChildProcess, ForkOptions } from 'child_process';
  * */
 export default class Cli {
     private plugins;
-    private root;
+    private cwd;
     private subprocess;
     private pkg;
     private env;

@@ -6,14 +6,14 @@ import chokidar from 'chokidar';
 const createServer = (cli: any) => {
   return cli
     .fork(path.resolve(__dirname, './server'), cli.argv, {
-      cwd: cli.root,
+      cwd: cli.cwd,
       env: cli.env,
       stdio: 'inherit',
     })
     .on('message', (msg: string) => msg === 'EXIT_WITH_ERROR' && cli.exit(1));
 };
 
-export default (cli: any) => {
+export default (cli: any, argv: any) => {
   logger.log('🚀  正在启动开发服务,请稍等...');
 
   //  创建服务

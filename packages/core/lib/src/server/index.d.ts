@@ -1,2 +1,2 @@
-declare const _default: (cli: any) => void;
+declare const _default: (cli: any, argv: any) => void;
 export default _default;

@@ -1,9 +1,12 @@
+import { DevServer } from 'webpack-chain';
+
 import cssLoader from './cssLoader';
+import { IWebpackConfig } from '../../type';
 
 export default (api: any) => {
-  api.chainWebpack((config: any) => {
+  api.chainWebpack((config: IWebpackConfig) => {
     if (api.mode !== 'development') return;
-    const {port,host,proxy } = api.simoConfig
+    const { port, host, proxy, outputPath } = api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
@@ -19,14 +22,20 @@ export default (api: any) => {
      */
     config.watch(false).mode('development');
 
+    debugger;
     /**
      * devServer
      */
     config.devServer
       // 热更新ws地址与location.host保持一致
-      .port(8080)
+      .contentBase(api.resolve(outputPath))
+      .port(port)
+      .host(host)
       .hot(true)
-      .open(true)
-      .contentBase(api.resolve('dist'));
+      .open(false)
+      .compress(true)
+      .when(proxy, (config: DevServer) => {
+        config.proxy(proxy);
+      });
   });
 };

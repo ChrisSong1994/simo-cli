@@ -22,6 +22,6 @@ export interface IOpts {
 }
 declare const _default: (context: any, opts?: IOpts) => {
     presets: (false | any[] | undefined)[];
-    plugins: any[];
+    plugins: any[][];
 };
 export default _default;

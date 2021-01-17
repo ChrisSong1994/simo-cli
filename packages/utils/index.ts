@@ -1,6 +1,8 @@
 import fs from 'fs-extra';
 import open from 'open';
 import deepmerge from 'deepmerge';
+import chalk from 'chalk';
+import execa from 'execa';
 
 import logger from './src/logger';
 import updateNotifier from './src/updateNotifier';
@@ -13,6 +15,8 @@ export {
   fs,
   open,
   deepmerge,
+  chalk,
+  execa,
   logger,
   updateNotifier,
   loadEnv,

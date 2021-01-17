@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pause = exports.resume = exports.stop = exports.start = void 0;
-const ora_1 = __importDefault(require("ora"));
-const chalk_1 = __importDefault(require("chalk"));
-const spinner = ora_1.default();
-let lastMsg = null;
-const start = (symbol, msg) => {
+var ora_1 = __importDefault(require("ora"));
+var chalk_1 = __importDefault(require("chalk"));
+var spinner = ora_1.default();
+var lastMsg = null;
+var start = function (symbol, msg) {
     if (!msg) {
         msg = symbol;
         symbol = chalk_1.default.green('🍺');
@@ -27,7 +27,7 @@ const start = (symbol, msg) => {
     spinner.start();
 };
 exports.start = start;
-const stop = (persist) => {
+var stop = function (persist) {
     if (lastMsg && persist !== false) {
         spinner.stopAndPersist({
             symbol: lastMsg.symbol,
@@ -40,11 +40,11 @@ const stop = (persist) => {
     lastMsg = null;
 };
 exports.stop = stop;
-const resume = () => {
+var resume = function () {
     spinner.start();
 };
 exports.resume = resume;
-const pause = () => {
+var pause = function () {
     spinner.stop();
 };
 exports.pause = pause;

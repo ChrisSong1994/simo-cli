@@ -66,14 +66,19 @@ export default (
 
       rule.use('css-loader').loader('css-loader').options(cssLoaderOptions);
 
-      if (isProd) {
-        rule.use('cssnano').loader('postcss-loader').options({
+      rule
+        .use('postcss-loader')
+        .loader('postcss-loader')
+        .options({
           sourceMap,
-          // plugins: [require('autoprefixer'), require('cssnano')(cssnanoOptions)],
+          postcssOptions: {
+            plugins: [
+              // https://github.com/luisrudge/postcss-flexbugs-fixes
+              require('postcss-flexbugs-fixes'),
+              require('autoprefixer'),
+            ],
+          },
         });
-      } else {
-        rule.use('postcss-loader').loader('postcss-loader').options({ sourceMap });
-      }
 
       if (loader) {
         rule.use(loader).loader(loader).options(Object.assign({ sourceMap }, options));

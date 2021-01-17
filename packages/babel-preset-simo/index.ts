@@ -1,5 +1,4 @@
-import { dirname } from 'path';
-import { mergeConfig } from '@chrissong/simo-utils';
+import path from 'path';
 
 interface IImportPluginOpts {
   libraryName: string;
@@ -53,11 +52,26 @@ export default (context: any, opts: IOpts = {}) => {
         allowNamespaces: true,
       },
     ],
-  ];
-  // const presets = [require('@babel/preset-env').default, require('@babel/preset-react').default];
+  ].filter(Boolean);
+
   const plugins = [
-    require('@babel/plugin-syntax-dynamic-import').default,
-    require('@chrissong/babel-auto-css-modules').default,
+    [require('@chrissong/babel-auto-css-modules').default],
+    [require('@babel/plugin-proposal-decorators').default, { legacy: true }],
+    [require('@babel/plugin-proposal-class-properties').default, { loose: true }],
+    [require('@babel/plugin-proposal-export-default-from').default, { loose: true }],
+    [require('@babel/plugin-syntax-dynamic-import').default],
+    [
+      require('@babel/plugin-transform-runtime').default,
+      {
+        version: require('@babel/runtime/package.json').version,
+        // https://babeljs.io/docs/en/babel-plugin-transform-runtime#absoluteruntime
+        // lock the version of @babel/runtime
+        // make sure we are using the correct version
+        absoluteRuntime: path.dirname(require.resolve('@babel/runtime/package.json')),
+        // https://babeljs.io/docs/en/babel-plugin-transform-runtime#useesmodules
+        useESModules: true,
+      },
+    ],
   ];
   return {
     presets,

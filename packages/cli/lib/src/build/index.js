@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const simo_core_1 = require("@chrissong/simo-core");
-exports.default = (cli) => {
-    cli.register('build', '打包项目文件', (yargs) => {
+var simo_core_1 = require("@chrissong/simo-core");
+exports.default = (function (cli) {
+    cli.register('build', '打包项目文件', function (yargs) {
         yargs
             .option('report', {
             alias: 'r',
@@ -14,9 +14,9 @@ exports.default = (cli) => {
             default: false,
             describe: '是否生成source map',
         });
-    }, (argv) => {
+    }, function (argv) {
         console.log(cli, argv);
         simo_core_1.build(cli, argv);
     });
-};
+});
 //# sourceMappingURL=index.js.map

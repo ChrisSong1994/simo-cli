@@ -7,21 +7,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param {Number} length 每次并发任务的条数
  * @return {Promise<Array>} Promise对象按切片执行结果
  */
-const parallelToSerial = (items, length = 1) => {
-    return new Promise((resolve, reject) => {
-        const res = [];
+var parallelToSerial = function (items, length) {
+    if (length === void 0) { length = 1; }
+    return new Promise(function (resolve, reject) {
+        var res = [];
         function next(i) {
-            const slice = items.slice(i, i + length);
+            var slice = items.slice(i, i + length);
             i += length;
             // 如果数据执行完之后就直接返回
             if (slice.length) {
                 // 执行处理逻辑
-                Promise.all(slice.map((item) => item()))
-                    .then((value) => {
-                    res.push(...value);
+                Promise.all(slice.map(function (item) { return item(); }))
+                    .then(function (value) {
+                    res.push.apply(res, value);
                     next(i);
                 })
-                    .catch((err) => reject(err));
+                    .catch(function (err) { return reject(err); });
             }
             else {
                 resolve(res);

@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
+import { open } from '@chrissong/simo-utils';
 
 import { OptionType } from '../../type';
 import Api from '../api';
@@ -17,7 +18,7 @@ const server = async (options: OptionType) => {
       if (err) return reject(err);
       resolve(null);
       if (api.argv.open) {
-        open(`http://localhost:${config.devServer.port}/${api.simoConfig.baseURL}`);
+        open(`http://localhost:${config.devServer.port}/${api.simoConfig.base}`);
       }
     });
   });

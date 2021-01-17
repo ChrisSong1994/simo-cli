@@ -1,9 +1,9 @@
-import WebpackChain from 'webpack-chain';
 import path from 'path';
-
+import WebpackChain from 'webpack-chain';
 import { fs, logger, parallelToSerial } from '@chrissong/simo-utils';
 
-import { OptionType } from '../type';
+import { OptionType, IWebpackConfig } from '../type';
+import DEFAULT_SIMO_CONFIG from './constant/defaultSimoConfig';
 
 export default class Api {
   private mode: string;
@@ -67,13 +67,13 @@ export default class Api {
    * @param {OptionType} option
    */
   formatOptions(option: OptionType) {
-    const { baseURL = '', chainWebpack, ...restConfig } = option.simoConfig;
+    const { chainWebpack, ...restConfig } = option.simoConfig;
     return {
       ...option,
       simoConfig: {
+        ...DEFAULT_SIMO_CONFIG,
         ...restConfig,
-        baseURL: baseURL.replace(/^\/+|\/+$/g, ''),
-        chainWebpack: (config: WebpackChain) => {
+        chainWebpack: (config: IWebpackConfig) => {
           if (typeof chainWebpack === 'function') chainWebpack(config);
           return config;
         },
@@ -119,7 +119,7 @@ export default class Api {
   /**
    * 获取webpack config
    */
-  async resolveWebpackConfig(): Promise<WebpackChain> {
+  async resolveWebpackConfig(): Promise<IWebpackConfig> {
     const config = new WebpackChain();
     const { chainWebpack } = this.simoConfig;
     // 生成webpack配置
@@ -129,9 +129,9 @@ export default class Api {
 
   /**
    * 注册执行插件
-   * @param {WebpackChain} config
+   * @param {IWebpackConfig} config
    */
-  use(config: WebpackChain) {
+  use(config: IWebpackConfig) {
     return (plugin: any) => {
       const api = {
         env: this.env,
@@ -141,7 +141,7 @@ export default class Api {
         simoConfig: this.simoConfig,
         context: this.context,
         resolve: (dir: string) => this.resolve(dir),
-        chainWebpack: (callback: (v: WebpackChain) => void) => callback(config),
+        chainWebpack: (callback: (v: IWebpackConfig) => void) => callback(config),
       };
       return () => plugin(api);
     };

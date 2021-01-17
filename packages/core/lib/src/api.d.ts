@@ -1,5 +1,4 @@
-import WebpackChain from 'webpack-chain';
-import { OptionType } from '../type';
+import { OptionType, IWebpackConfig } from '../type';
 export default class Api {
     private mode;
     private options;
@@ -34,11 +33,43 @@ export default class Api {
      */
     formatOptions(option: OptionType): {
         simoConfig: {
-            baseURL: string;
-            chainWebpack: (config: WebpackChain) => WebpackChain;
+            chainWebpack: (config: IWebpackConfig) => IWebpackConfig;
+            useTypescript: boolean;
+            base: string;
+            port: number;
+            host: string;
+            report: boolean;
+            inlineLimit: number;
+            outputPath: string;
+            publicPath: string;
+            target: string;
+            alias: import("../type").IObj | {
+                '@': string;
+            };
+            proxy: {
+                '/api': {
+                    target: string;
+                    changeOrigin: boolean;
+                    pathRewrite: {
+                        '^/api': string;
+                    };
+                }; /**
+                 * 环境变量
+                 */
+            } | import("../type").IPages;
+            devtool: string;
+            externals: string[] | import("../type").IObj | {
+                react: string;
+            };
+            pages: {
+                index: {
+                    entry: string;
+                    template: string;
+                };
+            };
         };
-        env: import("../type").ObjType;
-        argv: import("../type").ObjType;
+        env: import("../type").IObj;
+        argv: import("../type").IObj;
         cwd: string;
     };
     /**
@@ -52,10 +83,10 @@ export default class Api {
     /**
      * 获取webpack config
      */
-    resolveWebpackConfig(): Promise<WebpackChain>;
+    resolveWebpackConfig(): Promise<IWebpackConfig>;
     /**
      * 注册执行插件
-     * @param {WebpackChain} config
+     * @param {IWebpackConfig} config
      */
-    use(config: WebpackChain): (plugin: any) => () => any;
+    use(config: IWebpackConfig): (plugin: any) => () => any;
 }

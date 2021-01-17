@@ -1,5 +1,3 @@
-
-
-export default (config:any) => {
+export default (config: any) => {
   console.log(config);
 };

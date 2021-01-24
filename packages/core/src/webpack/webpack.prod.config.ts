@@ -2,7 +2,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
-import {  IWebpackConfig } from '../../type';
+import { IWebpackConfig } from '../../type';
 import cssLoader from './cssLoader';
 
 export default (api: any) => {
@@ -48,12 +48,35 @@ export default (api: any) => {
      */
     config.performance.hints(false);
 
-    config.optimization.noEmitOnErrors(true);
-
     /**
      * 设置压缩代码
      */
     config.optimization.minimize(true);
+
+    /**
+     * splitchunks
+     */
+    config.optimization.splitChunks({
+      chunks: 'async',
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    });
 
     /**
      * 压缩js

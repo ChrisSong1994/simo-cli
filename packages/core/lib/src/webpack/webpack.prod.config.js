@@ -44,11 +44,34 @@ exports.default = (function (api) {
          * 当文件过大时，不输出优化提示
          */
         config.performance.hints(false);
-        config.optimization.noEmitOnErrors(true);
         /**
          * 设置压缩代码
          */
         config.optimization.minimize(true);
+        /**
+         * splitchunks
+         */
+        config.optimization.splitChunks({
+            chunks: 'async',
+            minSize: 20000,
+            minRemainingSize: 0,
+            minChunks: 1,
+            maxAsyncRequests: 30,
+            maxInitialRequests: 30,
+            enforceSizeThreshold: 50000,
+            cacheGroups: {
+                defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    reuseExistingChunk: true,
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+            },
+        });
         /**
          * 压缩js
          */

@@ -8,7 +8,7 @@ export interface IObj {
 
 // webpack 链式调用实例
 export interface IWebpackConfig extends WebpackChain {
-  devServer?: DevServer;
+  devServer: DevServer;
 }
 
 export interface IPages {
@@ -52,4 +52,3 @@ export type StyleLoaderOption = {
   chunkFilename: string;
   publicPath: string;
 };
-

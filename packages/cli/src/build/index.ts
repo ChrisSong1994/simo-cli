@@ -19,7 +19,6 @@ export default (cli: Cli) => {
         });
     },
     (argv: any) => {
-      console.log(cli, argv);
       build(cli, argv);
     },
   );

@@ -15,7 +15,6 @@ exports.default = (function (cli) {
             describe: '是否生成source map',
         });
     }, function (argv) {
-        console.log(cli, argv);
         simo_core_1.build(cli, argv);
     });
 });

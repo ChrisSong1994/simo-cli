@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var webpack_1 = require("webpack");
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
+var eslint_webpack_plugin_1 = __importDefault(require("eslint-webpack-plugin"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) {
         var env = api.env, simoConfig = api.simoConfig, context = api.context;
@@ -23,6 +24,9 @@ exports.default = (function (api) {
         })
             .extensions.merge(['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.wasm']);
         // loader 配置
+        /**
+         * babel-loader
+         */
         config.module
             .rule('compile')
             .test(/\.(js|mjs|jsx|ts|tsx)$/)
@@ -83,10 +87,32 @@ exports.default = (function (api) {
         });
         // 插件配置
         /**
+         * eslint 插件配置
+         * */
+        config.plugin('eslint').use(eslint_webpack_plugin_1.default, [
+            {
+                context: context,
+                extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
+                eslintPath: require.resolve('eslint'),
+                cache: true,
+            },
+        ]);
+        /**
          * 编译进度
          * */
         config.plugin('progress').use(webpack_1.ProgressPlugin);
-        // 模版加载
+        /**
+         * 忽略moment locale文件
+         */
+        config.plugin('ignore').use(webpack_1.IgnorePlugin, [
+            {
+                resourceRegExp: /^\.\/locale$/,
+                contextRegExp: /moment$/,
+            },
+        ]);
+        /**
+         * 模版加载
+         */
         config.when(pages, function (config) {
             var _loop_1 = function (key) {
                 var _a = pages[key], entry = _a.entry, template = _a.template;

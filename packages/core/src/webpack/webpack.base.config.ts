@@ -1,7 +1,7 @@
 import path from 'path';
 import { DefinePlugin, ProgressPlugin, IgnorePlugin } from 'webpack';
-import WebpackChain from 'webpack-chain';
 import HtmlWebpackTemplate from 'html-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 
 import { IWebpackConfig } from '../../type';
 
@@ -26,6 +26,9 @@ export default (api: any) => {
       .extensions.merge(['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.wasm']);
 
     // loader 配置
+    /**
+     * babel-loader
+     */
     config.module
       .rule('compile')
       .test(/\.(js|mjs|jsx|ts|tsx)$/)
@@ -89,13 +92,38 @@ export default (api: any) => {
       });
 
     // 插件配置
+
+    /**
+     * eslint 插件配置
+     * */
+    config.plugin('eslint').use(ESLintPlugin, [
+      {
+        context: context,
+        extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
+        eslintPath: require.resolve('eslint'),
+        cache: true,
+      },
+    ]);
+
     /**
      * 编译进度
      * */
     config.plugin('progress').use(ProgressPlugin);
 
-    // 模版加载
-    config.when(pages, (config: WebpackChain) => {
+    /**
+     * 忽略moment locale文件
+     */
+    config.plugin('ignore').use(IgnorePlugin, [
+      {
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/,
+      },
+    ]);
+
+    /**
+     * 模版加载
+     */
+    config.when(pages, (config: IWebpackConfig) => {
       for (let key in pages) {
         const { entry, template } = pages[key];
 

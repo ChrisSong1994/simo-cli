@@ -1,0 +1,21 @@
+{
+  "name": "simo-template",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "@chrissong/eslint-config-simo": "^0.0.6",
+    "eslint-config-react-app": "^6.0.0",
+    "react-scripts": "^4.0.1"
+  }
+}

@@ -1,20 +1,36 @@
 import path from 'path';
-import { DefinePlugin, ProgressPlugin, IgnorePlugin } from 'webpack';
+import { fs } from '@chrissong/simo-utils';
+import { ProgressPlugin, IgnorePlugin } from 'webpack';
 import HtmlWebpackTemplate from 'html-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
+import _ from 'lodash';
 
 import { IWebpackConfig } from '../../type';
 
 export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
-    const { env, simoConfig, context } = api;
-    const { alias, pages, outputPath, publicPath, inlineLimit, useTypescript } = simoConfig;
+    const { simoConfig, context } = api;
+    const {
+      alias,
+      pages,
+      publicPath,
+      inlineLimit,
+      externals,
+      extraBabelPlugins,
+      extraBabelPresets,
+      ignoreMomentLocale,
+      output,
+    } = simoConfig;
 
     // 设置context
     config.context(context).target('web');
 
     // output配置
-    config.output.path(api.resolve(outputPath)).publicPath(publicPath);
+    config.output.merge({
+      ...output,
+      publicPath: publicPath,
+      path:api.resolve(output.path)  || api.resolve('dist'),
+    });
 
     // resolve 配置
     config.resolve
@@ -38,16 +54,19 @@ export default (api: any) => {
       .loader('babel-loader')
       .options({
         cacheDirectory: true,
+        sourceType: "unambiguous",
         presets: [
           [
             require.resolve('@chrissong/babel-preset-simo'),
             {
               env: true,
               react: true,
-              typescript: useTypescript,
+              typescript: fs.existsSync(path.resolve(context, 'tsconfig.json')), // 判断当前是否需要使用 @babel/preset-typescript
             },
           ],
+          ...(extraBabelPresets || []),
         ],
+        plugins: [...(extraBabelPlugins || [])].filter(Boolean),
       });
 
     // 图片
@@ -91,6 +110,11 @@ export default (api: any) => {
         esModule: false,
       });
 
+    //  排除依赖
+    config.when(externals, (config: IWebpackConfig) => {
+      config.externals(externals);
+    });
+
     // 插件配置
 
     /**
@@ -113,19 +137,21 @@ export default (api: any) => {
     /**
      * 忽略moment locale文件
      */
-    config.plugin('ignore').use(IgnorePlugin, [
-      {
-        resourceRegExp: /^\.\/locale$/,
-        contextRegExp: /moment$/,
-      },
-    ]);
+    if (ignoreMomentLocale) {
+      config.plugin('ignore').use(IgnorePlugin, [
+        {
+          resourceRegExp: /^\.\/locale$/,
+          contextRegExp: /moment$/,
+        },
+      ]);
+    }
 
     /**
      * 模版加载
      */
     config.when(pages, (config: IWebpackConfig) => {
       for (let key in pages) {
-        const { entry, template } = pages[key];
+        const { entry, template, htmlWebpackPluginOptions } = pages[key];
 
         if (Array.isArray(entry)) {
           entry.forEach((en) => config.entry(key).add(en));
@@ -135,7 +161,9 @@ export default (api: any) => {
 
         config.plugin(`html-template-${key}`).use(HtmlWebpackTemplate, [
           {
+            inject: Reflect.has(pages[key], 'htmlWebpackPluginOptions') ? true : false,
             template: path.resolve(context, template),
+            ...htmlWebpackPluginOptions,
           },
         ]);
       }

@@ -23,7 +23,7 @@ exports.default = (function (cli, argv) {
         env: env,
         argv: argv,
         cwd: cli.cwd,
-        simoConfig: utils_1.getSimoConfig(cli.cwd),
+        simoConfig: utils_1.getSimoConfig(cli.cwd, env),
     }).catch(function (err) {
         simo_utils_1.logger.log(err);
         process.exit(1);

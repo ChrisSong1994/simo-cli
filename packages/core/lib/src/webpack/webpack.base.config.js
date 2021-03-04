@@ -1,20 +1,39 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
+var simo_utils_1 = require("@chrissong/simo-utils");
 var webpack_1 = require("webpack");
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
 var eslint_webpack_plugin_1 = __importDefault(require("eslint-webpack-plugin"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) {
-        var env = api.env, simoConfig = api.simoConfig, context = api.context;
-        var alias = simoConfig.alias, pages = simoConfig.pages, outputPath = simoConfig.outputPath, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, useTypescript = simoConfig.useTypescript;
+        var simoConfig = api.simoConfig, context = api.context;
+        var alias = simoConfig.alias, pages = simoConfig.pages, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, externals = simoConfig.externals, extraBabelPlugins = simoConfig.extraBabelPlugins, extraBabelPresets = simoConfig.extraBabelPresets, ignoreMomentLocale = simoConfig.ignoreMomentLocale, output = simoConfig.output;
         // 设置context
         config.context(context).target('web');
         // output配置
-        config.output.path(api.resolve(outputPath)).publicPath(publicPath);
+        config.output.merge(__assign(__assign({}, output), { publicPath: publicPath, path: api.resolve(output.path) || api.resolve('dist') }));
         // resolve 配置
         config.resolve
             .when(alias, function (config) {
@@ -36,16 +55,18 @@ exports.default = (function (api) {
             .loader('babel-loader')
             .options({
             cacheDirectory: true,
-            presets: [
+            sourceType: "unambiguous",
+            presets: __spreadArrays([
                 [
                     require.resolve('@chrissong/babel-preset-simo'),
                     {
                         env: true,
                         react: true,
-                        typescript: useTypescript,
+                        typescript: simo_utils_1.fs.existsSync(path_1.default.resolve(context, 'tsconfig.json')),
                     },
-                ],
-            ],
+                ]
+            ], (extraBabelPresets || [])),
+            plugins: __spreadArrays((extraBabelPlugins || [])).filter(Boolean),
         });
         // 图片
         config.module
@@ -85,6 +106,10 @@ exports.default = (function (api) {
             name: 'static/[name].[hash:8].[ext]',
             esModule: false,
         });
+        //  排除依赖
+        config.when(externals, function (config) {
+            config.externals(externals);
+        });
         // 插件配置
         /**
          * eslint 插件配置
@@ -104,18 +129,20 @@ exports.default = (function (api) {
         /**
          * 忽略moment locale文件
          */
-        config.plugin('ignore').use(webpack_1.IgnorePlugin, [
-            {
-                resourceRegExp: /^\.\/locale$/,
-                contextRegExp: /moment$/,
-            },
-        ]);
+        if (ignoreMomentLocale) {
+            config.plugin('ignore').use(webpack_1.IgnorePlugin, [
+                {
+                    resourceRegExp: /^\.\/locale$/,
+                    contextRegExp: /moment$/,
+                },
+            ]);
+        }
         /**
          * 模版加载
          */
         config.when(pages, function (config) {
             var _loop_1 = function (key) {
-                var _a = pages[key], entry = _a.entry, template = _a.template;
+                var _a = pages[key], entry = _a.entry, template = _a.template, htmlWebpackPluginOptions = _a.htmlWebpackPluginOptions;
                 if (Array.isArray(entry)) {
                     entry.forEach(function (en) { return config.entry(key).add(en); });
                 }
@@ -123,9 +150,7 @@ exports.default = (function (api) {
                     config.entry(key).add(entry);
                 }
                 config.plugin("html-template-" + key).use(html_webpack_plugin_1.default, [
-                    {
-                        template: path_1.default.resolve(context, template),
-                    },
+                    __assign({ inject: Reflect.has(pages[key], 'htmlWebpackPluginOptions') ? true : false, template: path_1.default.resolve(context, template) }, htmlWebpackPluginOptions),
                 ]);
             };
             for (var key in pages) {

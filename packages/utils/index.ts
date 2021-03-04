@@ -3,6 +3,7 @@ import open from 'open';
 import deepmerge from 'deepmerge';
 import chalk from 'chalk';
 import execa from 'execa';
+import rimraf from 'rimraf';
 
 import logger from './src/logger';
 import updateNotifier from './src/updateNotifier';
@@ -17,6 +18,7 @@ export {
   deepmerge,
   chalk,
   execa,
+  rimraf,
   logger,
   updateNotifier,
   loadEnv,

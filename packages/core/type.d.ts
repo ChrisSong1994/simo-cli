@@ -26,7 +26,7 @@ export interface ISimoConfig extends IObj {
   host?: string;
   report?: boolean;
   inlineLimit?: number;
-  outputPath?: string;
+  output?: IObj;
   publicPath?: string;
   target?: string;
   alias?: IObj;

@@ -65,8 +65,8 @@ exports.default = (function (cli, argv) {
         '.babelrc',
         'babel.config.js',
         '.browserslistrc',
-        'simo.config.js',
         'tsconfig.json',
+        'simo.config.js',
     ], {
         cwd: cli.cwd,
     });

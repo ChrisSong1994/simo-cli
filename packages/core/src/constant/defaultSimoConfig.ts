@@ -3,7 +3,9 @@ import WebpackChain from 'webpack-chain';
 export default {
   useTypescript: false, // 可选：是否使用ts  默认false /
   base: '/' /* 可选：路由前缀  默认 */,
-  outputPath: 'dist' /* 可选： 资源输出目录名称   默认dist */,
+  output: {
+    path: 'dist' /* 可选： 资源输出目录名称   默认dist */,
+  },
   publicPath: './' /* 可选：静态文件路径 默认 './' */,
   target: 'web' /* 可选：默认web */,
   alias: { '@': './src' },
@@ -33,6 +35,8 @@ export default {
       template: './public/index.html' /* 页面html模板文件 */,
     },
   },
+  extraBabelPlugins: [], //  额外的babel插件
+  extraBabelPresets: [], // 额外的babel预设
   chainWebpack: (config: WebpackChain) => {
     /* 可选：webpack 链式配置回调 */
     /* 删除插件 */

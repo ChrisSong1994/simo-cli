@@ -6,9 +6,9 @@ import { IObj } from '../../type';
 export default (cli: Cli) => {
   cli.register(
     'create <name>',
-    '初始化项目',
+    '初始化项目名称',
     (yargs: any) => {
-      yargs.option('name', {
+      yargs.positional('name', {
         type: 'string',
         describe: '项目名称',
       });

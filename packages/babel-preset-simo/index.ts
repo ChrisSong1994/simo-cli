@@ -1,5 +1,4 @@
 import path from 'path';
-
 interface IImportPluginOpts {
   libraryName: string;
   libraryDirectory?: string;

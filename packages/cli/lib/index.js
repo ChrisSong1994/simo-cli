@@ -14,11 +14,12 @@ yargs_1.default
     .alias('version', 'v')
     .wrap(null)
     .fail(function (msg, err, yargs) {
-    if (err)
-        throw err;
+    debugger;
+    yargs.showHelp();
+    console.log(err);
     simo_utils_1.logger.error(msg);
-    yargs.help();
-    process.exit(1);
+    if (err)
+        process.exit(1);
 });
 //   初始化命令行工具
 var cli = new cli_1.default(process.cwd());

@@ -1,7 +1,6 @@
 import WebpackChain from 'webpack-chain';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import postcssSafeParser from 'postcss-safe-parser';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
 import { StyleLoaderOption } from 'packages/core/type';
 
@@ -23,18 +22,8 @@ interface ICreateCSSRuleOpts {
  */
 export default (
   config: WebpackChain,
-  { isProd, sourceMap, filename, chunkFilename, publicPath }: StyleLoaderOption,
+  { isProd, sourceMap, filename, chunkFilename }: StyleLoaderOption,
 ) => {
-  const cssnanoOptions = {
-    preset: [
-      'default',
-      {
-        mergeLonghand: false,
-        cssDeclarationSorter: false,
-      },
-    ],
-  };
-
   // 创建样式规则
   function createCSSRule({ lang, test, loader, options }: ICreateCSSRuleOpts) {
     const baseRule = config.module.rule(lang).test(test);
@@ -91,7 +80,7 @@ export default (
   createCSSRule({ lang: 'less', test: /\.less$/, loader: 'less-loader' });
 
   /**
-   * css 压缩
+   * css 拆分和压缩
    * */
   if (isProd) {
     // inject CSS extraction plugin
@@ -100,13 +89,6 @@ export default (
     /**
      * 压缩css
      */
-    config.optimization.minimizer('optimize').use(OptimizeCSSAssetsPlugin, [
-      {
-        cssProcessorOptions: {
-          parser: postcssSafeParser,
-          map: false,
-        },
-      },
-    ]);
+    config.optimization.minimizer('css-minimizer').use(CssMinimizerPlugin);
   }
 };

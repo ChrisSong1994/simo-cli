@@ -59,16 +59,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var yargs_1 = __importDefault(require("yargs"));
-var fs_extra_1 = __importDefault(require("fs-extra"));
 var chalk_1 = __importDefault(require("chalk"));
 var child_process_1 = require("child_process");
 var simo_utils_1 = require("@chrissong/simo-utils");
 var lodash_1 = __importDefault(require("lodash"));
 var fkill_1 = __importDefault(require("fkill"));
 var create_1 = __importDefault(require("./src/create"));
-var server_1 = __importDefault(require("./src/server"));
+var serve_1 = __importDefault(require("./src/serve"));
 var build_1 = __importDefault(require("./src/build"));
-var defaultPlugins = [create_1.default, server_1.default, build_1.default];
+var defaultPlugins = [create_1.default, serve_1.default, build_1.default];
 /** 命令行
  * 1.初始化命令行参数
  * 2.检查包更新情况
@@ -95,7 +94,7 @@ var Cli = /** @class */ (function () {
     // 读取项目package.json
     Cli.prototype.resolvePackages = function () {
         var pkgPath = path_1.default.resolve(this.cwd, 'package.json');
-        if (!fs_extra_1.default.existsSync(pkgPath))
+        if (!simo_utils_1.fs.existsSync(pkgPath))
             return {};
         try {
             return require(pkgPath);

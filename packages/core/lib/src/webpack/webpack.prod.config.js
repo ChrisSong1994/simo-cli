@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,19 +17,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
 var webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
 var clean_webpack_plugin_1 = require("clean-webpack-plugin");
+var copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
 var cssLoader_1 = __importDefault(require("./cssLoader"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) {
         if (api.mode !== 'production')
             return;
-        var report = api.simoConfig.report;
+        var _a = api.simoConfig, report = _a.report, staticPath = _a.staticPath, output = _a.output, publicPath = _a.publicPath;
         // 加载样式
         cssLoader_1.default(config, {
             isProd: true,
             sourceMap: false,
-            filename: 'static/css/[name].[contenthash:8].css',
-            chunkFilename: 'static/css/[id].css',
-            publicPath: '../../',
+            filename: '[name].[contenthash:8].css',
+            chunkFilename: '[id].css',
+            publicPath: publicPath,
         });
         /**
          * 配置模式与devtool
@@ -27,14 +39,40 @@ exports.default = (function (api) {
         config
             .watch(false)
             .mode('production')
-            .devtool('source-map')
-            .output.filename('static/js/[name].[contenthash:8].js')
-            .chunkFilename('static/js/[name].[contenthash:8].js');
+            .devtool(false)
+            .output.filename('[name].[contenthash:8].js')
+            .chunkFilename('[id].js');
         /**
          * 依赖打包大小分析
          */
         config.when(report, function (config) {
             config.plugin('bundle-analyzer').use(webpack_bundle_analyzer_1.BundleAnalyzerPlugin);
+        });
+        // 静态文件拷贝
+        config.when(staticPath, function () {
+            if (typeof staticPath === 'string') {
+                // 字符串路径将作为目录被拷贝到输出目录
+                config.plugin('static-copy').use(copy_webpack_plugin_1.default, [
+                    {
+                        patterns: [
+                            {
+                                from: api.resolve(staticPath),
+                                to: api.resolve(output.path),
+                                toType: 'dir',
+                                noErrorOnMissing: true,
+                            },
+                        ],
+                    },
+                ]);
+            }
+            // 数据将作为patterns值配置
+            if (Array.isArray(staticPath)) {
+                config.plugin('static-copy').use(copy_webpack_plugin_1.default, [
+                    {
+                        patterns: staticPath.map(function (item) { return (__assign(__assign({}, item), { from: api.resolve(item.from), to: api.resolve(item.to, output.path) })); }),
+                    },
+                ]);
+            }
         });
         /**
          * 删除打包文件

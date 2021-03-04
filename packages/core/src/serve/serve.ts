@@ -20,7 +20,7 @@ yargs
     });
 
     // 执行开发服务
-    exec({ env, argv, cwd, simoConfig: getSimoConfig(cwd) }).catch((err) => {
+    exec({ env, argv, cwd, simoConfig: getSimoConfig(cwd, env) }).catch((err) => {
       logger.log(err);
       if (process.send) {
         // 只存在于子进程当中

@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.mergeConfig = exports.parallelToSerial = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.logger = exports.execa = exports.chalk = exports.deepmerge = exports.open = exports.fs = void 0;
+exports.mergeConfig = exports.parallelToSerial = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.logger = exports.rimraf = exports.execa = exports.chalk = exports.deepmerge = exports.open = exports.fs = void 0;
 var fs_extra_1 = __importDefault(require("fs-extra"));
 exports.fs = fs_extra_1.default;
 var open_1 = __importDefault(require("open"));
@@ -33,6 +33,8 @@ var chalk_1 = __importDefault(require("chalk"));
 exports.chalk = chalk_1.default;
 var execa_1 = __importDefault(require("execa"));
 exports.execa = execa_1.default;
+var rimraf_1 = __importDefault(require("rimraf"));
+exports.rimraf = rimraf_1.default;
 var logger_1 = __importDefault(require("./src/logger"));
 exports.logger = logger_1.default;
 var updateNotifier_1 = __importDefault(require("./src/updateNotifier"));

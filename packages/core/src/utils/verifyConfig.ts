@@ -1,3 +1,5 @@
-export default (config: any) => {
-  console.log(config);
-};
+import Joi from 'joi';
+
+const schema = Joi.object({});
+
+export default schema

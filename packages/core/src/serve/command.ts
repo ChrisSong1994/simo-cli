@@ -1,5 +1,5 @@
 export default {
-  cmd: 'server',
+  cmd: 'serve',
   desc: '启动项目开发服务',
   builder: (yargs: any) => {
     yargs

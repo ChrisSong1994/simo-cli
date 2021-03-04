@@ -40,7 +40,9 @@ export default class Api {
             host: string;
             report: boolean;
             inlineLimit: number;
-            outputPath: string;
+            output: import("../type").IObj | {
+                path: string;
+            };
             publicPath: string;
             target: string;
             alias: import("../type").IObj | {
@@ -53,12 +55,10 @@ export default class Api {
                     pathRewrite: {
                         '^/api': string;
                     };
-                }; /**
-                 * 环境变量
-                 */
+                };
             } | import("../type").IPages;
             devtool: string;
-            externals: string[] | import("../type").IObj | {
+            externals: import("../type").IObj | string[] | {
                 react: string;
             };
             pages: {
@@ -67,6 +67,8 @@ export default class Api {
                     template: string;
                 };
             };
+            extraBabelPlugins: never[];
+            extraBabelPresets: never[];
         };
         env: import("../type").IObj;
         argv: import("../type").IObj;

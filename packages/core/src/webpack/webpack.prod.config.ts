@@ -1,6 +1,7 @@
 import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 import { IWebpackConfig } from '../../type';
 import cssLoader from './cssLoader';
@@ -9,15 +10,15 @@ export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
     if (api.mode !== 'production') return;
 
-    const { report } = api.simoConfig;
+    const { report, staticPath, output, publicPath } = api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
       isProd: true,
       sourceMap: false,
-      filename: 'static/css/[name].[contenthash:8].css',
-      chunkFilename: 'static/css/[id].css',
-      publicPath: '../../',
+      filename: '[name].[contenthash:8].css',
+      chunkFilename: '[id].css',
+      publicPath: publicPath,
     });
 
     /**
@@ -27,15 +28,47 @@ export default (api: any) => {
     config
       .watch(false)
       .mode('production')
-      .devtool('source-map')
-      .output.filename('static/js/[name].[contenthash:8].js')
-      .chunkFilename('static/js/[name].[contenthash:8].js');
+      .devtool(false)
+      .output.filename('[name].[contenthash:8].js')
+      .chunkFilename('[id].js');
 
     /**
      * 依赖打包大小分析
      */
     config.when(report, (config: IWebpackConfig) => {
       config.plugin('bundle-analyzer').use(BundleAnalyzerPlugin);
+    });
+
+    // 静态文件拷贝
+    config.when(staticPath, () => {
+      if (typeof staticPath === 'string') {
+        // 字符串路径将作为目录被拷贝到输出目录
+        config.plugin('static-copy').use(CopyWebpackPlugin, [
+          {
+            patterns: [
+              {
+                from: api.resolve(staticPath),
+                to: api.resolve(output.path),
+                toType: 'dir',
+                noErrorOnMissing: true,
+              },
+            ],
+          },
+        ]);
+      }
+
+      // 数据将作为patterns值配置
+      if (Array.isArray(staticPath)) {
+        config.plugin('static-copy').use(CopyWebpackPlugin, [
+          {
+            patterns: staticPath.map((item) => ({
+              ...item,
+              from: api.resolve(item.from),
+              to: api.resolve(item.to, output.path),
+            })),
+          },
+        ]);
+      }
     });
 
     /**

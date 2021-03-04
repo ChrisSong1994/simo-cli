@@ -42,21 +42,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var inquirer_1 = __importDefault(require("inquirer"));
 var simo_utils_1 = require("@chrissong/simo-utils");
+var validate_npm_package_name_1 = __importDefault(require("validate-npm-package-name"));
 var createSimoApp_1 = __importDefault(require("./src/createSimoApp"));
 var getTplParams_1 = __importDefault(require("./src/getTplParams"));
 var getPkgParams_1 = __importDefault(require("./src/getPkgParams"));
+var getPkgManager_1 = __importDefault(require("./src/getPkgManager"));
+var hasYarn_1 = __importDefault(require("./src/hasYarn"));
 /**
  * 项目初始化
  * @param{object} cli   cli实例对象
  * @param{object} argv  命令行参数
  */
 var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, function () {
-    var targetDir, isOverWrite, templateParams, pkgParams;
+    var targetDir, result, isOverWrite, templateParams, pkgParams, pkgManagerParams;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                targetDir = path_1.default.resolve(cli.cwd, argv.name);
                 debugger;
+                targetDir = path_1.default.resolve(cli.cwd, argv.name);
+                result = validate_npm_package_name_1.default(argv.name);
+                if (!result.validForNewPackages) {
+                    console.error(simo_utils_1.chalk.red("Invalid project name: \"" + argv.name + "\""));
+                    result.errors &&
+                        result.errors.forEach(function (err) {
+                            console.error(simo_utils_1.chalk.red.dim('Error: ' + err));
+                        });
+                    result.warnings &&
+                        result.warnings.forEach(function (warn) {
+                            console.error(simo_utils_1.chalk.yellowBright.dim('Warning: ' + warn));
+                        });
+                    cli.exit(1);
+                }
                 if (!simo_utils_1.fs.existsSync(targetDir)) return [3 /*break*/, 3];
                 return [4 /*yield*/, inquirer_1.default.prompt([
                         {
@@ -86,9 +102,19 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
                 return [4 /*yield*/, getPkgParams_1.default()];
             case 6:
                 pkgParams = _a.sent();
-                return [4 /*yield*/, createSimoApp_1.default(targetDir, templateParams, pkgParams)];
+                pkgManagerParams = { pkgManager: 'npm' };
+                if (!hasYarn_1.default()) return [3 /*break*/, 8];
+                return [4 /*yield*/, getPkgManager_1.default()];
             case 7:
+                pkgManagerParams = _a.sent();
+                _a.label = 8;
+            case 8: return [4 /*yield*/, createSimoApp_1.default(targetDir, templateParams, pkgParams, pkgManagerParams)];
+            case 9:
                 _a.sent();
+                simo_utils_1.logger.log("\uD83C\uDF89  Successfully created project " + simo_utils_1.chalk.yellow(argv.name) + ".");
+                simo_utils_1.logger.log("\uD83D\uDC49  Get started with the following commands:\n\n" +
+                    simo_utils_1.chalk.cyan(" " + simo_utils_1.chalk.gray('$') + " cd " + argv.name + "\n") +
+                    simo_utils_1.chalk.cyan(" " + simo_utils_1.chalk.gray('$') + " " + (pkgManagerParams.pkgManager === 'yarn' ? 'yarn serve' : 'npm run serve')));
                 return [2 /*return*/];
         }
     });

@@ -1,2 +1,3 @@
-declare const _default: (config: any) => void;
-export default _default;
+import Joi from 'joi';
+declare const schema: Joi.ObjectSchema<any>;
+export default schema;

@@ -1,15 +1,17 @@
 import { logger, chalk, execa } from '@chrissong/simo-utils';
-import { ChildProcess } from 'child_process';
 import readline from 'readline';
-import which from 'which';
+
+import { IPkgManagerParams } from '../type';
 
 /**
  * 安装依赖
  * @param{string} pkgManager yarn|npm
  * @param{string} targetDir  项目路径
  */
-export default async (targetDir: string): Promise<void> => {
-  const pkgManager = which.sync('yarn', { nothrow: true }) ? 'yarn' : 'npm';
+export default async (
+  targetDir: string,
+  pkgManager: IPkgManagerParams['pkgManager'],
+): Promise<void> => {
   const args = pkgManager === 'npm' ? ['install', '--loglevel', 'error'] : ['install'];
   const cmd = `${pkgManager} ${args.join(' ')}`;
   logger.log(`🚀  安装项目依赖 ${chalk.cyan(cmd)}，请稍等...`);
@@ -50,6 +52,7 @@ export default async (targetDir: string): Promise<void> => {
   });
 };
 
+// https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli/lib/util/executeCommand.js
 // 进度读取来自于 vue-cli
 function renderProgressBar(curr: number, total: number) {
   const ratio = Math.min(Math.max(curr / total, 0), 1);

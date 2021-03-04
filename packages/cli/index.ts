@@ -10,10 +10,11 @@ yargs
   .alias('version', 'v')
   .wrap(null)
   .fail((msg, err, yargs) => {
-    if (err) throw err;
+    debugger
+    yargs.showHelp();
+    console.log(err)
     logger.error(msg);
-    yargs.help();
-    process.exit(1);
+    if (err) process.exit(1);
   });
 
 //   初始化命令行工具

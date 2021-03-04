@@ -2,7 +2,9 @@ import WebpackChain from 'webpack-chain';
 declare const _default: {
     useTypescript: boolean;
     base: string;
-    outputPath: string;
+    output: {
+        path: string;
+    };
     publicPath: string;
     target: string;
     alias: {
@@ -31,6 +33,8 @@ declare const _default: {
             template: string;
         };
     };
+    extraBabelPlugins: never[];
+    extraBabelPresets: never[];
     chainWebpack: (config: WebpackChain) => void;
 };
 export default _default;

@@ -2,12 +2,17 @@ import path from 'path';
 
 import { copyDirectory } from './generator';
 import install from './install';
-import { IPkgParams, ITplParams } from '../type';
+import { IPkgParams, ITplParams, IPkgManagerParams } from '../type';
 
-const createSimoApp = async (targetDir: string, tplParams: ITplParams, pkgParams: IPkgParams) => {
+const createSimoApp = async (
+  targetDir: string,
+  tplParams: ITplParams,
+  pkgParams: IPkgParams,
+  pkgManagerParams: IPkgManagerParams,
+) => {
   const { templateType } = tplParams;
+  const { pkgManager } = pkgManagerParams;
 
-  debugger;
   // 创建项目
   copyDirectory({
     path: path.resolve(__dirname, `../../templates/${templateType}`),
@@ -16,7 +21,7 @@ const createSimoApp = async (targetDir: string, tplParams: ITplParams, pkgParams
   });
 
   // 自动安装项目依赖
-  await install(targetDir);
+  await install(targetDir, pkgManager);
 };
 
 export default createSimoApp;

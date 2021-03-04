@@ -41,16 +41,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var simo_utils_1 = require("@chrissong/simo-utils");
 var readline_1 = __importDefault(require("readline"));
-var which_1 = __importDefault(require("which"));
 /**
  * 安装依赖
  * @param{string} pkgManager yarn|npm
  * @param{string} targetDir  项目路径
  */
-exports.default = (function (targetDir) { return __awaiter(void 0, void 0, void 0, function () {
-    var pkgManager, args, cmd;
+exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, void 0, void 0, function () {
+    var args, cmd;
     return __generator(this, function (_a) {
-        pkgManager = which_1.default.sync('yarn', { nothrow: true }) ? 'yarn' : 'npm';
         args = pkgManager === 'npm' ? ['install', '--loglevel', 'error'] : ['install'];
         cmd = pkgManager + " " + args.join(' ');
         simo_utils_1.logger.log("\uD83D\uDE80  \u5B89\u88C5\u9879\u76EE\u4F9D\u8D56 " + simo_utils_1.chalk.cyan(cmd) + "\uFF0C\u8BF7\u7A0D\u7B49...");
@@ -86,6 +84,7 @@ exports.default = (function (targetDir) { return __awaiter(void 0, void 0, void 
             })];
     });
 }); });
+// https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli/lib/util/executeCommand.js
 // 进度读取来自于 vue-cli
 function renderProgressBar(curr, total) {
     var ratio = Math.min(Math.max(curr / total, 0), 1);

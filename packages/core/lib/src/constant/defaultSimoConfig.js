@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     useTypescript: false,
     base: '/' /* 可选：路由前缀  默认 */,
-    outputPath: 'dist' /* 可选： 资源输出目录名称   默认dist */,
+    output: {
+        path: 'dist' /* 可选： 资源输出目录名称   默认dist */,
+    },
     publicPath: './' /* 可选：静态文件路径 默认 './' */,
     target: 'web' /* 可选：默认web */,
     alias: { '@': './src' },
@@ -31,6 +33,8 @@ exports.default = {
             template: './public/index.html' /* 页面html模板文件 */,
         },
     },
+    extraBabelPlugins: [],
+    extraBabelPresets: [],
     chainWebpack: function (config) {
         /* 可选：webpack 链式配置回调 */
         /* 删除插件 */

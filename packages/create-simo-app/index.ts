@@ -1,10 +1,13 @@
 import path from 'path';
 import inquirer from 'inquirer';
 import { fs, chalk, logger } from '@chrissong/simo-utils';
+import ValidateNpmPackageName from 'validate-npm-package-name';
 
 import createSimoApp from './src/createSimoApp';
 import getTplParams from './src/getTplParams';
 import getPkgParams from './src/getPkgParams';
+import getPkgManager from './src/getPkgManager';
+import hasYarn from './src/hasYarn';
 
 /**
  * 项目初始化
@@ -12,10 +15,25 @@ import getPkgParams from './src/getPkgParams';
  * @param{object} argv  命令行参数
  */
 const create = async (cli: any, argv: any): Promise<void> => {
+  debugger;
   const targetDir = path.resolve(cli.cwd, argv.name);
 
-  debugger;
   // 项目名称校验
+  const result = ValidateNpmPackageName(argv.name);
+
+  if (!result.validForNewPackages) {
+    console.error(chalk.red(`Invalid project name: "${argv.name}"`));
+    result.errors &&
+      result.errors.forEach((err) => {
+        console.error(chalk.red.dim('Error: ' + err));
+      });
+
+    result.warnings &&
+      result.warnings.forEach((warn) => {
+        console.error(chalk.yellowBright.dim('Warning: ' + warn));
+      });
+    cli.exit(1);
+  }
 
   // 项目名称重复校验
   if (fs.existsSync(targetDir)) {
@@ -42,7 +60,26 @@ const create = async (cli: any, argv: any): Promise<void> => {
   //  输入package.json 基本信息
   const pkgParams = await getPkgParams();
 
-  await createSimoApp(targetDir, templateParams, pkgParams);
+  // 选择包管理器
+  let pkgManagerParams = { pkgManager: 'npm' };
+
+  if (hasYarn()) {
+    pkgManagerParams = await getPkgManager();
+  }
+
+  await createSimoApp(targetDir, templateParams, pkgParams, pkgManagerParams);
+
+  logger.log(`🎉  Successfully created project ${chalk.yellow(argv.name)}.`);
+
+  logger.log(
+    `👉  Get started with the following commands:\n\n` +
+      chalk.cyan(` ${chalk.gray('$')} cd ${argv.name}\n`) +
+      chalk.cyan(
+        ` ${chalk.gray('$')} ${
+          pkgManagerParams.pkgManager === 'yarn' ? 'yarn serve' : 'npm run serve'
+        }`,
+      ),
+  );
 };
 
 export default create;

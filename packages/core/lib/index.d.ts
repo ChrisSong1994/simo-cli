@@ -1,4 +1,4 @@
 import build from './src/build';
-import server from './src/server';
-import command from './src/server/command';
-export { build, server, command as serverComd };
+import serve from './src/serve';
+import command from './src/serve/command';
+export { build, serve, command as serveCmd };

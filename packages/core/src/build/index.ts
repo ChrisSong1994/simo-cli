@@ -22,7 +22,7 @@ export default (cli: any, argv: any) => {
     env: env,
     argv: argv,
     cwd: cli.cwd,
-    simoConfig: getSimoConfig(cli.cwd),
+    simoConfig: getSimoConfig(cli.cwd, env),
   }).catch((err) => {
     logger.log(err);
     process.exit(1);

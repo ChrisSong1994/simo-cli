@@ -1,18 +1,17 @@
 import path from 'path';
 import yargs from 'yargs';
-import fs from 'fs-extra';
 import chalk from 'chalk';
 import { ChildProcess, fork, ForkOptions } from 'child_process';
-import { logger } from '@chrissong/simo-utils';
+import { logger, fs } from '@chrissong/simo-utils';
 import { SignKeyObjectInput } from 'crypto';
 import _ from 'lodash';
 import fkill from 'fkill';
 
 import create from './src/create';
-import server from './src/server';
+import serve from './src/serve';
 import build from './src/build';
 
-const defaultPlugins: any[] = [create, server, build];
+const defaultPlugins: any[] = [create, serve, build];
 
 interface Commonds {
   [propName: string]: {

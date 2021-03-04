@@ -42,13 +42,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var generator_1 = require("./generator");
 var install_1 = __importDefault(require("./install"));
-var createSimoApp = function (targetDir, tplParams, pkgParams) { return __awaiter(void 0, void 0, void 0, function () {
-    var templateType;
+var createSimoApp = function (targetDir, tplParams, pkgParams, pkgManagerParams) { return __awaiter(void 0, void 0, void 0, function () {
+    var templateType, pkgManager;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 templateType = tplParams.templateType;
-                debugger;
+                pkgManager = pkgManagerParams.pkgManager;
                 // 创建项目
                 generator_1.copyDirectory({
                     path: path_1.default.resolve(__dirname, "../../templates/" + templateType),
@@ -56,7 +56,7 @@ var createSimoApp = function (targetDir, tplParams, pkgParams) { return __awaite
                     target: targetDir,
                 });
                 // 自动安装项目依赖
-                return [4 /*yield*/, install_1.default(targetDir)];
+                return [4 /*yield*/, install_1.default(targetDir, pkgManager)];
             case 1:
                 // 自动安装项目依赖
                 _a.sent();

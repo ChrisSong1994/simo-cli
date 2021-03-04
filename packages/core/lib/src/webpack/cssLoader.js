@@ -4,8 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
-var optimize_css_assets_webpack_plugin_1 = __importDefault(require("optimize-css-assets-webpack-plugin"));
-var postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
+var css_minimizer_webpack_plugin_1 = __importDefault(require("css-minimizer-webpack-plugin"));
 /**
  * @param {*} webpackConfig webpack-chain配置对象
  * @param {*} param
@@ -16,16 +15,7 @@ var postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
  * publicPath 资源文件路径publicPath，以output文件夹为根路径
  */
 exports.default = (function (config, _a) {
-    var isProd = _a.isProd, sourceMap = _a.sourceMap, filename = _a.filename, chunkFilename = _a.chunkFilename, publicPath = _a.publicPath;
-    var cssnanoOptions = {
-        preset: [
-            'default',
-            {
-                mergeLonghand: false,
-                cssDeclarationSorter: false,
-            },
-        ],
-    };
+    var isProd = _a.isProd, sourceMap = _a.sourceMap, filename = _a.filename, chunkFilename = _a.chunkFilename;
     // 创建样式规则
     function createCSSRule(_a) {
         var lang = _a.lang, test = _a.test, loader = _a.loader, options = _a.options;
@@ -72,7 +62,7 @@ exports.default = (function (config, _a) {
     createCSSRule({ lang: 'postcss', test: /\.p(ost)?css$/ });
     createCSSRule({ lang: 'less', test: /\.less$/, loader: 'less-loader' });
     /**
-     * css 压缩
+     * css 拆分和压缩
      * */
     if (isProd) {
         // inject CSS extraction plugin
@@ -80,14 +70,7 @@ exports.default = (function (config, _a) {
         /**
          * 压缩css
          */
-        config.optimization.minimizer('optimize').use(optimize_css_assets_webpack_plugin_1.default, [
-            {
-                cssProcessorOptions: {
-                    parser: postcss_safe_parser_1.default,
-                    map: false,
-                },
-            },
-        ]);
+        config.optimization.minimizer('css-minimizer').use(css_minimizer_webpack_plugin_1.default);
     }
 });
 //# sourceMappingURL=cssLoader.js.map

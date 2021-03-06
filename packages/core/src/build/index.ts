@@ -8,7 +8,7 @@ import exec from './exec';
  * 如果不正确则可能出现打包错误
  */
 export default (cli: any, argv: any) => {
-  logger.log('🚀  正在打包,请稍等...');
+  logger.log('📦 正在打包,请稍等...');
 
   loadEnv(process.cwd());
   // 先设置环境变量，以便在配置文件中使用

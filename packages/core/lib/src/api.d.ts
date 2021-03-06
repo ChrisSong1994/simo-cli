@@ -34,41 +34,19 @@ export default class Api {
     formatOptions(option: OptionType): {
         simoConfig: {
             chainWebpack: (config: IWebpackConfig) => IWebpackConfig;
-            useTypescript: boolean;
-            base: string;
-            port: number;
-            host: string;
-            report: boolean;
-            inlineLimit: number;
-            output: import("../type").IObj | {
-                path: string;
-            };
-            publicPath: string;
-            target: string;
-            alias: import("../type").IObj | {
-                '@': string;
-            };
-            proxy: {
-                '/api': {
-                    target: string;
-                    changeOrigin: boolean;
-                    pathRewrite: {
-                        '^/api': string;
-                    };
-                };
-            } | import("../type").IPages;
-            devtool: string;
-            externals: import("../type").IObj | string[] | {
-                react: string;
-            };
-            pages: {
-                index: {
-                    entry: string;
-                    template: string;
-                };
-            };
-            extraBabelPlugins: never[];
-            extraBabelPresets: never[];
+            useTypescript?: boolean | undefined;
+            base?: string | undefined;
+            port?: number | undefined;
+            host?: string | undefined;
+            report?: boolean | undefined;
+            inlineLimit?: number | undefined;
+            output?: import("../type").IObj | undefined;
+            publicPath?: string | undefined;
+            target?: string | undefined;
+            alias?: import("../type").IObj | undefined;
+            proxy?: import("../type").IPages | undefined;
+            devtool?: string | undefined;
+            externals?: string[] | import("../type").IObj | undefined;
         };
         env: import("../type").IObj;
         argv: import("../type").IObj;

@@ -14,7 +14,6 @@ const createServer = (cli: any) => {
     .on('message', (msg: string) => msg === 'EXIT_WITH_ERROR' && cli.exit(1));
 };
 
-
 export default (cli: any, argv: any) => {
   logger.log('🚀  正在启动开发服务,请稍等...');
 
@@ -41,8 +40,11 @@ export default (cli: any, argv: any) => {
 
   watcher.on('change', async () => {
     logger.log('🚀  检测到配置文件变化,服务正在自动重启...');
-    
-    await fkill(serverprocess.pid);
+    try {
+      await fkill(serverprocess.pid);
+    } catch (err) {}
+
+    debugger;
 
     serverprocess = createServer(cli);
   });

@@ -1,6 +1,10 @@
 import WebpackChain from 'webpack-chain';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import autoprefixer from 'autoprefixer';
+import postcssFlexbugsFixes from 'postcss-flexbugs-fixes';
+import postcssPresetEnv from 'postcss-preset-env';
+import postcssSafeParser from 'postcss-safe-parser';
 
 import { StyleLoaderOption } from 'packages/core/type';
 
@@ -62,9 +66,10 @@ export default (
           sourceMap,
           postcssOptions: {
             plugins: [
-              // https://github.com/luisrudge/postcss-flexbugs-fixes
-              require('postcss-flexbugs-fixes'),
-              require('autoprefixer'),
+              postcssFlexbugsFixes,
+              postcssSafeParser,
+              autoprefixer,
+              [postcssPresetEnv, { stage: 3 }],
             ],
           },
         });

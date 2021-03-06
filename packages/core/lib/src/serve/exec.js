@@ -54,6 +54,7 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
             case 1:
                 config = _a.sent();
                 return [2 /*return*/, new Promise(function (resolve, reject) {
+                        debugger;
                         var compiler = webpack_1.default(config);
                         var server = new webpack_dev_server_1.default(compiler, config.devServer);
                         server.listen(config.devServer.port, config.devServer.host, function (err) {

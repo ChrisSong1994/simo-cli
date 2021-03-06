@@ -64,10 +64,12 @@ var child_process_1 = require("child_process");
 var simo_utils_1 = require("@chrissong/simo-utils");
 var lodash_1 = __importDefault(require("lodash"));
 var fkill_1 = __importDefault(require("fkill"));
+var update_notifier_1 = __importDefault(require("update-notifier"));
 var create_1 = __importDefault(require("./src/create"));
 var serve_1 = __importDefault(require("./src/serve"));
 var build_1 = __importDefault(require("./src/build"));
-var defaultPlugins = [create_1.default, serve_1.default, build_1.default];
+var inspect_1 = __importDefault(require("./src/inspect"));
+var defaultPlugins = [create_1.default, serve_1.default, build_1.default, inspect_1.default];
 /** 命令行
  * 1.初始化命令行参数
  * 2.检查包更新情况
@@ -82,12 +84,17 @@ var Cli = /** @class */ (function () {
         this.subprocess = [];
         this.commands = {};
         this.env = lodash_1.default.cloneDeep(process.env);
+        this.pkg = this.resolvePackages();
         this.processMonitor();
         this.init();
     }
     Cli.prototype.init = function () {
         var _this = this;
-        this.pkg = this.resolvePackages();
+        // 检查安装包更新情况
+        update_notifier_1.default({
+            pkg: this.pkg,
+            updateCheckInterval: 1000 * 60 * 60 * 24 * 7,
+        }).notify();
         // 初始化插件
         this.plugins.forEach(function (plugin) { return plugin(_this); });
     };

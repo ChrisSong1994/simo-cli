@@ -26,6 +26,7 @@ var simo_utils_1 = require("@chrissong/simo-utils");
 var webpack_1 = require("webpack");
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
 var eslint_webpack_plugin_1 = __importDefault(require("eslint-webpack-plugin"));
+var webpackbar_1 = __importDefault(require("webpackbar"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) {
         var simoConfig = api.simoConfig, context = api.context;
@@ -55,7 +56,7 @@ exports.default = (function (api) {
             .loader('babel-loader')
             .options({
             cacheDirectory: true,
-            sourceType: "unambiguous",
+            sourceType: 'unambiguous',
             presets: __spreadArrays([
                 [
                     require.resolve('@chrissong/babel-preset-simo'),
@@ -125,7 +126,11 @@ exports.default = (function (api) {
         /**
          * 编译进度
          * */
-        config.plugin('progress').use(webpack_1.ProgressPlugin);
+        // config.plugin('progress').use(ProgressPlugin);
+        /**
+         * 打包进度条
+         */
+        config.plugin('process-bar').use(webpackbar_1.default);
         /**
          * 忽略moment locale文件
          */

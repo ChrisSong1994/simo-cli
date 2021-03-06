@@ -10,11 +10,13 @@ class App extends React.Component {
     console.log('lodash.keys', Object.keys(_));
   }
 
+  debugger
+
   render() {
     return (
       <div>
         <h3 className={Style['title']}> hello simo </h3>
-        hello world ddddddddds
+        hello world dddddddddsasasass
         <img src={noImage} />
       </div>
     );

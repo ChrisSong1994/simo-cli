@@ -4,6 +4,8 @@ import deepmerge from 'deepmerge';
 import chalk from 'chalk';
 import execa from 'execa';
 import rimraf from 'rimraf';
+import cliui from 'cliui';
+import inquirer from 'inquirer'
 
 import logger from './src/logger';
 import updateNotifier from './src/updateNotifier';
@@ -19,6 +21,8 @@ export {
   chalk,
   execa,
   rimraf,
+  inquirer,
+  cliui,
   logger,
   updateNotifier,
   loadEnv,

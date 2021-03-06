@@ -5,6 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
 var css_minimizer_webpack_plugin_1 = __importDefault(require("css-minimizer-webpack-plugin"));
+var autoprefixer_1 = __importDefault(require("autoprefixer"));
+var postcss_flexbugs_fixes_1 = __importDefault(require("postcss-flexbugs-fixes"));
+var postcss_preset_env_1 = __importDefault(require("postcss-preset-env"));
+var postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
 /**
  * @param {*} webpackConfig webpack-chain配置对象
  * @param {*} param
@@ -47,9 +51,10 @@ exports.default = (function (config, _a) {
                 sourceMap: sourceMap,
                 postcssOptions: {
                     plugins: [
-                        // https://github.com/luisrudge/postcss-flexbugs-fixes
-                        require('postcss-flexbugs-fixes'),
-                        require('autoprefixer'),
+                        postcss_flexbugs_fixes_1.default,
+                        postcss_safe_parser_1.default,
+                        autoprefixer_1.default,
+                        [postcss_preset_env_1.default, { stage: 3 }],
                     ],
                 },
             });

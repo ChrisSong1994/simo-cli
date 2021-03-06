@@ -72,13 +72,23 @@ exports.default = (function (cli, argv) {
         cwd: cli.cwd,
     });
     watcher.on('change', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     simo_utils_1.logger.log('🚀  检测到配置文件变化,服务正在自动重启...');
-                    return [4 /*yield*/, fkill_1.default(serverprocess.pid)];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, fkill_1.default(serverprocess.pid)];
+                case 2:
                     _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    err_1 = _a.sent();
+                    return [3 /*break*/, 4];
+                case 4:
+                    debugger;
                     serverprocess = createServer(cli);
                     return [2 /*return*/];
             }

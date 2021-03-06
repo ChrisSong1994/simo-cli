@@ -11,6 +11,7 @@ const server = async (options: OptionType) => {
   const config: any = await api.resolveWebpackConfig();
 
   return new Promise<any>((resolve, reject) => {
+    debugger
     const compiler = webpack(config);
     const server = new WebpackDevServer(compiler, config.devServer);
 

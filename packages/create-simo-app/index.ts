@@ -1,6 +1,5 @@
 import path from 'path';
-import inquirer from 'inquirer';
-import { fs, chalk, logger } from '@chrissong/simo-utils';
+import { fs, chalk, logger, inquirer } from '@chrissong/simo-utils';
 import ValidateNpmPackageName from 'validate-npm-package-name';
 
 import createSimoApp from './src/createSimoApp';
@@ -15,7 +14,6 @@ import hasYarn from './src/hasYarn';
  * @param{object} argv  命令行参数
  */
 const create = async (cli: any, argv: any): Promise<void> => {
-  debugger;
   const targetDir = path.resolve(cli.cwd, argv.name);
 
   // 项目名称校验

@@ -1,5 +1,5 @@
 import path from 'path';
-import inquirer from 'inquirer';
+import {inquirer} from '@chrissong/simo-utils';
 import { fs } from '@chrissong/simo-utils';
 
 import { ITplParams } from '../type';

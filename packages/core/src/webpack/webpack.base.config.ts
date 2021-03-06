@@ -1,9 +1,10 @@
 import path from 'path';
 import { fs } from '@chrissong/simo-utils';
-import { ProgressPlugin, IgnorePlugin } from 'webpack';
+import { IgnorePlugin } from 'webpack';
 import HtmlWebpackTemplate from 'html-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import _ from 'lodash';
+import WebpackBar from 'webpackbar';
 
 import { IWebpackConfig } from '../../type';
 
@@ -29,7 +30,7 @@ export default (api: any) => {
     config.output.merge({
       ...output,
       publicPath: publicPath,
-      path:api.resolve(output.path)  || api.resolve('dist'),
+      path: api.resolve(output.path) || api.resolve('dist'),
     });
 
     // resolve 配置
@@ -54,7 +55,7 @@ export default (api: any) => {
       .loader('babel-loader')
       .options({
         cacheDirectory: true,
-        sourceType: "unambiguous",
+        sourceType: 'unambiguous',
         presets: [
           [
             require.resolve('@chrissong/babel-preset-simo'),
@@ -132,7 +133,12 @@ export default (api: any) => {
     /**
      * 编译进度
      * */
-    config.plugin('progress').use(ProgressPlugin);
+    // config.plugin('progress').use(ProgressPlugin);
+
+    /**
+     * 打包进度条
+     */
+    config.plugin('process-bar').use(WebpackBar);
 
     /**
      * 忽略moment locale文件

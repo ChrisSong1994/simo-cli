@@ -1,3 +1,3 @@
 import { OptionType } from '../../type';
-declare const build: (options: OptionType) => Promise<any>;
-export default build;
+declare const _default: (options: OptionType) => Promise<any>;
+export default _default;

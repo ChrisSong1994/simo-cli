@@ -1,4 +1,4 @@
-import inquirer from 'inquirer';
+import {inquirer} from '@chrissong/simo-utils';
 
 import { IPkgParams } from '../type';
 

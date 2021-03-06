@@ -6,12 +6,14 @@ import { logger, fs } from '@chrissong/simo-utils';
 import { SignKeyObjectInput } from 'crypto';
 import _ from 'lodash';
 import fkill from 'fkill';
+import updateNotifier from 'update-notifier';
 
 import create from './src/create';
 import serve from './src/serve';
 import build from './src/build';
+import inspect from './src/inspect';
 
-const defaultPlugins: any[] = [create, serve, build];
+const defaultPlugins: any[] = [create, serve, build, inspect];
 
 interface Commonds {
   [propName: string]: {
@@ -41,12 +43,18 @@ export default class Cli {
     this.subprocess = [];
     this.commands = {};
     this.env = _.cloneDeep(process.env);
+    this.pkg = this.resolvePackages();
     this.processMonitor();
     this.init();
   }
 
   private init() {
-    this.pkg = this.resolvePackages();
+    // 检查安装包更新情况
+    updateNotifier({
+      pkg: this.pkg,
+      updateCheckInterval: 1000 * 60 * 60 * 24 * 7,
+    }).notify();
+
     // 初始化插件
     this.plugins.forEach((plugin) => plugin(this));
   }

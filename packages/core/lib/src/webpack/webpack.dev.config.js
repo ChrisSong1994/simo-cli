@@ -15,8 +15,8 @@ exports.default = (function (api) {
         cssLoader_1.default(config, {
             isProd: false,
             sourceMap: true,
-            filename: 'static/css/[name].css',
-            chunkFilename: 'static/css/[id].css',
+            filename: '[name].css',
+            chunkFilename: '[id].css',
             publicPath: '../../',
         });
         /**
@@ -28,12 +28,14 @@ exports.default = (function (api) {
          */
         config.devServer
             // 热更新ws地址与location.host保持一致
-            .contentBase(api.resolve(lodash_1.default.get(output, 'path', 'dist')))
+            .contentBase(api.resolve(lodash_1.default.get(output, 'path')))
             .port(port)
             .host(host)
             .hot(true)
             .open(false)
             .compress(true)
+            .progress(false)
+            .stats(false)
             .when(proxy, function (config) {
             config.proxy(proxy);
         });

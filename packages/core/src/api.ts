@@ -3,7 +3,7 @@ import WebpackChain from 'webpack-chain';
 import { fs, logger, parallelToSerial } from '@chrissong/simo-utils';
 
 import { OptionType, IWebpackConfig } from '../type';
-import DEFAULT_SIMO_CONFIG from './constant/defaultSimoConfig';
+import DEFAULT_SIMO_CONFIG from './constant/defaultConfig';
 
 export default class Api {
   private mode: string;

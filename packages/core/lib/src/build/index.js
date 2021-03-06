@@ -11,7 +11,7 @@ var exec_1 = __importDefault(require("./exec"));
  * 如果不正确则可能出现打包错误
  */
 exports.default = (function (cli, argv) {
-    simo_utils_1.logger.log('🚀  正在打包,请稍等...');
+    simo_utils_1.logger.log('📦 正在打包,请稍等...');
     simo_utils_1.loadEnv(process.cwd());
     // 先设置环境变量，以便在配置文件中使用
     var env = Object.assign(process.env, {

@@ -40,7 +40,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
-var inquirer_1 = __importDefault(require("inquirer"));
 var simo_utils_1 = require("@chrissong/simo-utils");
 var validate_npm_package_name_1 = __importDefault(require("validate-npm-package-name"));
 var createSimoApp_1 = __importDefault(require("./src/createSimoApp"));
@@ -58,7 +57,6 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                debugger;
                 targetDir = path_1.default.resolve(cli.cwd, argv.name);
                 result = validate_npm_package_name_1.default(argv.name);
                 if (!result.validForNewPackages) {
@@ -74,7 +72,7 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
                     cli.exit(1);
                 }
                 if (!simo_utils_1.fs.existsSync(targetDir)) return [3 /*break*/, 3];
-                return [4 /*yield*/, inquirer_1.default.prompt([
+                return [4 /*yield*/, simo_utils_1.inquirer.prompt([
                         {
                             name: 'isOverWrite',
                             message: "\u5F53\u524D\u6587\u4EF6\u5939\u5DF2\u5B58\u5728" + simo_utils_1.chalk.cyan(argv.name) + ",\u662F\u5426\u8986\u76D6?",

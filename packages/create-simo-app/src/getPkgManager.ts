@@ -1,7 +1,6 @@
-import inquirer from 'inquirer';
+import { inquirer } from '@chrissong/simo-utils';
 
 import { IPkgManagerParams } from '../type';
-
 
 // 获取输入参数
 const getPkgManager = async (): Promise<IPkgManagerParams> => {

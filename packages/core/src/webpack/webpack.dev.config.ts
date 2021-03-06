@@ -14,8 +14,8 @@ export default (api: any) => {
     cssLoader(config, {
       isProd: false,
       sourceMap: true,
-      filename: 'static/css/[name].css',
-      chunkFilename: 'static/css/[id].css',
+      filename: '[name].css',
+      chunkFilename: '[id].css',
       publicPath: '../../',
     });
 
@@ -29,12 +29,14 @@ export default (api: any) => {
      */
     config.devServer
       // 热更新ws地址与location.host保持一致
-      .contentBase(api.resolve(_.get(output, 'path', 'dist')))
+      .contentBase(api.resolve(_.get(output, 'path')))
       .port(port)
       .host(host)
       .hot(true)
       .open(false)
       .compress(true)
+      .progress(false)
+      .stats(false)
       .when(proxy, (config: DevServer) => {
         config.proxy(proxy);
       });

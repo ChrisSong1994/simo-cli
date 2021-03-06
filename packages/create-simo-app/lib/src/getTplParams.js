@@ -41,10 +41,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.templateTypes = void 0;
 var path_1 = __importDefault(require("path"));
-var inquirer_1 = __importDefault(require("inquirer"));
 var simo_utils_1 = require("@chrissong/simo-utils");
+var simo_utils_2 = require("@chrissong/simo-utils");
 // 读取模版名称
-exports.templateTypes = simo_utils_1.fs
+exports.templateTypes = simo_utils_2.fs
     .readdirSync(path_1.default.resolve(__dirname, '../../templates'))
     .map(function (type) { return ({
     key: type,
@@ -55,7 +55,7 @@ exports.templateTypes = simo_utils_1.fs
 var getTemplateParams = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, inquirer_1.default.prompt([
+            case 0: return [4 /*yield*/, simo_utils_1.inquirer.prompt([
                     {
                         name: 'templateType',
                         message: '请选择模版?',

@@ -41,8 +41,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var webpack_1 = __importDefault(require("webpack"));
 var simo_utils_1 = require("@chrissong/simo-utils");
+var lodash_1 = __importDefault(require("lodash"));
 var api_1 = __importDefault(require("../api"));
-var build = function (options) { return __awaiter(void 0, void 0, void 0, function () {
+var utils_1 = require("../utils");
+exports.default = (function (options) { return __awaiter(void 0, void 0, void 0, function () {
     var api, config;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -51,21 +53,20 @@ var build = function (options) { return __awaiter(void 0, void 0, void 0, functi
                 return [4 /*yield*/, api.resolveWebpackConfig()];
             case 1:
                 config = _a.sent();
-                debugger;
                 return [2 /*return*/, new Promise(function (resolve, reject) {
-                        webpack_1.default(config, function (err, stats) {
-                            if (err)
-                                return reject(err);
-                            // 打印结果
-                            process.stdout.write(stats.toString({
-                                colors: true,
-                                modules: false,
-                                children: false,
-                                chunks: false,
-                                chunkModules: false,
-                            }) + '\n\n');
+                        webpack_1.default(config, function (error, stats) {
+                            if (error || !stats)
+                                return reject(error);
+                            if (error || stats.compilation.errors.length) {
+                                simo_utils_1.logger.log(stats.toString({ colors: true, all: false, errors: true, warnings: true }));
+                                process.exit(1);
+                            }
+                            else {
+                                simo_utils_1.logger.log(stats.toString({ colors: true, all: false, errors: true, warnings: true }));
+                                simo_utils_1.logger.log(utils_1.formatStats(stats, lodash_1.default.get(options, 'simoConfig.output.path', ''), api));
+                            }
                             if (stats.hasErrors()) {
-                                simo_utils_1.logger.error('打包失败');
+                                simo_utils_1.logger.error(' 打包失败');
                                 reject(new Error('Webpack build failed'));
                             }
                             else if (stats.hasWarnings()) {
@@ -80,6 +81,5 @@ var build = function (options) { return __awaiter(void 0, void 0, void 0, functi
                     })];
         }
     });
-}); };
-exports.default = build;
+}); });
 //# sourceMappingURL=exec.js.map

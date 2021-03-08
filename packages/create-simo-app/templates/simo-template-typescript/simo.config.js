@@ -8,7 +8,6 @@ const simoConfig = (env) => {
   const isProd = NODE_ENV === 'production';
 
   return {
-    base: '/', // 可选：路由前缀  默认 /
     output: {
       path: 'dist',
       filename: isProd ? '[name].bundle.js' : '[name].js',

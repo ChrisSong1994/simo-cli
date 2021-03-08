@@ -26,7 +26,7 @@ interface ICreateCSSRuleOpts {
  */
 export default (
   config: WebpackChain,
-  { isProd, sourceMap, filename, chunkFilename }: StyleLoaderOption,
+  { isProd, sourceMap, filename, chunkFilename, browsersList }: StyleLoaderOption,
 ) => {
   // 创建样式规则
   function createCSSRule({ lang, test, loader, options }: ICreateCSSRuleOpts) {
@@ -68,7 +68,12 @@ export default (
             plugins: [
               postcssFlexbugsFixes,
               postcssSafeParser,
-              autoprefixer,
+              [
+                autoprefixer,
+                {
+                  overrideBrowserslist: browsersList,
+                },
+              ],
               [postcssPresetEnv, { stage: 3 }],
             ],
           },

@@ -4,13 +4,18 @@ import _ from 'lodash';
 
 import noImage from './images/noImage.png';
 import Style from './app.less';
-
+import text from './text.text';
+import markdown from './markdown.md';
 class App extends React.Component {
   componentDidMount() {
     console.log('lodash.keys', Object.keys(_));
+
+    console.log('text', text);
+
+    console.log('markdown', markdown);
   }
 
-  debugger
+  debugger;
 
   render() {
     return (

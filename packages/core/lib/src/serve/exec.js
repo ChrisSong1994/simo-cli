@@ -45,7 +45,7 @@ var simo_utils_1 = require("@chrissong/simo-utils");
 var api_1 = __importDefault(require("../api"));
 // 服务启动
 var server = function (options) { return __awaiter(void 0, void 0, void 0, function () {
-    var api, config;
+    var api, config, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -53,19 +53,42 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
                 return [4 /*yield*/, api.resolveWebpackConfig()];
             case 1:
                 config = _a.sent();
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        debugger;
-                        var compiler = webpack_1.default(config);
-                        var server = new webpack_dev_server_1.default(compiler, config.devServer);
-                        server.listen(config.devServer.port, config.devServer.host, function (err) {
-                            if (err)
-                                return reject(err);
-                            resolve(null);
-                            if (api.argv.open) {
-                                simo_utils_1.open("http://localhost:" + config.devServer.port + "/" + api.simoConfig.base);
-                            }
+                return [4 /*yield*/, simo_utils_1.findProcess('port', config.devServer.port)];
+            case 2:
+                result = _a.sent();
+                if (result.length) {
+                    simo_utils_1.logger.warn("\u26D4 \u7AEF\u53E3\u53F7 " + simo_utils_1.chalk.underline(config.devServer.port) + " \u88AB\u5360\u7528\uFF0C\u8BF7\u4FEE\u6539\u7AEF\u53E3\u53F7\uFF01");
+                    return [2 /*return*/, Promise.reject()];
+                }
+                return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
+                        var compiler, server;
+                        return __generator(this, function (_a) {
+                            compiler = webpack_1.default(config);
+                            server = new webpack_dev_server_1.default(compiler, config.devServer);
+                            server.listen(config.devServer.port, config.devServer.host, function (err) {
+                                if (err)
+                                    return reject(err);
+                                resolve(null);
+                                if (api.argv.open) {
+                                    simo_utils_1.open("http://" + config.devServer.host + ":" + config.devServer.port);
+                                }
+                                else {
+                                    var localUrl = "http://" + config.devServer.host + ":" + config.devServer.port;
+                                    var lanUrl = "http://" + simo_utils_1.address.ip() + ":" + config.devServer.port;
+                                    var copied = '';
+                                    try {
+                                        simo_utils_1.clipboardy.writeSync(localUrl);
+                                        copied = simo_utils_1.chalk.dim('(copied to clipboard)');
+                                    }
+                                    catch (e) {
+                                        copied = simo_utils_1.chalk.red("(copy to clipboard failed)");
+                                    }
+                                    simo_utils_1.logger.log("\n      App running at:\n       - Local: " + simo_utils_1.chalk.cyan(localUrl) + " " + copied + " \n       - Network: " + simo_utils_1.chalk.cyan(lanUrl) + " \n\n      Note that the development build is not optimized.\n      To create a production build, use " + simo_utils_1.chalk.cyan(simo_utils_1.hasYarn() ? 'yarn build' : 'npm build') + ".\n        ");
+                                }
+                            });
+                            return [2 /*return*/];
                         });
-                    })];
+                    }); })];
         }
     });
 }); };

@@ -1,6 +1,6 @@
 import WebpackChain from 'webpack-chain';
 import { StyleLoaderOption } from 'packages/core/type';
-declare const _default: (config: WebpackChain, { isProd, sourceMap, filename, chunkFilename }: StyleLoaderOption) => void;
+declare const _default: (config: WebpackChain, { isProd, sourceMap, filename, chunkFilename, browsersList }: StyleLoaderOption) => void;
 /**
  * @param {*} webpackConfig webpack-chain配置对象
  * @param {*} param

@@ -26,15 +26,16 @@ var simo_utils_1 = require("@chrissong/simo-utils");
 var webpack_1 = require("webpack");
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
 var eslint_webpack_plugin_1 = __importDefault(require("eslint-webpack-plugin"));
+var lodash_1 = __importDefault(require("lodash"));
 var webpackbar_1 = __importDefault(require("webpackbar"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) {
         var simoConfig = api.simoConfig, context = api.context;
-        var alias = simoConfig.alias, pages = simoConfig.pages, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, externals = simoConfig.externals, extraBabelPlugins = simoConfig.extraBabelPlugins, extraBabelPresets = simoConfig.extraBabelPresets, ignoreMomentLocale = simoConfig.ignoreMomentLocale, output = simoConfig.output;
+        var target = simoConfig.target, alias = simoConfig.alias, pages = simoConfig.pages, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, externals = simoConfig.externals, ignoreMomentLocale = simoConfig.ignoreMomentLocale, output = simoConfig.output, parallel = simoConfig.parallel, extraBabelOptions = simoConfig.extraBabelOptions;
         // 设置context
-        config.context(context).target('web');
+        config.context(context).target(target);
         // output配置
-        config.output.merge(__assign(__assign({}, output), { publicPath: publicPath, path: api.resolve(output.path) || api.resolve('dist') }));
+        config.output.merge(__assign({ publicPath: publicPath, path: api.resolve(lodash_1.default.get(output, 'path', 'dist')) }, lodash_1.default.omit(output, ['publicPath', 'path'])));
         // resolve 配置
         config.resolve
             .when(alias, function (config) {
@@ -45,19 +46,19 @@ exports.default = (function (api) {
             .extensions.merge(['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.wasm']);
         // loader 配置
         /**
-         * babel-loader
+         * thread-loader  babel-loader
          */
-        config.module
+        var jsRule = config.module
             .rule('compile')
             .test(/\.(js|mjs|jsx|ts|tsx)$/)
             .exclude.add(api.resolve('node_modules'))
-            .end()
+            .end();
+        if (parallel)
+            jsRule.use('thread-loader').loader(require.resolve('thread-loader'));
+        jsRule
             .use('babel-loader')
             .loader('babel-loader')
-            .options({
-            cacheDirectory: true,
-            sourceType: 'unambiguous',
-            presets: __spreadArrays([
+            .options(__assign({ cacheDirectory: true, sourceType: 'unambiguous', presets: __spreadArrays([
                 [
                     require.resolve('@chrissong/babel-preset-simo'),
                     {
@@ -66,9 +67,7 @@ exports.default = (function (api) {
                         typescript: simo_utils_1.fs.existsSync(path_1.default.resolve(context, 'tsconfig.json')),
                     },
                 ]
-            ], (extraBabelPresets || [])),
-            plugins: __spreadArrays((extraBabelPlugins || [])).filter(Boolean),
-        });
+            ], __spreadArrays(lodash_1.default.get(extraBabelOptions, 'presets', []))), plugins: __spreadArrays(lodash_1.default.get(extraBabelOptions, 'plugins', [])).filter(Boolean) }, lodash_1.default.omit(extraBabelOptions, ['presets', 'plugins'])));
         // 图片
         config.module
             .rule('images')
@@ -107,6 +106,12 @@ exports.default = (function (api) {
             name: 'static/[name].[hash:8].[ext]',
             esModule: false,
         });
+        // 文档字符串
+        config.module
+            .rule('plaintext')
+            .test(/\.(txt|text|md)$/)
+            .use('raw-loader')
+            .loader(require.resolve('raw-loader'));
         //  排除依赖
         config.when(externals, function (config) {
             config.externals(externals);
@@ -125,12 +130,8 @@ exports.default = (function (api) {
         ]);
         /**
          * 编译进度
-         * */
-        // config.plugin('progress').use(ProgressPlugin);
-        /**
-         * 打包进度条
          */
-        config.plugin('process-bar').use(webpackbar_1.default);
+        config.plugin('process').use(webpackbar_1.default);
         /**
          * 忽略moment locale文件
          */

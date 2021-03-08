@@ -88,7 +88,6 @@ exports.default = (function (cli, argv) {
                     err_1 = _a.sent();
                     return [3 /*break*/, 4];
                 case 4:
-                    debugger;
                     serverprocess = createServer(cli);
                     return [2 /*return*/];
             }

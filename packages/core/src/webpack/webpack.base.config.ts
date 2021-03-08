@@ -12,25 +12,26 @@ export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
     const { simoConfig, context } = api;
     const {
+      target,
       alias,
       pages,
       publicPath,
       inlineLimit,
       externals,
-      extraBabelPlugins,
-      extraBabelPresets,
       ignoreMomentLocale,
       output,
+      parallel,
+      extraBabelOptions,
     } = simoConfig;
 
     // 设置context
-    config.context(context).target('web');
+    config.context(context).target(target);
 
     // output配置
     config.output.merge({
-      ...output,
       publicPath: publicPath,
-      path: api.resolve(output.path) || api.resolve('dist'),
+      path: api.resolve(_.get(output, 'path', 'dist')),
+      ..._.omit(output, ['publicPath', 'path']),
     });
 
     // resolve 配置
@@ -44,13 +45,17 @@ export default (api: any) => {
 
     // loader 配置
     /**
-     * babel-loader
+     * thread-loader  babel-loader
      */
-    config.module
+    const jsRule = config.module
       .rule('compile')
       .test(/\.(js|mjs|jsx|ts|tsx)$/)
       .exclude.add(api.resolve('node_modules'))
-      .end()
+      .end();
+
+    if (parallel) jsRule.use('thread-loader').loader(require.resolve('thread-loader'));
+
+    jsRule
       .use('babel-loader')
       .loader('babel-loader')
       .options({
@@ -65,9 +70,10 @@ export default (api: any) => {
               typescript: fs.existsSync(path.resolve(context, 'tsconfig.json')), // 判断当前是否需要使用 @babel/preset-typescript
             },
           ],
-          ...(extraBabelPresets || []),
+          ...[..._.get(extraBabelOptions, 'presets', [])],
         ],
-        plugins: [...(extraBabelPlugins || [])].filter(Boolean),
+        plugins: [..._.get(extraBabelOptions, 'plugins', [])].filter(Boolean),
+        ..._.omit(extraBabelOptions, ['presets', 'plugins']),
       });
 
     // 图片
@@ -111,6 +117,13 @@ export default (api: any) => {
         esModule: false,
       });
 
+    // 文档字符串
+    config.module
+      .rule('plaintext')
+      .test(/\.(txt|text|md)$/)
+      .use('raw-loader')
+      .loader(require.resolve('raw-loader'));
+
     //  排除依赖
     config.when(externals, (config: IWebpackConfig) => {
       config.externals(externals);
@@ -132,13 +145,8 @@ export default (api: any) => {
 
     /**
      * 编译进度
-     * */
-    // config.plugin('progress').use(ProgressPlugin);
-
-    /**
-     * 打包进度条
      */
-    config.plugin('process-bar').use(WebpackBar);
+    config.plugin('process').use(WebpackBar);
 
     /**
      * 忽略moment locale文件

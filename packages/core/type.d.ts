@@ -20,8 +20,6 @@ export interface IPages {
 
 // simo 配置
 export interface ISimoConfig extends IObj {
-  useTypescript?: boolean;
-  base?: string;
   port?: number;
   host?: string;
   report?: boolean;
@@ -51,4 +49,5 @@ export type StyleLoaderOption = {
   filename: string;
   chunkFilename: string;
   publicPath: string;
+  browsersList: string[];
 };

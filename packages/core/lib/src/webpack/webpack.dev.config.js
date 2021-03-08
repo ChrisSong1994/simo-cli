@@ -10,7 +10,7 @@ exports.default = (function (api) {
     api.chainWebpack(function (config) {
         if (api.mode !== 'development')
             return;
-        var _a = api.simoConfig, port = _a.port, host = _a.host, proxy = _a.proxy, output = _a.output;
+        var _a = api.simoConfig, port = _a.port, host = _a.host, proxy = _a.proxy, output = _a.output, publicPath = _a.publicPath, browsersList = _a.browsersList;
         // 加载样式
         cssLoader_1.default(config, {
             isProd: false,
@@ -18,6 +18,7 @@ exports.default = (function (api) {
             filename: '[name].css',
             chunkFilename: '[id].css',
             publicPath: '../../',
+            browsersList: browsersList,
         });
         /**
          * 配置模式与devtool
@@ -29,6 +30,7 @@ exports.default = (function (api) {
         config.devServer
             // 热更新ws地址与location.host保持一致
             .contentBase(api.resolve(lodash_1.default.get(output, 'path')))
+            // .publicPath(api.resolve(publicPath))
             .port(port)
             .host(host)
             .hot(true)

@@ -8,15 +8,8 @@ exports.default = {
             .option('open', {
             alias: 'o',
             type: 'boolean',
-            default: true,
+            default: false,
             describe: '是否自动打开浏览器',
-        })
-            .option('port', {
-            alias: 'p',
-            type: 'number',
-            default: 8080,
-            requiresArg: true,
-            describe: '指定 devServer 端口号',
         });
     },
 };

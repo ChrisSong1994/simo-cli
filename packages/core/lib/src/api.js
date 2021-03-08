@@ -64,7 +64,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var webpack_chain_1 = __importDefault(require("webpack-chain"));
 var simo_utils_1 = require("@chrissong/simo-utils");
-var defaultConfig_1 = __importDefault(require("./constant/defaultConfig"));
 var Api = /** @class */ (function () {
     function Api(mode, options) {
         this.mode = mode;
@@ -88,7 +87,7 @@ var Api = /** @class */ (function () {
          */
         get: function () {
             var argv = this.options.argv;
-            return __assign(__assign({}, argv), { open: argv.open || false, port: argv.port || 8080, report: argv.report || false, sourcemap: argv.sourcemap || false });
+            return __assign(__assign({}, argv), { open: argv.open, port: argv.port, report: argv.report, sourcemap: argv.sourcemap });
         },
         enumerable: false,
         configurable: true
@@ -119,7 +118,8 @@ var Api = /** @class */ (function () {
      * @param {String} dir
      */
     Api.prototype.resolve = function (dir) {
-        return path_1.default.resolve(this.context, dir);
+        var absulatePath = path_1.default.resolve(this.context, dir);
+        return absulatePath;
     };
     /**
      * 格式化options参数
@@ -127,7 +127,7 @@ var Api = /** @class */ (function () {
      */
     Api.prototype.formatOptions = function (option) {
         var _a = option.simoConfig, chainWebpack = _a.chainWebpack, restConfig = __rest(_a, ["chainWebpack"]);
-        return __assign(__assign({}, option), { simoConfig: __assign(__assign(__assign({}, defaultConfig_1.default), restConfig), { chainWebpack: function (config) {
+        return __assign(__assign({}, option), { simoConfig: __assign(__assign({}, restConfig), { chainWebpack: function (config) {
                     if (typeof chainWebpack === 'function')
                         chainWebpack(config);
                     return config;

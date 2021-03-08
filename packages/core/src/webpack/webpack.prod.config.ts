@@ -10,7 +10,7 @@ export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
     if (api.mode !== 'production') return;
 
-    const { report, staticPath, output, publicPath } = api.simoConfig;
+    const { staticPath, output, publicPath, browsersList } = api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
@@ -19,6 +19,7 @@ export default (api: any) => {
       filename: '[name].[contenthash:8].css',
       chunkFilename: '[id].css',
       publicPath: publicPath,
+      browsersList: browsersList,
     });
 
     /**
@@ -28,14 +29,14 @@ export default (api: any) => {
     config
       .watch(false)
       .mode('production')
-      .devtool(false)
+      .devtool(api.argv.sourcemap ? 'source-map' : false)
       .output.filename('[name].[contenthash:8].js')
       .chunkFilename('[id].js');
 
     /**
      * 依赖打包大小分析
      */
-    config.when(report, (config: IWebpackConfig) => {
+    config.when(api.argv.report, (config: IWebpackConfig) => {
       config.plugin('bundle-analyzer').use(BundleAnalyzerPlugin);
     });
 
@@ -75,7 +76,6 @@ export default (api: any) => {
      * 删除打包文件
      * */
     config.plugin('clean-webpack-plugin').use(CleanWebpackPlugin);
-
 
     /**
      * 当文件过大时，不输出优化提示

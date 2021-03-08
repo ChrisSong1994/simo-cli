@@ -8,7 +8,7 @@ import { IWebpackConfig } from '../../type';
 export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
     if (api.mode !== 'development') return;
-    const { port, host, proxy, output } = api.simoConfig;
+    const { port, host, proxy, output, publicPath, browsersList } = api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
@@ -17,6 +17,7 @@ export default (api: any) => {
       filename: '[name].css',
       chunkFilename: '[id].css',
       publicPath: '../../',
+      browsersList: browsersList,
     });
 
     /**
@@ -30,6 +31,7 @@ export default (api: any) => {
     config.devServer
       // 热更新ws地址与location.host保持一致
       .contentBase(api.resolve(_.get(output, 'path')))
+      // .publicPath(api.resolve(publicPath))
       .port(port)
       .host(host)
       .hot(true)

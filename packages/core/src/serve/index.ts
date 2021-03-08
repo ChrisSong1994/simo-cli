@@ -44,8 +44,6 @@ export default (cli: any, argv: any) => {
       await fkill(serverprocess.pid);
     } catch (err) {}
 
-    debugger;
-
     serverprocess = createServer(cli);
   });
 };

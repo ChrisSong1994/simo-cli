@@ -34,8 +34,6 @@ export default class Api {
     formatOptions(option: OptionType): {
         simoConfig: {
             chainWebpack: (config: IWebpackConfig) => IWebpackConfig;
-            useTypescript?: boolean | undefined;
-            base?: string | undefined;
             port?: number | undefined;
             host?: string | undefined;
             report?: boolean | undefined;
@@ -46,7 +44,7 @@ export default class Api {
             alias?: import("../type").IObj | undefined;
             proxy?: import("../type").IPages | undefined;
             devtool?: string | undefined;
-            externals?: string[] | import("../type").IObj | undefined;
+            externals?: import("../type").IObj | string[] | undefined;
         };
         env: import("../type").IObj;
         argv: import("../type").IObj;

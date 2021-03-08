@@ -1,3 +1,3 @@
 import Joi from 'joi';
-declare const schema: Joi.ObjectSchema<any>;
-export default schema;
+declare const _default: (value: any) => Joi.ValidationResult;
+export default _default;

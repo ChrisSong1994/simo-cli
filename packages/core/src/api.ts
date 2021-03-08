@@ -3,7 +3,6 @@ import WebpackChain from 'webpack-chain';
 import { fs, logger, parallelToSerial } from '@chrissong/simo-utils';
 
 import { OptionType, IWebpackConfig } from '../type';
-import DEFAULT_SIMO_CONFIG from './constant/defaultConfig';
 
 export default class Api {
   private mode: string;
@@ -32,10 +31,10 @@ export default class Api {
     const argv = this.options.argv;
     return {
       ...argv,
-      open: argv.open || false,
-      port: argv.port || 8080,
-      report: argv.report || false,
-      sourcemap: argv.sourcemap || false,
+      open: argv.open,
+      port: argv.port,
+      report: argv.report,
+      sourcemap: argv.sourcemap,
     };
   }
 
@@ -59,7 +58,8 @@ export default class Api {
    * @param {String} dir
    */
   resolve(dir: string) {
-    return path.resolve(this.context, dir);
+    const absulatePath = path.resolve(this.context, dir);
+    return absulatePath;
   }
 
   /**
@@ -71,7 +71,6 @@ export default class Api {
     return {
       ...option,
       simoConfig: {
-        ...DEFAULT_SIMO_CONFIG,
         ...restConfig,
         chainWebpack: (config: IWebpackConfig) => {
           if (typeof chainWebpack === 'function') chainWebpack(config);

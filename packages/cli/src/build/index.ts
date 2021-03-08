@@ -9,6 +9,8 @@ export default (cli: Cli) => {
       yargs
         .option('report', {
           alias: 'r',
+          type: 'boolean',
+          default: false,
           describe: '生成打包报告文件，可指定文件名',
         })
         .option('sourcemap', {

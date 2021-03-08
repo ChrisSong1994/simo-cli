@@ -21,7 +21,12 @@ yargs_1.default
         BABEL_ENV: 'development',
     });
     // 执行开发服务
-    exec_1.default({ env: env, argv: argv, cwd: cwd, simoConfig: getSimoConfig_1.default(cwd, env) }).catch(function (err) {
+    exec_1.default({
+        env: env,
+        argv: argv,
+        cwd: cwd,
+        simoConfig: getSimoConfig_1.default(cwd, env),
+    }).catch(function (err) {
         simo_utils_1.logger.log(err);
         if (process_1.default.send) {
             // 只存在于子进程当中

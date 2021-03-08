@@ -23,7 +23,7 @@ exports.default = (function (api) {
     api.chainWebpack(function (config) {
         if (api.mode !== 'production')
             return;
-        var _a = api.simoConfig, report = _a.report, staticPath = _a.staticPath, output = _a.output, publicPath = _a.publicPath;
+        var _a = api.simoConfig, staticPath = _a.staticPath, output = _a.output, publicPath = _a.publicPath, browsersList = _a.browsersList;
         // 加载样式
         cssLoader_1.default(config, {
             isProd: true,
@@ -31,6 +31,7 @@ exports.default = (function (api) {
             filename: '[name].[contenthash:8].css',
             chunkFilename: '[id].css',
             publicPath: publicPath,
+            browsersList: browsersList,
         });
         /**
          * 配置模式与devtool
@@ -39,13 +40,13 @@ exports.default = (function (api) {
         config
             .watch(false)
             .mode('production')
-            .devtool(false)
+            .devtool(api.argv.sourcemap ? 'source-map' : false)
             .output.filename('[name].[contenthash:8].js')
             .chunkFilename('[id].js');
         /**
          * 依赖打包大小分析
          */
-        config.when(report, function (config) {
+        config.when(api.argv.report, function (config) {
             config.plugin('bundle-analyzer').use(webpack_bundle_analyzer_1.BundleAnalyzerPlugin);
         });
         // 静态文件拷贝

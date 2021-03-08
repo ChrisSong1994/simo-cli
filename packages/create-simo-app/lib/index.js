@@ -46,7 +46,6 @@ var createSimoApp_1 = __importDefault(require("./src/createSimoApp"));
 var getTplParams_1 = __importDefault(require("./src/getTplParams"));
 var getPkgParams_1 = __importDefault(require("./src/getPkgParams"));
 var getPkgManager_1 = __importDefault(require("./src/getPkgManager"));
-var hasYarn_1 = __importDefault(require("./src/hasYarn"));
 /**
  * 项目初始化
  * @param{object} cli   cli实例对象
@@ -101,7 +100,7 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
             case 6:
                 pkgParams = _a.sent();
                 pkgManagerParams = { pkgManager: 'npm' };
-                if (!hasYarn_1.default()) return [3 /*break*/, 8];
+                if (!simo_utils_1.hasYarn()) return [3 /*break*/, 8];
                 return [4 /*yield*/, getPkgManager_1.default()];
             case 7:
                 pkgManagerParams = _a.sent();

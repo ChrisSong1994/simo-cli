@@ -1,12 +1,11 @@
 import path from 'path';
-import { fs, chalk, logger, inquirer } from '@chrissong/simo-utils';
+import { fs, chalk, logger, inquirer, hasYarn } from '@chrissong/simo-utils';
 import ValidateNpmPackageName from 'validate-npm-package-name';
 
 import createSimoApp from './src/createSimoApp';
 import getTplParams from './src/getTplParams';
 import getPkgParams from './src/getPkgParams';
 import getPkgManager from './src/getPkgManager';
-import hasYarn from './src/hasYarn';
 
 /**
  * 项目初始化

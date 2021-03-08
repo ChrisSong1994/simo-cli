@@ -19,7 +19,7 @@ var postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
  * publicPath 资源文件路径publicPath，以output文件夹为根路径
  */
 exports.default = (function (config, _a) {
-    var isProd = _a.isProd, sourceMap = _a.sourceMap, filename = _a.filename, chunkFilename = _a.chunkFilename;
+    var isProd = _a.isProd, sourceMap = _a.sourceMap, filename = _a.filename, chunkFilename = _a.chunkFilename, browsersList = _a.browsersList;
     // 创建样式规则
     function createCSSRule(_a) {
         var lang = _a.lang, test = _a.test, loader = _a.loader, options = _a.options;
@@ -53,7 +53,12 @@ exports.default = (function (config, _a) {
                     plugins: [
                         postcss_flexbugs_fixes_1.default,
                         postcss_safe_parser_1.default,
-                        autoprefixer_1.default,
+                        [
+                            autoprefixer_1.default,
+                            {
+                                overrideBrowserslist: browsersList,
+                            },
+                        ],
                         [postcss_preset_env_1.default, { stage: 3 }],
                     ],
                 },

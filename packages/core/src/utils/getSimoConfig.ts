@@ -1,8 +1,10 @@
 import path from 'path';
 import fs from 'fs';
+import { logger } from '@chrissong/simo-utils';
 
 import { IObj } from '../../type';
-import defaultConfig from '../constant/defaultConfig';
+import defaultConfig from './defaultConfig';
+import verifyConfig from './verifyConfig';
 
 export default (cwd: string, env: IObj) => {
   // 匹配 simo.config.(j|t)s
@@ -21,7 +23,18 @@ export default (cwd: string, env: IObj) => {
   }
 
   // 支持对象和函数两种方式
-  return typeof config === 'function'
-    ? { ...defaultConfig, ...config(env) }
-    : { ...defaultConfig, config };
+  if (typeof config === 'function') {
+    config = { ...defaultConfig, ...config(env) };
+  } else {
+    config = { ...defaultConfig, config };
+  }
+
+  const { error, value } = verifyConfig(config);
+
+  if (error) {
+    logger.error(`配置项错误:${error}`);
+    process.exit(1);
+  } else {
+    return value;
+  }
 };

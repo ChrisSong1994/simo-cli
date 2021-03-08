@@ -1,6 +1,7 @@
 import yargs from 'yargs';
 import process from 'process';
 import { loadEnv, logger } from '@chrissong/simo-utils';
+import _ from 'lodash';
 
 import command from './command';
 import exec from './exec';
@@ -20,7 +21,12 @@ yargs
     });
 
     // 执行开发服务
-    exec({ env, argv, cwd, simoConfig: getSimoConfig(cwd, env) }).catch((err) => {
+    exec({
+      env,
+      argv,
+      cwd,
+      simoConfig: getSimoConfig(cwd, env),
+    }).catch((err) => {
       logger.log(err);
       if (process.send) {
         // 只存在于子进程当中

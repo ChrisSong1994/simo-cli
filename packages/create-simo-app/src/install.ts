@@ -43,7 +43,6 @@ export default async (
 
     child.on('close', (code: number) => {
       if (code !== 0) {
-        // eslint-disable-next-line prefer-promise-reject-errors
         reject(`pkgManager failed: ${pkgManager} ${args.join(' ')}`);
         return;
       }
@@ -53,7 +52,7 @@ export default async (
 };
 
 // https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli/lib/util/executeCommand.js
-// 进度读取来自于 vue-cli
+// from vue-cli
 function renderProgressBar(curr: number, total: number) {
   const ratio = Math.min(Math.max(curr / total, 0), 1);
   const bar = ` ${curr}/${total}`;

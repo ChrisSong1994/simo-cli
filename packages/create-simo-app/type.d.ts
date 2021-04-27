@@ -1,9 +1,10 @@
-import { type } from "os";
+import { type } from 'os';
 
 export interface ITplParams {
-  isBuiltTemplate: boolean;
-  gitAddress?: string;
-  templateType?: string;
+  name: string;
+  repository: string;
+  description: string;
+  isBuiltIn: boolean;
 }
 
 export interface IPkgParams {
@@ -14,5 +15,5 @@ export interface IPkgParams {
 }
 
 export interface IPkgManagerParams {
-  pkgManager: 'yarn' | 'npm';
+  pkgManager: string
 }

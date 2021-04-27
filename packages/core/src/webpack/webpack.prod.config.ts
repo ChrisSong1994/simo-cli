@@ -3,14 +3,15 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 
+
 import { IWebpackConfig } from '../../type';
 import cssLoader from './cssLoader';
 
 export default (api: any) => {
-  api.chainWebpack((config: IWebpackConfig) => {
+  api.chainWebpack(async (config: IWebpackConfig) => {
     if (api.mode !== 'production') return;
 
-    const { staticPath, output, publicPath, browsersList } = api.simoConfig;
+    const { copyPath, output, publicPath, browsersList, parallel } = api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
@@ -41,14 +42,14 @@ export default (api: any) => {
     });
 
     // 静态文件拷贝
-    config.when(staticPath, () => {
-      if (typeof staticPath === 'string') {
+    config.when(copyPath, () => {
+      if (typeof copyPath === 'string') {
         // 字符串路径将作为目录被拷贝到输出目录
         config.plugin('static-copy').use(CopyWebpackPlugin, [
           {
             patterns: [
               {
-                from: api.resolve(staticPath),
+                from: api.resolve(copyPath),
                 to: api.resolve(output.path),
                 toType: 'dir',
                 noErrorOnMissing: true,
@@ -59,10 +60,10 @@ export default (api: any) => {
       }
 
       // 数据将作为patterns值配置
-      if (Array.isArray(staticPath)) {
+      if (Array.isArray(copyPath)) {
         config.plugin('static-copy').use(CopyWebpackPlugin, [
           {
-            patterns: staticPath.map((item) => ({
+            patterns: copyPath.map((item) => ({
               ...item,
               from: api.resolve(item.from),
               to: api.resolve(item.to, output.path),
@@ -75,7 +76,7 @@ export default (api: any) => {
     /**
      * 删除打包文件
      * */
-    config.plugin('clean-webpack-plugin').use(CleanWebpackPlugin);
+    config.plugin('clean').use(CleanWebpackPlugin);
 
     /**
      * 当文件过大时，不输出优化提示
@@ -115,6 +116,11 @@ export default (api: any) => {
     /**
      * 压缩js
      */
-    config.optimization.minimizer('terser').use(TerserPlugin);
+    config.optimization.minimizer('terser').use(TerserPlugin, [
+      {
+        parallel: parallel,
+        extractComments: false,
+      },
+    ]);
   });
 };

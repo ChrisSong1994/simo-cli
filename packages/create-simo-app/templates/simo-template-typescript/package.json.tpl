@@ -12,12 +12,14 @@
   "license": "ISC",
   "dependencies": {
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
-    "@chrissong/simo-cli": "0.0.1",
+    "@chrissong/simo-cli":"@latest",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.7",
     "typescript": "4.0.3"
    }
 }

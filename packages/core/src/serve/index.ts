@@ -15,6 +15,7 @@ const createServer = (cli: any) => {
 };
 
 export default (cli: any, argv: any) => {
+  
   logger.log('🚀  正在启动开发服务,请稍等...');
 
   //  创建服务
@@ -28,6 +29,7 @@ export default (cli: any, argv: any) => {
       '.eslintrc.js',
       '.eslintignore',
       '.babelrc',
+      '.babelrc.js',
       'babel.config.js',
       '.browserslistrc',
       'tsconfig.json',

@@ -6,9 +6,7 @@ import exec from './exec';
 const inspect = (cli: any, argv: any) => {
   loadEnv(process.cwd());
   const env = Object.assign(process.env, {
-    CMD: 'build',
-    NODE_ENV: 'production',
-    BABEL_ENV: 'production',
+    NODE_ENV: 'production'
   });
 
   exec({

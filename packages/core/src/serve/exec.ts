@@ -1,14 +1,6 @@
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-import {
-  open,
-  logger,
-  address,
-  chalk,
-  clipboardy,
-  hasYarn,
-  findProcess,
-} from '@chrissong/simo-utils';
+import { open, logger, address, chalk, clipboardy, hasYarn, findProcess } from '@chrissong/simo-utils';
 
 import { OptionType } from '../../type';
 import Api from '../api';
@@ -29,33 +21,39 @@ const server = async (options: OptionType) => {
     const compiler = webpack(config);
     const server = new WebpackDevServer(compiler, config.devServer);
 
-    server.listen(config.devServer.port, config.devServer.host, (err) => {
-      if (err) return reject(err);
-      resolve(null);
+    const isDefaultHost = ['localhost', '0.0.0.0', '127.0.0.1'].includes(config.devServer.host);
 
-      if (api.argv.open) {
-        open(`http://${config.devServer.host}:${config.devServer.port}`);
-      } else {
-        const localUrl = `http://${config.devServer.host}:${config.devServer.port}`;
-        const lanUrl = `http://${address.ip()}:${config.devServer.port}`;
+    server.listen(
+      config.devServer.port,
+      isDefaultHost ? '0.0.0.0' : config.devServer.host,
+      (err) => {
+        if (err) return reject(err);
+        resolve(null);
 
-        let copied = '';
-        try {
-          clipboardy.writeSync(localUrl);
-          copied = chalk.dim('(copied to clipboard)');
-        } catch (e) {
-          copied = chalk.red(`(copy to clipboard failed)`);
-        }
+        if (api.argv.open) {
+          open(`http://${config.devServer.host}:${config.devServer.port}`);
+        } else {
+          const localUrl = `http://${config.devServer.host}:${config.devServer.port}`;
+          const lanUrl = `http://${address.ip()}:${config.devServer.port}`;
 
-        logger.log(`
+          let copied = '';
+          try {
+            clipboardy.writeSync(localUrl);
+            copied = chalk.dim('(copied to clipboard)');
+          } catch (e) {
+            copied = chalk.red(`(copy to clipboard failed)`);
+          }
+
+          logger.log(`
       App running at:
-       - Local: ${chalk.cyan(localUrl)} ${copied} 
-       - Network: ${chalk.cyan(lanUrl)} \n
+       - Local: ${chalk.cyan(localUrl)} ${copied}
+       ${isDefaultHost ? ` - Network: ${chalk.cyan(lanUrl)} \n` : ''}
       Note that the development build is not optimized.
       To create a production build, use ${chalk.cyan(hasYarn() ? 'yarn build' : 'npm build')}.
         `);
-      }
-    });
+        }
+      },
+    );
   });
 };
 

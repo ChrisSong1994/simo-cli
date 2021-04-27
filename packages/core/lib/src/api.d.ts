@@ -44,7 +44,7 @@ export default class Api {
             alias?: import("../type").IObj | undefined;
             proxy?: import("../type").IPages | undefined;
             devtool?: string | undefined;
-            externals?: import("../type").IObj | string[] | undefined;
+            externals?: string[] | import("../type").IObj | undefined;
         };
         env: import("../type").IObj;
         argv: import("../type").IObj;

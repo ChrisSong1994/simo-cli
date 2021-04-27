@@ -1,4 +1,4 @@
-import create from '@chrissong/create-simo-app';
+import { create } from '@chrissong/create-simo-app';
 
 import Cli from '../../cli';
 import { IObj } from '../../type';
@@ -14,7 +14,7 @@ export default (cli: Cli) => {
       });
     },
     (argv: IObj) => {
-      create(cli, argv);
+      create.default(cli, argv);
     },
   );
 };

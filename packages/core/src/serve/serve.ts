@@ -15,9 +15,7 @@ yargs
     //   加载环境变量
     loadEnv(cwd);
     const env = Object.assign(process.env, {
-      CMD: 'server',
       NODE_ENV: 'development',
-      BABEL_ENV: 'development',
     });
 
     // 执行开发服务

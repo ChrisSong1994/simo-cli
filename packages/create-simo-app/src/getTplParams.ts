@@ -1,28 +1,32 @@
 import path from 'path';
-import {inquirer} from '@chrissong/simo-utils';
-import { fs } from '@chrissong/simo-utils';
+import { fs, inquirer } from '@chrissong/simo-utils';
+import _ from 'lodash';
 
 import { ITplParams } from '../type';
 
-// 读取模版名称
-export const templateTypes = fs
-  .readdirSync(path.resolve(__dirname, '../../templates'))
-  .map((type: string) => ({
-    key: type,
-    name: type,
-    value: type,
-  }));
+// 模版仓库
+const templateStorePath = path.join(__dirname, '../../templateStore.json');
 
 // 获取输入参数
 const getTemplateParams = async (): Promise<ITplParams> => {
-  return await inquirer.prompt([
+  const templatesData = JSON.parse(fs.readFileSync(templateStorePath, { encoding: 'utf8' }));
+
+  // 读取模版名称
+  const templatesTypes = Object.keys(templatesData).map((key) => ({
+    key: key,
+    name: key,
+    value: key,
+  }));
+
+  const template = await inquirer.prompt([
     {
       name: 'templateType',
       message: '请选择模版?',
       type: 'list',
-      choices: templateTypes,
+      choices: templatesTypes,
     },
   ]);
+  return templatesData[template.templateType];
 };
 
 export default getTemplateParams;

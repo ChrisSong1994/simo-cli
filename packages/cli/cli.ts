@@ -2,18 +2,19 @@ import path from 'path';
 import yargs from 'yargs';
 import chalk from 'chalk';
 import { ChildProcess, fork, ForkOptions } from 'child_process';
-import { logger, fs } from '@chrissong/simo-utils';
+import { logger, fs, semverGt } from '@chrissong/simo-utils';
 import { SignKeyObjectInput } from 'crypto';
 import _ from 'lodash';
 import fkill from 'fkill';
-import updateNotifier from 'update-notifier';
+// import updateNotifier from 'update-notifier';
 
 import create from './src/create';
 import serve from './src/serve';
 import build from './src/build';
 import inspect from './src/inspect';
+import template from './src/template';
 
-const defaultPlugins: any[] = [create, serve, build, inspect];
+const defaultPlugins: any[] = [create, serve, build, inspect, template];
 
 interface Commonds {
   [propName: string]: {
@@ -49,11 +50,17 @@ export default class Cli {
   }
 
   private init() {
-    // 检查安装包更新情况
-    updateNotifier({
-      pkg: this.pkg,
-      updateCheckInterval: 1000 * 60 * 60 * 24 * 7,
-    }).notify();
+    // 检查node版本 （wWebpack 5 对 Node.js 的版本要求至少是 10.13.0 (LTS) ）
+    if (!semverGt(process.versions.node, '10.13.0')) {
+      logger.warn(`请升级您所使用的Node.js版本到10.13.0以上`);
+      process.exit(0);
+    }
+
+    // // 检查安装包更新情况
+    // updateNotifier({
+    //   pkg: this.pkg,
+    //   updateCheckInterval: 1000 * 60 * 60 * 24 * 7,
+    // }).notify();
 
     // 初始化插件
     this.plugins.forEach((plugin) => plugin(this));
@@ -75,7 +82,7 @@ export default class Cli {
   public fork(path: string, argv: string[], options: ForkOptions) {
     const subprocess = fork(path, argv, {
       env: this.env,
-      execArgv: [`--inspect-brk=127.0.0.1:${process.debugPort + 1}`], // 开发模式
+      // execArgv: [`--inspect-brk=127.0.0.1:${process.debugPort + 1}`], // 开发模式
       ...options,
     });
     subprocess.on('close', () => {

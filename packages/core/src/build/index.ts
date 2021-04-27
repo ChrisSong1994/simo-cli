@@ -13,9 +13,7 @@ export default (cli: any, argv: any) => {
   loadEnv(process.cwd());
   // 先设置环境变量，以便在配置文件中使用
   const env = Object.assign(process.env, {
-    CMD: 'build',
     NODE_ENV: 'production',
-    BABEL_ENV: 'production',
   });
 
   exec({

@@ -1,6 +1,7 @@
 import webpack from 'webpack';
-import { logger } from '@chrissong/simo-utils';
+import { logger, fs } from '@chrissong/simo-utils';
 import _ from 'lodash';
+import path from 'path';
 
 import { OptionType } from '../../type';
 import Api from '../api';
@@ -33,5 +34,19 @@ export default async (options: OptionType) => {
         resolve('success');
       }
     });
+  }).then(() => {
+    /**
+     *  默认拷贝public内的非html文件
+     */
+    if (fs.existsSync(api.resolve('./public'))) {
+      fs.copySync(
+        api.resolve('./public'),
+        api.resolve(_.get(options, 'simoConfig.output.path', '')),
+        {
+          dereference: true,
+          filter: (file) => path.extname(file) !== '.html',
+        },
+      );
+    }
   });
 };

@@ -3,6 +3,7 @@ import WebpackChain from 'webpack-chain';
 import { fs, logger, parallelToSerial } from '@chrissong/simo-utils';
 
 import { OptionType, IWebpackConfig } from '../type';
+import { getPaths } from './utils';
 
 export default class Api {
   private mode: string;
@@ -139,6 +140,7 @@ export default class Api {
         argv: this.argv,
         simoConfig: this.simoConfig,
         context: this.context,
+        paths: getPaths(this.context),
         resolve: (dir: string) => this.resolve(dir),
         chainWebpack: (callback: (v: IWebpackConfig) => void) => callback(config),
       };

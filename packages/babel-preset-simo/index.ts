@@ -1,49 +1,20 @@
 import path from 'path';
-interface IImportPluginOpts {
-  libraryName: string;
-  libraryDirectory?: string;
-  style?: boolean;
-  camel2DashComponentName?: boolean;
-}
-
 export interface IOpts {
   typescript?: boolean;
-  react?: object;
-  debug?: boolean;
-  env?: object;
-  transformRuntime?: object;
-  reactRemovePropTypes?: boolean;
-  reactRequire?: boolean;
-  dynamicImportNode?: boolean;
-  importToAwaitRequire?: object;
-  autoCSSModules?: boolean;
-  svgr?: object;
-  import?: IImportPluginOpts[];
-  lockCoreJS3?: object;
-  modify?: Function;
+  targets?: string[];
+  refresh?: boolean;
+  isDev?: boolean;
 }
 
-function toObject<T extends object>(obj: T | boolean): T | Partial<T> {
-  return typeof obj === 'object' ? obj : {};
-}
-
-const defaultEnvConfig = {
-  exclude: [
-    'transform-typeof-symbol',
-    'transform-unicode-regex',
-    'transform-sticky-regex',
-    'transform-new-target',
-    'transform-modules-umd',
-    'transform-modules-systemjs',
-    'transform-modules-amd',
-    'transform-literals',
-  ],
-};
-
-export default (context: any, opts: IOpts = {}) => {
+export default (_context: any, opts: IOpts = {}) => {
   const presets = [
-    opts.env && [require('@babel/preset-env').default],
-    opts.react && [require('@babel/preset-react').default],
+    [
+      require('@babel/preset-env').default,
+      {
+        targets: opts.targets,
+      },
+    ],
+    [require('@babel/preset-react').default],
     opts.typescript && [
       require('@babel/preset-typescript').default,
       {
@@ -54,6 +25,8 @@ export default (context: any, opts: IOpts = {}) => {
   ].filter(Boolean);
 
   const plugins = [
+    opts.refresh && opts.isDev && [require('react-refresh/babel')],
+    [require('babel-plugin-lodash')],
     [require('@chrissong/babel-auto-css-modules').default],
     [require('@babel/plugin-proposal-decorators').default, { legacy: true }],
     [require('@babel/plugin-proposal-class-properties').default, { loose: true }],
@@ -71,7 +44,7 @@ export default (context: any, opts: IOpts = {}) => {
         useESModules: true,
       },
     ],
-  ];
+  ].filter(Boolean);
   return {
     presets,
     plugins,

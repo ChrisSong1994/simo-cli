@@ -10,6 +10,7 @@ import address from 'address';
 import clipboardy from 'clipboardy';
 import which from 'which';
 import findProcess from 'find-process';
+import semverGt from 'semver/functions/gt';
 
 import logger from './src/logger';
 import updateNotifier from './src/updateNotifier';
@@ -19,6 +20,7 @@ import parallelToSerial from './src/parallelToSerial';
 import mergeConfig from './src/mergeConfig';
 import hasYarn from './src/hasYarn';
 import hasMultipleCores from './src/hasMultipleCores';
+import errorCapture from './src/errorCapture'
 
 export {
   fs,
@@ -34,6 +36,7 @@ export {
   which,
   findProcess,
   logger,
+  semverGt,
   updateNotifier,
   loadEnv,
   spinner,
@@ -41,4 +44,5 @@ export {
   mergeConfig,
   hasYarn,
   hasMultipleCores,
+  errorCapture
 };

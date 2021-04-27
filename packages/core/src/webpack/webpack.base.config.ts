@@ -1,27 +1,32 @@
-import path from 'path';
 import { fs } from '@chrissong/simo-utils';
-import { IgnorePlugin } from 'webpack';
+import { IgnorePlugin, DefinePlugin } from 'webpack';
 import HtmlWebpackTemplate from 'html-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
+import LodashModuleReplacementPlugin from 'lodash-webpack-plugin';
 import _ from 'lodash';
 import WebpackBar from 'webpackbar';
 
-import { IWebpackConfig } from '../../type';
+import { IWebpackConfig, IObj } from '../../type';
 
 export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
-    const { simoConfig, context } = api;
+    const { simoConfig, context, paths, env } = api;
+    const useTypescript = fs.existsSync(paths.appTsConfigPath);
+    const isDevelopment = env.NODE_ENV === 'development';
+
     const {
+      define,
       target,
       alias,
       pages,
       publicPath,
       inlineLimit,
       externals,
-      ignoreMomentLocale,
       output,
       parallel,
+      browsersList,
       extraBabelOptions,
+      fastRefresh,
     } = simoConfig;
 
     // 设置context
@@ -41,7 +46,19 @@ export default (api: any) => {
           config.alias.set(key, api.resolve(alias[key]));
         });
       })
-      .extensions.merge(['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.wasm']);
+      .extensions.merge([
+        '.mjs',
+        '.js',
+        '.jsx',
+        '.ts',
+        '.tsx',
+        '.json',
+        '.wasm',
+        '.less',
+        '.scss',
+        '.sass',
+        'css',
+      ]);
 
     // loader 配置
     /**
@@ -65,9 +82,10 @@ export default (api: any) => {
           [
             require.resolve('@chrissong/babel-preset-simo'),
             {
-              env: true,
-              react: true,
-              typescript: fs.existsSync(path.resolve(context, 'tsconfig.json')), // 判断当前是否需要使用 @babel/preset-typescript
+              targets: browsersList,
+              typescript: useTypescript,
+              refresh: fastRefresh,
+              isDev: isDevelopment,
             },
           ],
           ...[..._.get(extraBabelOptions, 'presets', [])],
@@ -75,6 +93,12 @@ export default (api: any) => {
         plugins: [..._.get(extraBabelOptions, 'plugins', [])].filter(Boolean),
         ..._.omit(extraBabelOptions, ['presets', 'plugins']),
       });
+
+    // 匹配规则配置
+    config.module
+      .rule('modules')
+      .test(/\.m?jsx?$/)
+      .resolve.set('fullySpecified', false);
 
     // 图片
     config.module
@@ -144,21 +168,32 @@ export default (api: any) => {
     ]);
 
     /**
+     * 自定义常量 .env优先
+     */
+    const newEnvs = { ...define, ...env };
+    const stringfyEnvs: IObj = {};
+    Object.keys(newEnvs).forEach((key) => (stringfyEnvs[key] = JSON.stringify(newEnvs[key])));
+    config.plugin('define').use(DefinePlugin, [stringfyEnvs]);
+
+    /**
      * 编译进度
      */
-    config.plugin('process').use(WebpackBar);
+    config.plugin('progress').use(WebpackBar);
 
     /**
      * 忽略moment locale文件
      */
-    if (ignoreMomentLocale) {
-      config.plugin('ignore').use(IgnorePlugin, [
-        {
-          resourceRegExp: /^\.\/locale$/,
-          contextRegExp: /moment$/,
-        },
-      ]);
-    }
+    config.plugin('ignore').use(IgnorePlugin, [
+      {
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/,
+      },
+    ]);
+
+    /**
+     * lodash精简
+     * */
+    config.plugin('lodash').use(LodashModuleReplacementPlugin);
 
     /**
      * 模版加载
@@ -168,15 +203,18 @@ export default (api: any) => {
         const { entry, template, htmlWebpackPluginOptions } = pages[key];
 
         if (Array.isArray(entry)) {
-          entry.forEach((en) => config.entry(key).add(en));
+          entry.forEach((en) => config.entry(key).add(api.resolve(en)));
         } else {
-          config.entry(key).add(entry);
+          config.entry(key).add(api.resolve(entry));
         }
 
+        // 模版
         config.plugin(`html-template-${key}`).use(HtmlWebpackTemplate, [
           {
+            filename: `${key}.html`,
+            template: api.resolve(template),
             inject: Reflect.has(pages[key], 'htmlWebpackPluginOptions') ? true : false,
-            template: path.resolve(context, template),
+            chunks: [key],
             ...htmlWebpackPluginOptions,
           },
         ]);

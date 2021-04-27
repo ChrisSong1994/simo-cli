@@ -1,10 +1,6 @@
 import WebpackChain from 'webpack-chain';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import autoprefixer from 'autoprefixer';
-import postcssFlexbugsFixes from 'postcss-flexbugs-fixes';
-import postcssPresetEnv from 'postcss-preset-env';
-import postcssSafeParser from 'postcss-safe-parser';
 
 import { StyleLoaderOption } from 'packages/core/type';
 
@@ -52,31 +48,36 @@ export default (
       }
 
       const cssLoaderOptions = {
-        modules, // 开启css module
+        modules: modules
+          ? {
+              localIdentName: '[path][name]-[local]_[hash:base64:5]',
+            }
+          : false, // 开启css module
         sourceMap,
-        importLoaders: 1 + (isProd ? 1 : 0),
+        importLoaders: 10,
       };
 
       rule.use('css-loader').loader('css-loader').options(cssLoaderOptions);
-
       rule
         .use('postcss-loader')
-        .loader('postcss-loader')
+        .loader(require.resolve('postcss-loader'))
         .options({
-          sourceMap,
-          postcssOptions: {
-            plugins: [
-              postcssFlexbugsFixes,
-              postcssSafeParser,
-              [
-                autoprefixer,
-                {
-                  overrideBrowserslist: browsersList,
-                },
-              ],
-              [postcssPresetEnv, { stage: 3 }],
-            ],
-          },
+          // Necessary for external CSS imports to work
+          // https://github.com/facebookincubator/create-react-app/issues/2677
+          ident: 'postcss',
+          plugins: () => [
+            // https://github.com/luisrudge/postcss-flexbugs-fixes
+            require('postcss-flexbugs-fixes'),
+            // https://github.com/csstools/postcss-preset-env
+            require('postcss-preset-env')({
+              // TODO: set browsers
+              autoprefixer: {
+                overrideBrowserslist: browsersList,
+              },
+              // https://cssdb.org/
+              stage: 3,
+            }),
+          ],
         });
 
       if (loader) {

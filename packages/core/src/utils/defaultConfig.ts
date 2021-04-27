@@ -2,7 +2,7 @@ import { hasMultipleCores } from '@chrissong/simo-utils';
 
 export default {
   target: 'web', // 可选：默认web
-  // staticPath: 'src/statics', // 可选：string|object[] 静态文件拷贝目录
+  // copyPath: 'src/statics', // 可选：string|object[] 静态文件拷贝目录
   output: {
     path: 'dist',
     // filename:  '[name].js',
@@ -18,14 +18,8 @@ export default {
   host: 'localhost', // 可选：静态服务的host
   proxy: {
     // 可选：配置代理能力
-    '/api': {
-      target: 'http://www.api.com/',
-      changeOrigin: true,
-      pathRewrite: { '^/api': '' },
-    },
-    '/edge': 'https://cpgxpt.zhengqiyezhi666.com:13001/',
   },
-  // devtool: 'cheap-module-source-map', // 可选：development环境默认是 cheap-module-source-map，  production 默认是 false
+  devtool: 'cheap-module-source-map', // 可选：development环境默认是 cheap-module-source-map，  production 默认是 false
   externals: {
     // 可选： 设置哪些模块可以不被打包，通过 <script> 或其他方式引入
     // react: 'React',
@@ -50,6 +44,8 @@ export default {
     presets: [],
     plugins: [],
   },
-  ignoreMomentLocale: true, // 可选：默认为false 忽略moment的locale文件
-  // chainWebpack: (config) => {}, // 可选：
+  define: {}, // 可选：自定义常量
+  tsTypeCheck: true, // 可选：是否开启编译ts类型检查
+  fastRefresh: true, // 可选：保持组件状态仅在开发环境使用
+  chainWebpack: () => {}, // 可选：
 };

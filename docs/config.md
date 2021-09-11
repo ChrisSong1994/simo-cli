@@ -2,7 +2,7 @@
 
 ## 配置方式
 
-simoConfig 支持两种配置方式，对象或者函数。使用导出函数时将会提供一个`env`对象作为参数；
+支持 `simo.config.js`、`simo.config.ts` 、`.simorc.ts` 、`.simorc.js`配置文件，支持对象或者函数。使用导出函数时将会提供一个`env`对象作为参数；
 
 ```js
 module.exports = (env) => {
@@ -45,9 +45,16 @@ import App from 'ROOT/app';
 
 配置需要兼容的浏览器最低版本，会自动引入 polyfill 和做语法转换
 
+## buildNotifier
+
+- Type:`boolean | string | object`
+- Defaults:`true`
+
+通过[webpack-build-notifier](https://github.com/RoccoC/webpack-build-notifier)实现系统级别的 notifications，当 buildNotifier 参数为字符串时将作为通知的标题使用，参数为对象将合并默认配置。
+
 ## copyPath
 
-- Type:`string`
+- Type:`string | array`
 
 需要拷贝到打包目录的文件夹
 
@@ -70,6 +77,13 @@ module.exports = {
   },
 };
 ```
+
+## cssExtract
+
+- Type: `boolean`
+- Default: true
+
+默认打包的时候将 CSS 提取到单独的文件中，为每个包含 CSS 的 JS 文件创建一个 CSS 文件，并且支持 CSS 和 SourceMaps 的按需加载。
 
 ## define
 
@@ -112,7 +126,7 @@ if (PRODUCTION) {
 
 ## externals
 
-- Type: `object`
+- Type: `string | function | object`
 - Default: `{}`
 
 设置哪些模块可以不被打包，通过 `<script>` 或其他方式引入，通常需要和 scripts 或 headScripts 配置同时使用。
@@ -158,6 +172,13 @@ module.exports = {
 - Default:`0.0.0.0`
 
 静态服务域名
+
+## inlineLimit
+
+- Type:`boolean`
+- Default: `10000(10k)`
+
+配置图片文件是否走 base64 编译的阈值。默认是 10000 字节，少于他会被编译为 base64 编码，否则会生成单独的文件。
 
 ## pages
 
@@ -262,24 +283,59 @@ module.exports =  (env) => {
 
 ```
 
+## outputEnvironment
+
+注意配置是用来告诉 webpack 有些环境的 es x 功能是否可用的查看 [output.environment](https://webpack.js.org/configuration/output/#outputenvironment)
+
+- Type: `object`
+- Default:
+
+```json
+{
+    // 注意这个是用来告诉webpack 有些环境的 es x 功能是否可用的
+    // The environment supports arrow functions ('() => { ... }').
+    arrowFunction: false,
+    // The environment supports BigInt as literal (123n).
+    bigIntLiteral: false,
+    // The environment supports const and let for variable declarations.
+    const: false,
+    // The environment supports destructuring ('{ a, b } = obj').
+    destructuring: false,
+    // The environment supports an async import() function to import EcmaScript modules.
+    dynamicImport: false,
+    // The environment supports 'for of' iteration ('for (const x of array) { ... }').
+    forOf: false,
+    // The environment supports ECMAScript Module syntax to import ECMAScript modules (import ... from '...').
+    module: false,
+  },
+
+```
+
 ## target
 
-- Type: `string`
-- Default:`web`
+- Type: `string | [string] | boolean`
+- Default:`['web', 'es5']`
 
 项目部署环境
 
 ```js
 module.exports = {
-  target: 'node',
+  target: ['web', 'es5'],
 };
 ```
 
-在上述示例中，target 设置为 node，webpack 将在类 Node.js 环境编译代码。(使用 Node.js 的 require 加载 chunk，而不加载任何内置模块，如 fs 或 path),默认 web 环境。
+在上述示例中，target 设置为 node，webpack 将在类 Node.js 环境编译代码。(使用 Node.js 的 require 加载 chunk，而不加载任何内置模块，如 fs 或 path),默认 ['web', 'es5']。 **注意：** web 环境会默认编译成`esm` 代码。
 
 ## tsTypeCheck
 
 - Type:`boolean`
-- Ddfault:`true`
+- Dedfault:`true`
 
 是否开启 ts 类型检查
+
+## watchFiles
+
+- Type:`array`
+- Default:`[ '.env', '.eslintrc', '.eslintrc.js','.eslintignore','tsconfig.json', 'simo.config.js', 'simo.config.ts' ]`
+
+监听配置文件修改将会重启本地开发服务器

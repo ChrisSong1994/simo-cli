@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var webpack_1 = __importDefault(require("webpack"));
 var simo_utils_1 = require("@chrissong/simo-utils");
 var lodash_1 = __importDefault(require("lodash"));
+var path_1 = __importDefault(require("path"));
 var api_1 = __importDefault(require("../api"));
 var utils_1 = require("../utils");
 exports.default = (function (options) { return __awaiter(void 0, void 0, void 0, function () {
@@ -78,6 +79,16 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                                 resolve('success');
                             }
                         });
+                    }).then(function () {
+                        /**
+                         *  默认拷贝public内的非html文件
+                         */
+                        if (simo_utils_1.fs.existsSync(api.resolve('./public'))) {
+                            simo_utils_1.fs.copySync(api.resolve('./public'), api.resolve(lodash_1.default.get(options, 'simoConfig.output.path', '')), {
+                                dereference: true,
+                                filter: function (file) { return path_1.default.extname(file) !== '.html'; },
+                            });
+                        }
                     })];
         }
     });

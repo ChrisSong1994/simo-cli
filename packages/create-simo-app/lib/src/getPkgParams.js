@@ -35,8 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var simo_utils_1 = require("@chrissong/simo-utils");
+var lodash_1 = __importDefault(require("lodash"));
 // 获取输入参数
 var getPkgParams = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -46,22 +50,26 @@ var getPkgParams = function () { return __awaiter(void 0, void 0, void 0, functi
                         type: 'input',
                         name: 'name',
                         message: '请输入项目名称?',
+                        filter: function (v) { return lodash_1.default.trim(v); },
                     },
                     {
                         type: 'input',
                         name: 'version',
                         message: '请输入版本号?',
                         default: '1.0.0',
+                        filter: function (v) { return lodash_1.default.trim(v); },
                     },
                     {
                         type: 'input',
                         name: 'auther',
                         message: '请输入作者名称？',
+                        filter: function (v) { return lodash_1.default.trim(v); },
                     },
                     {
                         type: 'input',
                         name: 'description',
                         message: '请输入描述？',
+                        filter: function (v) { return lodash_1.default.trim(v); },
                     },
                 ])];
             case 1: return [2 /*return*/, _a.sent()];

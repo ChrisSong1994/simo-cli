@@ -5,10 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mini_css_extract_plugin_1 = __importDefault(require("mini-css-extract-plugin"));
 var css_minimizer_webpack_plugin_1 = __importDefault(require("css-minimizer-webpack-plugin"));
-var autoprefixer_1 = __importDefault(require("autoprefixer"));
-var postcss_flexbugs_fixes_1 = __importDefault(require("postcss-flexbugs-fixes"));
-var postcss_preset_env_1 = __importDefault(require("postcss-preset-env"));
-var postcss_safe_parser_1 = __importDefault(require("postcss-safe-parser"));
 /**
  * @param {*} webpackConfig webpack-chain配置对象
  * @param {*} param
@@ -39,29 +35,35 @@ exports.default = (function (config, _a) {
                 rule.use('style-loader').loader('style-loader');
             }
             var cssLoaderOptions = {
-                modules: modules,
+                modules: modules
+                    ? {
+                        localIdentName: '[path][name]-[local]_[hash:base64:5]',
+                    }
+                    : false,
                 sourceMap: sourceMap,
-                importLoaders: 1 + (isProd ? 1 : 0),
+                importLoaders: 10,
             };
             rule.use('css-loader').loader('css-loader').options(cssLoaderOptions);
             rule
                 .use('postcss-loader')
-                .loader('postcss-loader')
+                .loader(require.resolve('postcss-loader'))
                 .options({
-                sourceMap: sourceMap,
-                postcssOptions: {
-                    plugins: [
-                        postcss_flexbugs_fixes_1.default,
-                        postcss_safe_parser_1.default,
-                        [
-                            autoprefixer_1.default,
-                            {
-                                overrideBrowserslist: browsersList,
-                            },
-                        ],
-                        [postcss_preset_env_1.default, { stage: 3 }],
-                    ],
-                },
+                // Necessary for external CSS imports to work
+                // https://github.com/facebookincubator/create-react-app/issues/2677
+                ident: 'postcss',
+                plugins: function () { return [
+                    // https://github.com/luisrudge/postcss-flexbugs-fixes
+                    require('postcss-flexbugs-fixes'),
+                    // https://github.com/csstools/postcss-preset-env
+                    require('postcss-preset-env')({
+                        // TODO: set browsers
+                        autoprefixer: {
+                            overrideBrowserslist: browsersList,
+                        },
+                        // https://cssdb.org/
+                        stage: 3,
+                    }),
+                ]; },
             });
             if (loader) {
                 rule.use(loader).loader(loader).options(Object.assign({ sourceMap: sourceMap }, options));

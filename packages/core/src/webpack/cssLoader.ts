@@ -2,7 +2,7 @@ import WebpackChain from 'webpack-chain';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
-import { StyleLoaderOption } from 'packages/core/type';
+import { StyleLoaderOption } from '@chrissong/simo-core/type';
 
 interface ICreateCSSRuleOpts {
   lang: string;
@@ -22,7 +22,7 @@ interface ICreateCSSRuleOpts {
  */
 export default (
   config: WebpackChain,
-  { isProd, sourceMap, filename, chunkFilename, browsersList }: StyleLoaderOption,
+  { isProd, sourceMap, filename, chunkFilename, browsersList, cssExtract }: StyleLoaderOption,
 ) => {
   // 创建样式规则
   function createCSSRule({ lang, test, loader, options }: ICreateCSSRuleOpts) {
@@ -41,7 +41,7 @@ export default (
       rule: WebpackChain.Rule<WebpackChain.Rule<WebpackChain.Module>>,
       modules: boolean,
     ) {
-      if (isProd) {
+      if (isProd && cssExtract) {
         rule.use('extract-css-loader').loader(MiniCssExtractPlugin.loader);
       } else {
         rule.use('style-loader').loader('style-loader');
@@ -72,7 +72,7 @@ export default (
             require('postcss-preset-env')({
               // TODO: set browsers
               autoprefixer: {
-                overrideBrowserslist: browsersList,
+                // overrideBrowserslist: browsersList,
               },
               // https://cssdb.org/
               stage: 3,
@@ -88,12 +88,29 @@ export default (
 
   createCSSRule({ lang: 'css', test: /\.css$/ });
   createCSSRule({ lang: 'postcss', test: /\.p(ost)?css$/ });
-  createCSSRule({ lang: 'less', test: /\.less$/, loader: 'less-loader' });
+  createCSSRule({
+    lang: 'less',
+    test: /\.less$/,
+    loader: 'less-loader',
+    options: {
+      lessOptions: {
+        // https://github.com/ant-design/ant-motion/issues/44
+        // False by default starting in v3.0.0. Enables evaluation of JavaScript inline in .less files. This created a security problem for some developers who didn't expect user input for style sheets to have executable code.
+        javascriptEnabled: true, // https://lesscss.org/usage/#less-options   less v3.0.0版本引入 默认false,使用minxin 的话需要改成true
+      },
+    },
+  });
+  createCSSRule({
+    lang: 'sass',
+    test: /\.s(c|a)ss$/,
+    loader: 'sass-loader',
+    options: { implementation: require('sass') },
+  });
 
   /**
    * css 拆分和压缩
    * */
-  if (isProd) {
+  if (isProd && cssExtract) {
     // inject CSS extraction plugin
     config.plugin('extract-css').use(MiniCssExtractPlugin, [{ filename, chunkFilename }]);
 

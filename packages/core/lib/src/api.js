@@ -64,6 +64,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
 var webpack_chain_1 = __importDefault(require("webpack-chain"));
 var simo_utils_1 = require("@chrissong/simo-utils");
+var utils_1 = require("./utils");
 var Api = /** @class */ (function () {
     function Api(mode, options) {
         this.mode = mode;
@@ -203,6 +204,7 @@ var Api = /** @class */ (function () {
                 argv: _this.argv,
                 simoConfig: _this.simoConfig,
                 context: _this.context,
+                paths: utils_1.getPaths(_this.context),
                 resolve: function (dir) { return _this.resolve(dir); },
                 chainWebpack: function (callback) { return callback(config); },
             };

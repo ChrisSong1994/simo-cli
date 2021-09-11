@@ -3,6 +3,12 @@ import readline from 'readline';
 
 import { IPkgManagerParams } from '../type';
 
+const PACKAGE_MANAGER_CONFIG = {
+  npm: ['install', '--loglevel', 'error'],
+  xnpm: ['install', '--loglevel', 'error'],
+  yarn: ['install'],
+};
+
 /**
  * 安装依赖
  * @param{string} pkgManager yarn|npm
@@ -12,7 +18,8 @@ export default async (
   targetDir: string,
   pkgManager: IPkgManagerParams['pkgManager'],
 ): Promise<void> => {
-  const args = pkgManager === 'npm' ? ['install', '--loglevel', 'error'] : ['install'];
+  // @ts-ignore
+  const args = PACKAGE_MANAGER_CONFIG[pkgManager];
   const cmd = `${pkgManager} ${args.join(' ')}`;
   logger.log(`🚀  安装项目依赖 ${chalk.cyan(cmd)}，请稍等...`);
 

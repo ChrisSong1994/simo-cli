@@ -5,7 +5,7 @@ import { IPkgParams } from '../type';
 
 // 获取输入参数
 const getPkgParams = async (): Promise<IPkgParams> => {
-  return await inquirer.prompt([
+  const result=  await inquirer.prompt([
     {
       type: 'input',
       name: 'name',
@@ -32,6 +32,8 @@ const getPkgParams = async (): Promise<IPkgParams> => {
       filter: (v) => _.trim(v),
     },
   ]);
+
+  return result
 };
 
 export default getPkgParams;

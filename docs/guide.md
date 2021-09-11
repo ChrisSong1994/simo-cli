@@ -1,5 +1,14 @@
-# simo-cli 命令
+# simo-cli 使用指南
 
+### 安装
+
+支持 **Node.js** 版本>= **v10.13.0**
+
+```sh
+npm install @chrissong/simo-cli -g
+&
+yarn global add  @chrissong/simo-cli
+```
 
 ### simo
 
@@ -14,6 +23,7 @@ simo -v    #0.0.5
 ```bash
 simo -h
 ```
+
 ### simo create
 
 创建项目

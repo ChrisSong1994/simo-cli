@@ -21,17 +21,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = __importDefault(require("path"));
 var simo_utils_1 = require("@chrissong/simo-utils");
 var webpack_1 = require("webpack");
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
 var eslint_webpack_plugin_1 = __importDefault(require("eslint-webpack-plugin"));
+var lodash_webpack_plugin_1 = __importDefault(require("lodash-webpack-plugin"));
 var lodash_1 = __importDefault(require("lodash"));
 var webpackbar_1 = __importDefault(require("webpackbar"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) {
-        var simoConfig = api.simoConfig, context = api.context;
-        var target = simoConfig.target, alias = simoConfig.alias, pages = simoConfig.pages, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, externals = simoConfig.externals, ignoreMomentLocale = simoConfig.ignoreMomentLocale, output = simoConfig.output, parallel = simoConfig.parallel, extraBabelOptions = simoConfig.extraBabelOptions;
+        var simoConfig = api.simoConfig, context = api.context, paths = api.paths, env = api.env;
+        var useTypescript = simo_utils_1.fs.existsSync(paths.appTsConfigPath);
+        var isDevelopment = env.NODE_ENV === 'development';
+        var define = simoConfig.define, target = simoConfig.target, alias = simoConfig.alias, pages = simoConfig.pages, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, externals = simoConfig.externals, output = simoConfig.output, parallel = simoConfig.parallel, browsersList = simoConfig.browsersList, extraBabelOptions = simoConfig.extraBabelOptions, fastRefresh = simoConfig.fastRefresh;
         // 设置context
         config.context(context).target(target);
         // output配置
@@ -43,7 +45,19 @@ exports.default = (function (api) {
                 config.alias.set(key, api.resolve(alias[key]));
             });
         })
-            .extensions.merge(['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json', '.wasm']);
+            .extensions.merge([
+            '.mjs',
+            '.js',
+            '.jsx',
+            '.ts',
+            '.tsx',
+            '.json',
+            '.wasm',
+            '.less',
+            '.scss',
+            '.sass',
+            'css',
+        ]);
         // loader 配置
         /**
          * thread-loader  babel-loader
@@ -62,12 +76,18 @@ exports.default = (function (api) {
                 [
                     require.resolve('@chrissong/babel-preset-simo'),
                     {
-                        env: true,
-                        react: true,
-                        typescript: simo_utils_1.fs.existsSync(path_1.default.resolve(context, 'tsconfig.json')),
+                        targets: browsersList,
+                        typescript: useTypescript,
+                        refresh: fastRefresh,
+                        isDev: isDevelopment,
                     },
                 ]
             ], __spreadArrays(lodash_1.default.get(extraBabelOptions, 'presets', []))), plugins: __spreadArrays(lodash_1.default.get(extraBabelOptions, 'plugins', [])).filter(Boolean) }, lodash_1.default.omit(extraBabelOptions, ['presets', 'plugins'])));
+        // 匹配规则配置
+        config.module
+            .rule('modules')
+            .test(/\.m?jsx?$/)
+            .resolve.set('fullySpecified', false);
         // 图片
         config.module
             .rule('images')
@@ -129,20 +149,29 @@ exports.default = (function (api) {
             },
         ]);
         /**
+         * 自定义常量 .env优先
+         */
+        var newEnvs = __assign(__assign({}, define), env);
+        var stringfyEnvs = {};
+        Object.keys(newEnvs).forEach(function (key) { return (stringfyEnvs[key] = JSON.stringify(newEnvs[key])); });
+        config.plugin('define').use(webpack_1.DefinePlugin, [stringfyEnvs]);
+        /**
          * 编译进度
          */
-        config.plugin('process').use(webpackbar_1.default);
+        config.plugin('progress').use(webpackbar_1.default);
         /**
          * 忽略moment locale文件
          */
-        if (ignoreMomentLocale) {
-            config.plugin('ignore').use(webpack_1.IgnorePlugin, [
-                {
-                    resourceRegExp: /^\.\/locale$/,
-                    contextRegExp: /moment$/,
-                },
-            ]);
-        }
+        config.plugin('ignore').use(webpack_1.IgnorePlugin, [
+            {
+                resourceRegExp: /^\.\/locale$/,
+                contextRegExp: /moment$/,
+            },
+        ]);
+        /**
+         * lodash精简
+         * */
+        config.plugin('lodash').use(lodash_webpack_plugin_1.default);
         /**
          * 模版加载
          */
@@ -150,13 +179,14 @@ exports.default = (function (api) {
             var _loop_1 = function (key) {
                 var _a = pages[key], entry = _a.entry, template = _a.template, htmlWebpackPluginOptions = _a.htmlWebpackPluginOptions;
                 if (Array.isArray(entry)) {
-                    entry.forEach(function (en) { return config.entry(key).add(en); });
+                    entry.forEach(function (en) { return config.entry(key).add(api.resolve(en)); });
                 }
                 else {
-                    config.entry(key).add(entry);
+                    config.entry(key).add(api.resolve(entry));
                 }
+                // 模版
                 config.plugin("html-template-" + key).use(html_webpack_plugin_1.default, [
-                    __assign({ inject: Reflect.has(pages[key], 'htmlWebpackPluginOptions') ? true : false, template: path_1.default.resolve(context, template) }, htmlWebpackPluginOptions),
+                    __assign({ filename: key + ".html", template: api.resolve(template), inject: Reflect.has(pages[key], 'htmlWebpackPluginOptions') ? true : false, chunks: [key] }, htmlWebpackPluginOptions),
                 ]);
             };
             for (var key in pages) {

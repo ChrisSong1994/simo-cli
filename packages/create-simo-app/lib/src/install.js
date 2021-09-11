@@ -75,7 +75,6 @@ exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, v
                 }
                 child.on('close', function (code) {
                     if (code !== 0) {
-                        // eslint-disable-next-line prefer-promise-reject-errors
                         reject("pkgManager failed: " + pkgManager + " " + args.join(' '));
                         return;
                     }
@@ -85,7 +84,7 @@ exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, v
     });
 }); });
 // https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli/lib/util/executeCommand.js
-// 进度读取来自于 vue-cli
+// from vue-cli
 function renderProgressBar(curr, total) {
     var ratio = Math.min(Math.max(curr / total, 0), 1);
     var bar = " " + curr + "/" + total;

@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hasMultipleCores = exports.hasYarn = exports.mergeConfig = exports.parallelToSerial = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.logger = exports.findProcess = exports.which = exports.clipboardy = exports.address = exports.inquirer = exports.cliui = exports.rimraf = exports.execa = exports.chalk = exports.deepmerge = exports.open = exports.fs = void 0;
+exports.errorCapture = exports.hasMultipleCores = exports.hasYarn = exports.mergeConfig = exports.parallelToSerial = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.semverGt = exports.logger = exports.findProcess = exports.which = exports.clipboardy = exports.address = exports.inquirer = exports.cliui = exports.rimraf = exports.execa = exports.chalk = exports.deepmerge = exports.open = exports.fs = void 0;
 var fs_extra_1 = __importDefault(require("fs-extra"));
 exports.fs = fs_extra_1.default;
 var open_1 = __importDefault(require("open"));
@@ -47,6 +47,8 @@ var which_1 = __importDefault(require("which"));
 exports.which = which_1.default;
 var find_process_1 = __importDefault(require("find-process"));
 exports.findProcess = find_process_1.default;
+var gt_1 = __importDefault(require("semver/functions/gt"));
+exports.semverGt = gt_1.default;
 var logger_1 = __importDefault(require("./src/logger"));
 exports.logger = logger_1.default;
 var updateNotifier_1 = __importDefault(require("./src/updateNotifier"));
@@ -63,4 +65,6 @@ var hasYarn_1 = __importDefault(require("./src/hasYarn"));
 exports.hasYarn = hasYarn_1.default;
 var hasMultipleCores_1 = __importDefault(require("./src/hasMultipleCores"));
 exports.hasMultipleCores = hasMultipleCores_1.default;
+var errorCapture_1 = __importDefault(require("./src/errorCapture"));
+exports.errorCapture = errorCapture_1.default;
 //# sourceMappingURL=index.js.map

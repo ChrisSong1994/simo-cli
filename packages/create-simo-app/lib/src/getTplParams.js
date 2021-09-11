@@ -39,31 +39,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.templateTypes = void 0;
 var path_1 = __importDefault(require("path"));
 var simo_utils_1 = require("@chrissong/simo-utils");
-var simo_utils_2 = require("@chrissong/simo-utils");
-// 读取模版名称
-exports.templateTypes = simo_utils_2.fs
-    .readdirSync(path_1.default.resolve(__dirname, '../../templates'))
-    .map(function (type) { return ({
-    key: type,
-    name: type,
-    value: type,
-}); });
+// 模版仓库
+var templateStorePath = path_1.default.join(__dirname, '../../templateStore.json');
 // 获取输入参数
 var getTemplateParams = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var templatesData, templatesTypes, template;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, simo_utils_1.inquirer.prompt([
-                    {
-                        name: 'templateType',
-                        message: '请选择模版?',
-                        type: 'list',
-                        choices: exports.templateTypes,
-                    },
-                ])];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 0:
+                templatesData = JSON.parse(simo_utils_1.fs.readFileSync(templateStorePath, { encoding: 'utf8' }));
+                templatesTypes = Object.keys(templatesData).map(function (key) { return ({
+                    key: key,
+                    name: key,
+                    value: key,
+                }); });
+                return [4 /*yield*/, simo_utils_1.inquirer.prompt([
+                        {
+                            name: 'templateType',
+                            message: '请选择模版?',
+                            type: 'list',
+                            choices: templatesTypes,
+                        },
+                    ])];
+            case 1:
+                template = _a.sent();
+                return [2 /*return*/, templatesData[template.templateType]];
         }
     });
 }); };

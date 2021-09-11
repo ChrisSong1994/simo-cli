@@ -1,11 +1,14 @@
+import path from 'path';
 import { HotModuleReplacementPlugin } from 'webpack';
 import { DevServer } from 'webpack-chain';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+
 import _ from 'lodash';
 import { fs } from '@chrissong/simo-utils';
+import notifier from 'node-notifier';
 
 import cssLoader from './cssLoader';
 import { IWebpackConfig } from '../../type';
@@ -13,14 +16,18 @@ import { getProxy } from '../utils';
 
 export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
-    if (api.mode !== 'development') return;
+    const isDevelopment = api.env.NODE_ENV === 'development';
+    if (!isDevelopment) return;
+
     const { simoConfig, paths } = api;
-    const { port, host, proxy, browsersList, devtool, tsTypeCheck } = simoConfig;
+    const { port, host, proxy, browsersList, devtool, tsTypeCheck, fastRefresh } = simoConfig;
+
     const useTypescript = fs.existsSync(paths.appTsConfigPath);
 
     // 加载样式
     cssLoader(config, {
       isProd: false,
+      cssExtract: false,
       sourceMap: true,
       filename: '[name].css',
       chunkFilename: '[id].css',
@@ -31,7 +38,7 @@ export default (api: any) => {
     /**
      * 配置模式与devtool,缓存等
      */
-    config.mode('development').devtool(devtool)
+    config.mode('development').devtool(devtool);
 
     /**
      * devServer
@@ -43,7 +50,7 @@ export default (api: any) => {
       .port(port)
       .host(host)
       .hot(true)
-      .open(false)
+      .open(true)
       .progress(false)
       .stats(false)
       .clientLogLevel('none')
@@ -66,7 +73,21 @@ export default (api: any) => {
     /**
      * 错误
      */
-    config.plugin('error').use(FriendlyErrorsWebpackPlugin);
+    config.plugin('error').use(FriendlyErrorsWebpackPlugin, [
+      {
+        onErrors: (severity, errors) => {
+          if (severity !== 'error') {
+            return;
+          }
+          const error = errors[0];
+          notifier.notify({
+            title: 'Webpack error',
+            message: severity + ': ' + error,
+            icon: path.resolve(__dirname, '../statics/webpack_logo.ico'),
+          });
+        },
+      },
+    ]);
 
     /**
      * 大小写敏感
@@ -81,6 +102,6 @@ export default (api: any) => {
     /**
      * reactRefresh
      */
-    config.plugin('react-refresh').use(ReactRefreshWebpackPlugin);
+    fastRefresh && config.plugin('refresh').use(ReactRefreshWebpackPlugin, [{ overlay: false }]);
   });
 };

@@ -4,26 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var path_1 = __importDefault(require("path"));
-function toObject(obj) {
-    return typeof obj === 'object' ? obj : {};
-}
-var defaultEnvConfig = {
-    exclude: [
-        'transform-typeof-symbol',
-        'transform-unicode-regex',
-        'transform-sticky-regex',
-        'transform-new-target',
-        'transform-modules-umd',
-        'transform-modules-systemjs',
-        'transform-modules-amd',
-        'transform-literals',
-    ],
-};
-exports.default = (function (context, opts) {
+exports.default = (function (_context, opts) {
     if (opts === void 0) { opts = {}; }
     var presets = [
-        opts.env && [require('@babel/preset-env').default],
-        opts.react && [require('@babel/preset-react').default],
+        [
+            require('@babel/preset-env').default,
+            {
+                targets: opts.targets,
+            },
+        ],
+        [require('@babel/preset-react').default],
         opts.typescript && [
             require('@babel/preset-typescript').default,
             {
@@ -33,6 +23,8 @@ exports.default = (function (context, opts) {
         ],
     ].filter(Boolean);
     var plugins = [
+        opts.refresh && opts.isDev && [require('react-refresh/babel')],
+        [require('babel-plugin-lodash')],
         [require('@chrissong/babel-auto-css-modules').default],
         [require('@babel/plugin-proposal-decorators').default, { legacy: true }],
         [require('@babel/plugin-proposal-class-properties').default, { loose: true }],
@@ -50,7 +42,7 @@ exports.default = (function (context, opts) {
                 useESModules: true,
             },
         ],
-    ];
+    ].filter(Boolean);
     return {
         presets: presets,
         plugins: plugins,

@@ -6,16 +6,8 @@ declare const _default: {
     publicPath: string;
     port: number;
     host: string;
-    proxy: {
-        '/api': {
-            target: string;
-            changeOrigin: boolean;
-            pathRewrite: {
-                '^/api': string;
-            };
-        };
-        '/edge': string;
-    };
+    proxy: {};
+    devtool: string;
     externals: {};
     pages: {
         index: {
@@ -32,6 +24,9 @@ declare const _default: {
         presets: never[];
         plugins: never[];
     };
-    ignoreMomentLocale: boolean;
+    define: {};
+    tsTypeCheck: boolean;
+    fastRefresh: boolean;
+    chainWebpack: () => void;
 };
 export default _default;

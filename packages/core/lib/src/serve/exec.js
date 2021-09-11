@@ -61,11 +61,12 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
                     return [2 /*return*/, Promise.reject()];
                 }
                 return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
-                        var compiler, server;
+                        var compiler, server, isDefaultHost;
                         return __generator(this, function (_a) {
                             compiler = webpack_1.default(config);
                             server = new webpack_dev_server_1.default(compiler, config.devServer);
-                            server.listen(config.devServer.port, config.devServer.host, function (err) {
+                            isDefaultHost = ['localhost', '0.0.0.0', '127.0.0.1'].includes(config.devServer.host);
+                            server.listen(config.devServer.port, isDefaultHost ? '0.0.0.0' : config.devServer.host, function (err) {
                                 if (err)
                                     return reject(err);
                                 resolve(null);
@@ -83,7 +84,7 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
                                     catch (e) {
                                         copied = simo_utils_1.chalk.red("(copy to clipboard failed)");
                                     }
-                                    simo_utils_1.logger.log("\n      App running at:\n       - Local: " + simo_utils_1.chalk.cyan(localUrl) + " " + copied + " \n       - Network: " + simo_utils_1.chalk.cyan(lanUrl) + " \n\n      Note that the development build is not optimized.\n      To create a production build, use " + simo_utils_1.chalk.cyan(simo_utils_1.hasYarn() ? 'yarn build' : 'npm build') + ".\n        ");
+                                    simo_utils_1.logger.log("\n      App running at:\n       - Local: " + simo_utils_1.chalk.cyan(localUrl) + " " + copied + "\n       " + (isDefaultHost ? " - Network: " + simo_utils_1.chalk.cyan(lanUrl) + " \n" : '') + "\n      Note that the development build is not optimized.\n      To create a production build, use " + simo_utils_1.chalk.cyan(simo_utils_1.hasYarn() ? 'yarn build' : 'npm build') + ".\n        ");
                                 }
                             });
                             return [2 /*return*/];

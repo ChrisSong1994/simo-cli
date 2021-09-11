@@ -15,9 +15,7 @@ exports.default = (function (cli, argv) {
     simo_utils_1.loadEnv(process.cwd());
     // 先设置环境变量，以便在配置文件中使用
     var env = Object.assign(process.env, {
-        CMD: 'build',
         NODE_ENV: 'production',
-        BABEL_ENV: 'production',
     });
     exec_1.default({
         env: env,

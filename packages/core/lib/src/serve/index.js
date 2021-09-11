@@ -64,6 +64,7 @@ exports.default = (function (cli, argv) {
         '.eslintrc.js',
         '.eslintignore',
         '.babelrc',
+        '.babelrc.js',
         'babel.config.js',
         '.browserslistrc',
         'tsconfig.json',

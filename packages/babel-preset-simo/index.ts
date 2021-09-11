@@ -11,12 +11,13 @@ export default (_context: any, opts: IOpts = {}) => {
     [
       require('@babel/preset-env').default,
       {
-        targets: opts.targets,
+        // targets: opts.targets,
+        modules: false,
       },
     ],
     [require('@babel/preset-react').default],
     opts.typescript && [
-      require('@babel/preset-typescript').default,
+      require('@babel/preset-typescript'),
       {
         // https://babeljs.io/docs/en/babel-plugin-transform-typescript#impartial-namespace-support
         allowNamespaces: true,
@@ -24,12 +25,11 @@ export default (_context: any, opts: IOpts = {}) => {
     ],
   ].filter(Boolean);
 
+
   const plugins = [
     opts.refresh && opts.isDev && [require('react-refresh/babel')],
-    [require('babel-plugin-lodash')],
     [require('@chrissong/babel-auto-css-modules').default],
     [require('@babel/plugin-proposal-decorators').default, { legacy: true }],
-    [require('@babel/plugin-proposal-class-properties').default, { loose: true }],
     [require('@babel/plugin-proposal-export-default-from').default, { loose: true }],
     [require('@babel/plugin-syntax-dynamic-import').default],
     [
@@ -45,6 +45,7 @@ export default (_context: any, opts: IOpts = {}) => {
       },
     ],
   ].filter(Boolean);
+
   return {
     presets,
     plugins,

@@ -64,12 +64,13 @@ var child_process_1 = require("child_process");
 var simo_utils_1 = require("@chrissong/simo-utils");
 var lodash_1 = __importDefault(require("lodash"));
 var fkill_1 = __importDefault(require("fkill"));
-var update_notifier_1 = __importDefault(require("update-notifier"));
+// import updateNotifier from 'update-notifier';
 var create_1 = __importDefault(require("./src/create"));
 var serve_1 = __importDefault(require("./src/serve"));
 var build_1 = __importDefault(require("./src/build"));
 var inspect_1 = __importDefault(require("./src/inspect"));
-var defaultPlugins = [create_1.default, serve_1.default, build_1.default, inspect_1.default];
+var template_1 = __importDefault(require("./src/template"));
+var defaultPlugins = [create_1.default, serve_1.default, build_1.default, inspect_1.default, template_1.default];
 /** 命令行
  * 1.初始化命令行参数
  * 2.检查包更新情况
@@ -90,11 +91,16 @@ var Cli = /** @class */ (function () {
     }
     Cli.prototype.init = function () {
         var _this = this;
-        // 检查安装包更新情况
-        update_notifier_1.default({
-            pkg: this.pkg,
-            updateCheckInterval: 1000 * 60 * 60 * 24 * 7,
-        }).notify();
+        // 检查node版本 （wWebpack 5 对 Node.js 的版本要求至少是 10.13.0 (LTS) ）
+        if (!simo_utils_1.semverGt(process.versions.node, '10.13.0')) {
+            simo_utils_1.logger.warn("\u8BF7\u5347\u7EA7\u60A8\u6240\u4F7F\u7528\u7684Node.js\u7248\u672C\u523010.13.0\u4EE5\u4E0A");
+            process.exit(0);
+        }
+        // // 检查安装包更新情况
+        // updateNotifier({
+        //   pkg: this.pkg,
+        //   updateCheckInterval: 1000 * 60 * 60 * 24 * 7,
+        // }).notify();
         // 初始化插件
         this.plugins.forEach(function (plugin) { return plugin(_this); });
     };
@@ -114,7 +120,7 @@ var Cli = /** @class */ (function () {
     // 创建子进程执行
     Cli.prototype.fork = function (path, argv, options) {
         var _this = this;
-        var subprocess = child_process_1.fork(path, argv, __assign({ env: this.env, execArgv: ["--inspect-brk=127.0.0.1:" + (process.debugPort + 1)] }, options));
+        var subprocess = child_process_1.fork(path, argv, __assign({ env: this.env }, options));
         subprocess.on('close', function () {
             var index = _this.subprocess.findIndex(function (item) { return item === subprocess; });
             _this.subprocess.splice(index, 1);

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "simo-template",
+    "repository": "./templates/simo-template",
+    "description": "Js 模版 ",
+    "isBuiltIn": true
+  },
+  {
+    "name": "simo-template-typescript",
+    "repository": "./templates/simo-template-typescript",
+    "description": "Ts 模版 ",
+    "isBuiltIn": true
+  }
+]

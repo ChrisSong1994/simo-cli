@@ -10,7 +10,7 @@ const createSimoApp = async (
   pkgParams: IPkgParams,
   pkgManagerParams: IPkgManagerParams,
 ) => {
-  const { repository, name, isBuiltIn } = tplParams;
+  const { repository, isBuiltIn } = tplParams;
   const { pkgManager } = pkgManagerParams;
 
   if (isBuiltIn) {

@@ -1,8 +1,11 @@
+import path from 'path';
 import { fs } from '@chrissong/simo-utils';
 import { IgnorePlugin, DefinePlugin } from 'webpack';
 import HtmlWebpackTemplate from 'html-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
-import LodashModuleReplacementPlugin from 'lodash-webpack-plugin';
+import WebpackBuildNotifierPlugin from 'webpack-build-notifier';
+import NodePolyfillWebpackPlugin from 'node-polyfill-webpack-plugin';
+
 import _ from 'lodash';
 import WebpackBar from 'webpackbar';
 
@@ -21,21 +24,26 @@ export default (api: any) => {
       pages,
       publicPath,
       inlineLimit,
-      externals,
       output,
+      outputEnvironment,
       parallel,
       browsersList,
       extraBabelOptions,
       fastRefresh,
+      buildNotifier,
     } = simoConfig;
 
     // 设置context
-    config.context(context).target(target);
+    config
+      .context(context)
+      .target(isDevelopment ? 'web' : target)
+      .cache({ type: 'filesystem', maxAge: 604800000 }); // 无用缓存默认一周失效
 
     // output配置
     config.output.merge({
       publicPath: publicPath,
       path: api.resolve(_.get(output, 'path', 'dist')),
+      environment: outputEnvironment,
       ..._.omit(output, ['publicPath', 'path']),
     });
 
@@ -76,19 +84,20 @@ export default (api: any) => {
       .use('babel-loader')
       .loader('babel-loader')
       .options({
+        exclude: /(node_modules)/,
         cacheDirectory: true,
         sourceType: 'unambiguous',
         presets: [
           [
             require.resolve('@chrissong/babel-preset-simo'),
             {
-              targets: browsersList,
+              targets: browsersList.join(','),
               typescript: useTypescript,
               refresh: fastRefresh,
               isDev: isDevelopment,
             },
           ],
-          ...[..._.get(extraBabelOptions, 'presets', [])],
+          ..._.get(extraBabelOptions, 'presets', []),
         ],
         plugins: [..._.get(extraBabelOptions, 'plugins', [])].filter(Boolean),
         ..._.omit(extraBabelOptions, ['presets', 'plugins']),
@@ -148,12 +157,31 @@ export default (api: any) => {
       .use('raw-loader')
       .loader(require.resolve('raw-loader'));
 
-    //  排除依赖
-    config.when(externals, (config: IWebpackConfig) => {
-      config.externals(externals);
-    });
-
     // 插件配置
+
+    /**
+     * webpack 5 的node模块补丁
+     */
+
+    config
+      .plugin('webpack-node-polyfill')
+      .use(NodePolyfillWebpackPlugin, [{ excludeAliases: ['console'] }]);
+
+    /**
+     *  构建通知
+     */
+    config.when(Boolean(buildNotifier), (config: IWebpackConfig) => {
+      let opts = {
+        title: 'simo build',
+        logo: path.resolve(__dirname, '../statics/webpack_logo.ico'),
+      };
+      if (typeof buildNotifier === 'string') {
+        opts = { ...opts, title: buildNotifier };
+      } else if (typeof buildNotifier === 'object') {
+        opts = { ...opts, ...buildNotifier };
+      }
+      config.plugin('build-notifier').use(WebpackBuildNotifierPlugin, [opts]);
+    });
 
     /**
      * eslint 插件配置
@@ -178,7 +206,17 @@ export default (api: any) => {
     /**
      * 编译进度
      */
-    config.plugin('progress').use(WebpackBar);
+    config.plugin('progress').use(WebpackBar, [
+      isDevelopment
+        ? {
+            name: 'simo serve',
+            color: 'green',
+          }
+        : {
+            name: 'simo build',
+            color: 'orange',
+          },
+    ]);
 
     /**
      * 忽略moment locale文件
@@ -191,16 +229,11 @@ export default (api: any) => {
     ]);
 
     /**
-     * lodash精简
-     * */
-    config.plugin('lodash').use(LodashModuleReplacementPlugin);
-
-    /**
      * 模版加载
      */
     config.when(pages, (config: IWebpackConfig) => {
       for (let key in pages) {
-        const { entry, template, htmlWebpackPluginOptions } = pages[key];
+        const { entry, template, htmlWebpackPluginOptions = {} } = pages[key];
 
         if (Array.isArray(entry)) {
           entry.forEach((en) => config.entry(key).add(api.resolve(en)));
@@ -208,16 +241,18 @@ export default (api: any) => {
           config.entry(key).add(api.resolve(entry));
         }
 
-        // 模版
-        config.plugin(`html-template-${key}`).use(HtmlWebpackTemplate, [
-          {
-            filename: `${key}.html`,
-            template: api.resolve(template),
-            inject: Reflect.has(pages[key], 'htmlWebpackPluginOptions') ? true : false,
-            chunks: [key],
-            ...htmlWebpackPluginOptions,
-          },
-        ]);
+        if (template) {
+          // 模版
+          config.plugin(`html-template-${key}`).use(HtmlWebpackTemplate, [
+            {
+              filename: `${key}.html`,
+              template: api.resolve(template),
+              inject: true,
+              chunks: [key],
+              ...htmlWebpackPluginOptions,
+            },
+          ]);
+        }
       }
     });
   });

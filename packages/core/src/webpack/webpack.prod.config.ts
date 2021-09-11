@@ -2,7 +2,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
-
+import _ from 'lodash';
 
 import { IWebpackConfig } from '../../type';
 import cssLoader from './cssLoader';
@@ -11,13 +11,22 @@ export default (api: any) => {
   api.chainWebpack(async (config: IWebpackConfig) => {
     if (api.mode !== 'production') return;
 
-    const { copyPath, output, publicPath, browsersList, parallel } = api.simoConfig;
+    const {
+      copyPath,
+      output,
+      publicPath,
+      browsersList,
+      parallel,
+      cssExtract,
+      externals,
+    } = api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
       isProd: true,
       sourceMap: false,
-      filename: '[name].[contenthash:8].css',
+      cssExtract: cssExtract,
+      filename: '[name].css',
       chunkFilename: '[id].css',
       publicPath: publicPath,
       browsersList: browsersList,
@@ -31,8 +40,13 @@ export default (api: any) => {
       .watch(false)
       .mode('production')
       .devtool(api.argv.sourcemap ? 'source-map' : false)
-      .output.filename('[name].[contenthash:8].js')
+      .output.filename(_.get(output, 'filename') || '[name].[contenthash:8].js')
       .chunkFilename('[id].js');
+
+    //  排除依赖
+    config.when(externals, (config: IWebpackConfig) => {
+      config.externals(externals);
+    });
 
     /**
      * 依赖打包大小分析

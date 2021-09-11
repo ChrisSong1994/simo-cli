@@ -9,9 +9,7 @@ var exec_1 = __importDefault(require("./exec"));
 var inspect = function (cli, argv) {
     simo_utils_1.loadEnv(process.cwd());
     var env = Object.assign(process.env, {
-        CMD: 'build',
-        NODE_ENV: 'production',
-        BABEL_ENV: 'production',
+        NODE_ENV: 'production'
     });
     exec_1.default({
         env: env,

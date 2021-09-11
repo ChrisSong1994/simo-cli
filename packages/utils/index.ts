@@ -20,7 +20,10 @@ import parallelToSerial from './src/parallelToSerial';
 import mergeConfig from './src/mergeConfig';
 import hasYarn from './src/hasYarn';
 import hasMultipleCores from './src/hasMultipleCores';
-import errorCapture from './src/errorCapture'
+import errorCapture from './src/errorCapture';
+import copyFiles from './src/copyFiles';
+import rimrafPromify from './src/rimrafPromify';
+import getUserHome from './src/getUserHome'
 
 export {
   fs,
@@ -44,5 +47,8 @@ export {
   mergeConfig,
   hasYarn,
   hasMultipleCores,
-  errorCapture
+  errorCapture,
+  copyFiles,
+  rimrafPromify,
+  getUserHome
 };

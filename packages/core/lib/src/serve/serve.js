@@ -16,9 +16,7 @@ yargs_1.default
     //   加载环境变量
     simo_utils_1.loadEnv(cwd);
     var env = Object.assign(process_1.default.env, {
-        CMD: 'server',
         NODE_ENV: 'development',
-        BABEL_ENV: 'development',
     });
     // 执行开发服务
     exec_1.default({

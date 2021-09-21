@@ -43,27 +43,26 @@ var webpack_1 = __importDefault(require("webpack"));
 var webpack_dev_server_1 = __importDefault(require("webpack-dev-server"));
 var simo_utils_1 = require("@chrissong/simo-utils");
 var api_1 = __importDefault(require("../api"));
-// 服务启动
 var server = function (options) { return __awaiter(void 0, void 0, void 0, function () {
     var api, config, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 api = new api_1.default('development', options);
-                return [4 /*yield*/, api.resolveWebpackConfig()];
+                return [4, api.resolveWebpackConfig()];
             case 1:
                 config = _a.sent();
-                return [4 /*yield*/, simo_utils_1.findProcess('port', config.devServer.port)];
+                return [4, (0, simo_utils_1.findProcess)('port', config.devServer.port)];
             case 2:
                 result = _a.sent();
                 if (result.length) {
                     simo_utils_1.logger.warn("\u26D4 \u7AEF\u53E3\u53F7 " + simo_utils_1.chalk.underline(config.devServer.port) + " \u88AB\u5360\u7528\uFF0C\u8BF7\u4FEE\u6539\u7AEF\u53E3\u53F7\uFF01");
-                    return [2 /*return*/, Promise.reject()];
+                    return [2, Promise.reject()];
                 }
-                return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
+                return [2, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
                         var compiler, server, isDefaultHost;
                         return __generator(this, function (_a) {
-                            compiler = webpack_1.default(config);
+                            compiler = (0, webpack_1.default)(config);
                             server = new webpack_dev_server_1.default(compiler, config.devServer);
                             isDefaultHost = ['localhost', '0.0.0.0', '127.0.0.1'].includes(config.devServer.host);
                             server.listen(config.devServer.port, isDefaultHost ? '0.0.0.0' : config.devServer.host, function (err) {
@@ -71,7 +70,7 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
                                     return reject(err);
                                 resolve(null);
                                 if (api.argv.open) {
-                                    simo_utils_1.open("http://" + config.devServer.host + ":" + config.devServer.port);
+                                    (0, simo_utils_1.open)("http://" + config.devServer.host + ":" + config.devServer.port);
                                 }
                                 else {
                                     var localUrl = "http://" + config.devServer.host + ":" + config.devServer.port;
@@ -84,14 +83,13 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
                                     catch (e) {
                                         copied = simo_utils_1.chalk.red("(copy to clipboard failed)");
                                     }
-                                    simo_utils_1.logger.log("\n      App running at:\n       - Local: " + simo_utils_1.chalk.cyan(localUrl) + " " + copied + "\n       " + (isDefaultHost ? " - Network: " + simo_utils_1.chalk.cyan(lanUrl) + " \n" : '') + "\n      Note that the development build is not optimized.\n      To create a production build, use " + simo_utils_1.chalk.cyan(simo_utils_1.hasYarn() ? 'yarn build' : 'npm build') + ".\n        ");
+                                    simo_utils_1.logger.log("\n      App running at:\n       - Local: " + simo_utils_1.chalk.cyan(localUrl) + " " + copied + "\n       " + (isDefaultHost ? " - Network: " + simo_utils_1.chalk.cyan(lanUrl) + " \n" : '') + "\n      Note that the development build is not optimized.\n      To create a production build, use " + simo_utils_1.chalk.cyan((0, simo_utils_1.hasYarn)() ? 'yarn build' : 'npm build') + ".\n        ");
                                 }
                             });
-                            return [2 /*return*/];
+                            return [2];
                         });
                     }); })];
         }
     });
 }); };
 exports.default = server;
-//# sourceMappingURL=exec.js.map

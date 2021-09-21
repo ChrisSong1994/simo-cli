@@ -22,4 +22,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.template = exports.create = void 0;
 exports.create = __importStar(require("./src/create"));
 exports.template = __importStar(require("./src/template"));
-//# sourceMappingURL=index.js.map

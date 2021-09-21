@@ -48,15 +48,15 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
             case 0:
                 simo_utils_1.spinner.start('📄  配置打印中...');
                 api = new api_1.default('production', options);
-                return [4 /*yield*/, api.resolveWebpackConfig()];
+                return [4, api.resolveWebpackConfig()];
             case 1:
                 config = _a.sent();
                 result = JSON.stringify(config, undefined, 2);
-                if (!options.argv.filename) return [3 /*break*/, 9];
+                if (!options.argv.filename) return [3, 9];
                 targetFile = api.resolve(options.argv.filename + ".json");
-                if (!simo_utils_1.fs.existsSync(targetFile)) return [3 /*break*/, 6];
+                if (!simo_utils_1.fs.existsSync(targetFile)) return [3, 6];
                 simo_utils_1.spinner.pause();
-                return [4 /*yield*/, simo_utils_1.inquirer.prompt([
+                return [4, simo_utils_1.inquirer.prompt([
                         {
                             name: 'isOverWrite',
                             message: "\u5F53\u524D\u6587\u4EF6\u5939\u5DF2\u5B58\u5728" + simo_utils_1.chalk.cyan(options.argv.filename + ".json") + ",\u662F\u5426\u8986\u76D6?",
@@ -67,25 +67,24 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
             case 2:
                 isOverWrite = (_a.sent()).isOverWrite;
                 simo_utils_1.spinner.resume();
-                if (!isOverWrite) return [3 /*break*/, 5];
-                return [4 /*yield*/, simo_utils_1.fs.remove(targetFile)];
+                if (!isOverWrite) return [3, 5];
+                return [4, simo_utils_1.fs.remove(targetFile)];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, simo_utils_1.fs.writeFile(targetFile, result)];
+                return [4, simo_utils_1.fs.writeFile(targetFile, result)];
             case 4:
                 _a.sent();
                 _a.label = 5;
-            case 5: return [2 /*return*/, simo_utils_1.spinner.stop()];
-            case 6: return [4 /*yield*/, simo_utils_1.fs.writeFile(targetFile, result)];
+            case 5: return [2, simo_utils_1.spinner.stop()];
+            case 6: return [4, simo_utils_1.fs.writeFile(targetFile, result)];
             case 7:
                 _a.sent();
-                return [2 /*return*/, simo_utils_1.spinner.stop()];
-            case 8: return [3 /*break*/, 10];
+                return [2, simo_utils_1.spinner.stop()];
+            case 8: return [3, 10];
             case 9:
                 simo_utils_1.logger.log(result);
-                return [2 /*return*/, simo_utils_1.spinner.stop()];
-            case 10: return [2 /*return*/];
+                return [2, simo_utils_1.spinner.stop()];
+            case 10: return [2];
         }
     });
 }); });
-//# sourceMappingURL=exec.js.map

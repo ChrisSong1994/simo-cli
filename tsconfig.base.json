@@ -6,7 +6,7 @@
     "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */ /* Specify library files to be included in the compilation. */,
     "allowJs": false /* Allow javascript files to be compiled. */,
     "declaration": true /* Generates corresponding '.d.ts' file. */,
-
+    "removeComments": true,
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
@@ -20,5 +20,5 @@
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "exclude": ["./examples"]
+  "exclude": ["./examples", "./packages/create-simo-app/templates"]
 }

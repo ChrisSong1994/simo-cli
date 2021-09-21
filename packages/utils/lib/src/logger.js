@@ -32,4 +32,3 @@ exports.default = {
     error: error,
     warn: warn,
 };
-//# sourceMappingURL=logger.js.map

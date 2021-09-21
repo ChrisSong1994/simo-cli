@@ -51,11 +51,11 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
         switch (_a.label) {
             case 0:
                 api = new api_1.default('production', options);
-                return [4 /*yield*/, api.resolveWebpackConfig()];
+                return [4, api.resolveWebpackConfig()];
             case 1:
                 config = _a.sent();
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        webpack_1.default(config, function (error, stats) {
+                return [2, new Promise(function (resolve, reject) {
+                        (0, webpack_1.default)(config, function (error, stats) {
                             if (error || !stats)
                                 return reject(error);
                             if (error || stats.compilation.errors.length) {
@@ -64,7 +64,7 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                             }
                             else {
                                 simo_utils_1.logger.log(stats.toString({ colors: true, all: false, errors: true, warnings: true }));
-                                simo_utils_1.logger.log(utils_1.formatStats(stats, lodash_1.default.get(options, 'simoConfig.output.path', ''), api));
+                                simo_utils_1.logger.log((0, utils_1.formatStats)(stats, lodash_1.default.get(options, 'simoConfig.output.path', ''), api));
                             }
                             if (stats.hasErrors()) {
                                 simo_utils_1.logger.error(' 打包失败');
@@ -80,9 +80,6 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                             }
                         });
                     }).then(function () {
-                        /**
-                         *  默认拷贝public内的非html文件
-                         */
                         if (simo_utils_1.fs.existsSync(api.resolve('./public'))) {
                             simo_utils_1.fs.copySync(api.resolve('./public'), api.resolve(lodash_1.default.get(options, 'simoConfig.output.path', '')), {
                                 dereference: true,
@@ -93,4 +90,3 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
         }
     });
 }); });
-//# sourceMappingURL=exec.js.map

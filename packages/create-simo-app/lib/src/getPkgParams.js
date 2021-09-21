@@ -41,11 +41,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var simo_utils_1 = require("@chrissong/simo-utils");
 var lodash_1 = __importDefault(require("lodash"));
-// 获取输入参数
 var getPkgParams = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, simo_utils_1.inquirer.prompt([
+            case 0: return [4, simo_utils_1.inquirer.prompt([
                     {
                         type: 'input',
                         name: 'name',
@@ -72,9 +72,10 @@ var getPkgParams = function () { return __awaiter(void 0, void 0, void 0, functi
                         filter: function (v) { return lodash_1.default.trim(v); },
                     },
                 ])];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 1:
+                result = _a.sent();
+                return [2, result];
         }
     });
 }); };
 exports.default = getPkgParams;
-//# sourceMappingURL=getPkgParams.js.map

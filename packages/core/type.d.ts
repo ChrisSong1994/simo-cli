@@ -3,7 +3,7 @@ import Webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
 export interface IObj {
-  [key: string]: any;
+  [key?: string]: any;
 }
 
 // webpack 链式调用实例
@@ -46,6 +46,7 @@ export type OptionType = {
 export type StyleLoaderOption = {
   isProd: Boolean;
   sourceMap: Boolean;
+  cssExtract:Boolean;
   filename: string;
   chunkFilename: string;
   publicPath: string;

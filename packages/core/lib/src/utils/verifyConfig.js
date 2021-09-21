@@ -7,15 +7,18 @@ var joi_1 = __importDefault(require("joi"));
 var schema = joi_1.default.object({
     alias: joi_1.default.object(),
     browsersList: joi_1.default.array(),
+    buildNotifier: joi_1.default.alternatives(joi_1.default.boolean(), joi_1.default.string(), joi_1.default.object()),
     copyPath: joi_1.default.alternatives(joi_1.default.string(), joi_1.default.array()),
     chainWebpack: joi_1.default.function(),
+    cssExtract: joi_1.default.boolean(),
     define: joi_1.default.object(),
     devtool: joi_1.default.string(),
-    externals: joi_1.default.object(),
+    externals: joi_1.default.alternatives(joi_1.default.string(), joi_1.default.function(), joi_1.default.object()),
     extraBabelOptions: joi_1.default.object(),
     fastRefresh: joi_1.default.boolean(),
     host: joi_1.default.string(),
-    pages: joi_1.default.object(),
+    inlineLimit: joi_1.default.number(),
+    pages: joi_1.default.object().required(),
     parallel: joi_1.default.boolean(),
     port: joi_1.default.number().integer().min(0),
     proxy: joi_1.default.object(),
@@ -24,13 +27,13 @@ var schema = joi_1.default.object({
         path: joi_1.default.string().required(),
         filename: joi_1.default.string(),
         chunkFilename: joi_1.default.string(),
-        library: joi_1.default.string(),
-        libraryTarget: joi_1.default.string(),
-    }),
-    target: joi_1.default.string(),
+        library: joi_1.default.alternatives(joi_1.default.string(), joi_1.default.array(), joi_1.default.object()),
+    }).required(),
+    outputEnvironment: joi_1.default.object(),
+    target: joi_1.default.alternatives(joi_1.default.string(), joi_1.default.boolean(), joi_1.default.array()),
     tsTypeCheck: joi_1.default.boolean(),
+    watchFiles: joi_1.default.array(),
 });
 exports.default = (function (value) {
     return schema.validate(value);
 });
-//# sourceMappingURL=verifyConfig.js.map

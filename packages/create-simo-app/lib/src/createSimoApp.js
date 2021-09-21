@@ -43,40 +43,32 @@ var path_1 = __importDefault(require("path"));
 var generator_1 = require("./generator");
 var install_1 = __importDefault(require("./install"));
 var createSimoApp = function (targetDir, tplParams, pkgParams, pkgManagerParams) { return __awaiter(void 0, void 0, void 0, function () {
-    var repository, name, isBuiltIn, pkgManager;
+    var repository, isBuiltIn, pkgManager;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                repository = tplParams.repository, name = tplParams.name, isBuiltIn = tplParams.isBuiltIn;
+                repository = tplParams.repository, isBuiltIn = tplParams.isBuiltIn;
                 pkgManager = pkgManagerParams.pkgManager;
-                if (!isBuiltIn) return [3 /*break*/, 1];
-                // 拷贝项目
-                generator_1.copyDirectory({
+                if (!isBuiltIn) return [3, 1];
+                (0, generator_1.copyDirectory)({
                     path: path_1.default.resolve(__dirname, "../../" + repository),
                     context: { pkgParams: pkgParams },
                     target: targetDir,
                 });
-                return [3 /*break*/, 3];
-            case 1: 
-            // 拉取代码
-            return [4 /*yield*/, generator_1.pullProject({
+                return [3, 3];
+            case 1: return [4, (0, generator_1.pullProject)({
                     repository: repository,
                     context: { pkgParams: pkgParams },
                     target: targetDir,
                 })];
             case 2:
-                // 拉取代码
                 _a.sent();
                 _a.label = 3;
-            case 3: 
-            // 自动安装项目依赖
-            return [4 /*yield*/, install_1.default(targetDir, pkgManager)];
+            case 3: return [4, (0, install_1.default)(targetDir, pkgManager)];
             case 4:
-                // 自动安装项目依赖
                 _a.sent();
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); };
 exports.default = createSimoApp;
-//# sourceMappingURL=createSimoApp.js.map

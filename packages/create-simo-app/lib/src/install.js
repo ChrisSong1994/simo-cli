@@ -41,19 +41,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var simo_utils_1 = require("@chrissong/simo-utils");
 var readline_1 = __importDefault(require("readline"));
-/**
- * 安装依赖
- * @param{string} pkgManager yarn|npm
- * @param{string} targetDir  项目路径
- */
+var PACKAGE_MANAGER_CONFIG = {
+    npm: ['install', '--loglevel', 'error'],
+    xnpm: ['install', '--loglevel', 'error'],
+    yarn: ['install'],
+};
 exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, void 0, void 0, function () {
     var args, cmd;
     return __generator(this, function (_a) {
-        args = pkgManager === 'npm' ? ['install', '--loglevel', 'error'] : ['install'];
+        args = PACKAGE_MANAGER_CONFIG[pkgManager];
         cmd = pkgManager + " " + args.join(' ');
         simo_utils_1.logger.log("\uD83D\uDE80  \u5B89\u88C5\u9879\u76EE\u4F9D\u8D56 " + simo_utils_1.chalk.cyan(cmd) + "\uFF0C\u8BF7\u7A0D\u7B49...");
-        return [2 /*return*/, new Promise(function (resolve, reject) {
-                var child = simo_utils_1.execa(pkgManager, args, {
+        return [2, new Promise(function (resolve, reject) {
+                var child = (0, simo_utils_1.execa)(pkgManager, args, {
                     cwd: targetDir,
                     stdio: ['inherit', 'inherit', 'pipe'],
                 });
@@ -65,8 +65,6 @@ exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, v
                                 return;
                             var progressBarMatch = str.match(/\[.*\] (\d+)\/(\d+)/);
                             if (progressBarMatch) {
-                                // since yarn is in a child process, it's unable to get the width of
-                                // the terminal. reimplement the progress bar ourselves!
                                 renderProgressBar(progressBarMatch[1], progressBarMatch[2]);
                                 return;
                             }
@@ -83,8 +81,6 @@ exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, v
             })];
     });
 }); });
-// https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli/lib/util/executeCommand.js
-// from vue-cli
 function renderProgressBar(curr, total) {
     var ratio = Math.min(Math.max(curr / total, 0), 1);
     var bar = " " + curr + "/" + total;
@@ -103,4 +99,3 @@ function toStartOfLine(stream) {
     }
     readline_1.default.cursorTo(stream, 0);
 }
-//# sourceMappingURL=install.js.map

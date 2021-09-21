@@ -35,7 +35,7 @@ export default (cli: any, argv: any) => {
       try {
         await fkill(serverprocess.pid);
       } catch (err) {
-        return logger.error(err);
+        return logger.error((err as Error).toString());
       }
 
       serverprocess = createServer(cli);

@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pause = exports.resume = exports.stop = exports.start = void 0;
 var ora_1 = __importDefault(require("ora"));
-var spinner = ora_1.default();
+var spinner = (0, ora_1.default)();
 var start = function (msg) {
     spinner.text = msg;
     spinner.start();
@@ -23,4 +23,3 @@ var pause = function () {
     spinner.stop();
 };
 exports.pause = pause;
-//# sourceMappingURL=spinner.js.map

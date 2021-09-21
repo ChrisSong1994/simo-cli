@@ -11,4 +11,3 @@ exports.default = (function (cli) {
         create_simo_app_1.create.default(cli, argv);
     });
 });
-//# sourceMappingURL=index.js.map

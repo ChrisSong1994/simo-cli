@@ -11,7 +11,7 @@ const loadEnv = (cwd: string) => {
   try {
     const env = dotenv.config({ path: basePath });
     dotenvExpand(env);
-  } catch (err) {
+  } catch (err:any) {
     if (err.toString().indexOf('ENOENT') < 0) {
       throw err;
     }

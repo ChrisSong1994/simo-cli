@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var simo_utils_1 = require("@chrissong/simo-utils");
-var ui = simo_utils_1.cliui({ width: process.stdout.columns || 80 });
+var ui = (0, simo_utils_1.cliui)({ width: process.stdout.columns || 80 });
 var formatStats = function (stats, dir, api) {
     var json = stats.toJson({
         hash: false,
@@ -59,4 +59,3 @@ var formatStats = function (stats, dir, api) {
     return "\n" + ui.toString() + "\n";
 };
 exports.default = formatStats;
-//# sourceMappingURL=formatStats.js.map

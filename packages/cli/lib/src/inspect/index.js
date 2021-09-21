@@ -9,7 +9,6 @@ exports.default = (function (cli) {
             describe: '生成配置文件，可指定文件名',
         });
     }, function (argv) {
-        simo_core_1.inspect(cli, argv);
+        (0, simo_core_1.inspect)(cli, argv);
     });
 });
-//# sourceMappingURL=index.js.map

@@ -37,33 +37,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var simo_utils_1 = require("@chrissong/simo-utils");
-// 获取输入参数
 var getPkgManager = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var hasXnmp, hasYarn;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, simo_utils_1.inquirer.prompt([
-                    {
-                        name: 'pkgManager',
-                        message: '请选择包管理器?',
-                        type: 'list',
-                        default: 'yarn',
-                        choices: [
-                            {
-                                key: 'yarn',
-                                name: 'yarn',
-                                value: 'yarn',
-                            },
-                            {
-                                key: 'npm',
-                                name: 'npm',
-                                value: 'npm',
-                            },
-                        ],
-                    },
-                ])];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 0:
+                hasXnmp = simo_utils_1.which.sync('xnpm', { nothrow: true });
+                hasYarn = simo_utils_1.which.sync('yarn', { nothrow: true });
+                return [4, simo_utils_1.inquirer.prompt([
+                        {
+                            name: 'pkgManager',
+                            message: '请选择包管理器?',
+                            type: 'list',
+                            default: 'npm',
+                            choices: [
+                                {
+                                    key: 'npm',
+                                    name: 'npm',
+                                    value: 'npm',
+                                },
+                                hasXnmp
+                                    ? {
+                                        key: 'xnpm',
+                                        name: 'xnpm',
+                                        value: 'xnpm',
+                                    }
+                                    : null,
+                                hasYarn
+                                    ? {
+                                        key: 'yarn',
+                                        name: 'yarn',
+                                        value: 'yarn',
+                                    }
+                                    : null,
+                            ].filter(Boolean),
+                        },
+                    ])];
+            case 1: return [2, _a.sent()];
         }
     });
 }); };
 exports.default = getPkgManager;
-//# sourceMappingURL=getPkgManager.js.map

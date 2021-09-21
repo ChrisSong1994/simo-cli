@@ -12,4 +12,3 @@ var command_1 = __importDefault(require("./src/serve/command"));
 exports.serveCmd = command_1.default;
 var inspect_1 = __importDefault(require("./src/inspect"));
 exports.inspect = inspect_1.default;
-//# sourceMappingURL=index.js.map

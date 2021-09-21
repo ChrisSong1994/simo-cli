@@ -39,19 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = __importDefault(require("path"));
 var simo_utils_1 = require("@chrissong/simo-utils");
 var lodash_1 = __importDefault(require("lodash"));
-// 模版仓库
-var templateStorePath = path_1.default.join(__dirname, '../../templateStore.json');
-/**
- * 项目初始化
- * @param{object} cli   cli实例对象
- * @param{object} argv  命令行参数
- */
+var cli_table3_1 = __importDefault(require("cli-table3"));
+var getTempStorePath_1 = __importDefault(require("./getTempStorePath"));
+var HOME_PATH = (0, simo_utils_1.getUserHome)();
 var template = function (cli, argv) { return __awaiter(void 0, void 0, void 0, function () {
-    var action, name, repository, description, templatesData, displayTemplates, addTemplate, removeTemplate;
+    var templateStorePath, action, name, repository, description, templatesData, displayTemplates, addTemplate, removeTemplate;
     return __generator(this, function (_a) {
+        templateStorePath = (0, getTempStorePath_1.default)();
         action = argv.action, name = argv.name, repository = argv.repository, description = argv.description;
         templatesData = JSON.parse(simo_utils_1.fs.readFileSync(templateStorePath, { encoding: 'utf8' }));
         displayTemplates = function () {
@@ -59,20 +55,40 @@ var template = function (cli, argv) { return __awaiter(void 0, void 0, void 0, f
                 simo_utils_1.logger.warn("Currently,you have not add any tempaltes!");
             }
             else {
-                console.table(templatesData);
+                var table_1 = new cli_table3_1.default({
+                    head: ['name', 'repository', 'description', 'isBuiltIn'],
+                    style: {
+                        'padding-left': 1,
+                        'padding-right': 1,
+                        head: [],
+                        border: [],
+                    },
+                });
+                templatesData.forEach(function (data) {
+                    table_1.push([
+                        simo_utils_1.chalk.yellow(data['name']),
+                        simo_utils_1.chalk.green(data['repository']),
+                        data['description'],
+                        data['isBuiltIn']
+                            ? simo_utils_1.chalk.greenBright(data['isBuiltIn'])
+                            : simo_utils_1.chalk.yellowBright(data['isBuiltIn']),
+                    ]);
+                });
+                console.log(simo_utils_1.chalk.greenBright('模版列表:'));
+                console.log(table_1.toString());
             }
         };
         addTemplate = function () {
-            if (lodash_1.default.has(templatesData, name)) {
+            if (lodash_1.default.find(templatesData, { name: name })) {
                 return simo_utils_1.logger.error("The template named " + simo_utils_1.chalk.red(name) + " is exist!");
             }
             else {
-                templatesData[name] = {
+                templatesData.push({
                     name: name,
                     repository: repository,
                     description: description,
                     isBuiltIn: false,
-                };
+                });
                 simo_utils_1.fs.writeFileSync(templateStorePath, JSON.stringify(templatesData, null, 2), {
                     encoding: 'utf8',
                 });
@@ -80,32 +96,29 @@ var template = function (cli, argv) { return __awaiter(void 0, void 0, void 0, f
             }
         };
         removeTemplate = function () {
-            // 只有新增的模版可以删除，内置模版不可以删除
-            if (!lodash_1.default.has(templatesData, name)) {
+            if (!lodash_1.default.find(templatesData, { name: name })) {
                 return simo_utils_1.logger.error("The template named " + simo_utils_1.chalk.red(name) + " is not exist!");
             }
-            if (templatesData[name].isBuiltIn) {
+            if (lodash_1.default.find(templatesData, { name: name }).isBuiltIn) {
                 return simo_utils_1.logger.warn("The template named " + simo_utils_1.chalk.yellow(name) + " is built template,can`t be remove!");
             }
             else {
-                delete templatesData[name];
-                simo_utils_1.fs.writeFileSync(templateStorePath, JSON.stringify(templatesData, null, 2), {
+                var newTemplatesData = templatesData.filter(function (v) { return v.name !== name; });
+                simo_utils_1.fs.writeFileSync(templateStorePath, JSON.stringify(newTemplatesData, null, 2), {
                     encoding: 'utf8',
                 });
-                simo_utils_1.logger.done("The template named " + simo_utils_1.chalk.green(name) + " has been removed!");
+                simo_utils_1.logger.done("The template named " + simo_utils_1.chalk.yellow(name) + " has been removed!");
             }
         };
-        // 显示模版
         switch (action) {
             case 'ls':
-                return [2 /*return*/, displayTemplates()];
+                return [2, displayTemplates()];
             case 'add':
-                return [2 /*return*/, addTemplate()];
+                return [2, addTemplate()];
             case 'remove':
-                return [2 /*return*/, removeTemplate()];
+                return [2, removeTemplate()];
         }
-        return [2 /*return*/];
+        return [2];
     });
 }); };
 exports.default = template;
-//# sourceMappingURL=template.js.map

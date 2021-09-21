@@ -65,7 +65,7 @@ var path_1 = __importDefault(require("path"));
 var webpack_chain_1 = __importDefault(require("webpack-chain"));
 var simo_utils_1 = require("@chrissong/simo-utils");
 var utils_1 = require("./utils");
-var Api = /** @class */ (function () {
+var Api = (function () {
     function Api(mode, options) {
         this.mode = mode;
         this.options = this.formatOptions(options);
@@ -73,9 +73,6 @@ var Api = /** @class */ (function () {
         this.plugins = this.resolvePlugins();
     }
     Object.defineProperty(Api.prototype, "env", {
-        /**
-         * 环境变量
-         */
         get: function () {
             return this.options.env;
         },
@@ -83,9 +80,6 @@ var Api = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Api.prototype, "argv", {
-        /**
-         * 命令行参数
-         */
         get: function () {
             var argv = this.options.argv;
             return __assign(__assign({}, argv), { open: argv.open, port: argv.port, report: argv.report, sourcemap: argv.sourcemap });
@@ -94,10 +88,6 @@ var Api = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Api.prototype, "context", {
-        /**
-         * 当前程序执行路径
-         * 等同于process.cwd和webpack的context路径
-         */
         get: function () {
             return this.options.cwd;
         },
@@ -105,27 +95,16 @@ var Api = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Api.prototype, "simoConfig", {
-        /**
-         * config配置文件对象
-         */
         get: function () {
             return this.options.simoConfig;
         },
         enumerable: false,
         configurable: true
     });
-    /**
-     * resolve路径
-     * @param {String} dir
-     */
     Api.prototype.resolve = function (dir) {
         var absulatePath = path_1.default.resolve(this.context, dir);
         return absulatePath;
     };
-    /**
-     * 格式化options参数
-     * @param {OptionType} option
-     */
     Api.prototype.formatOptions = function (option) {
         var _a = option.simoConfig, chainWebpack = _a.chainWebpack, restConfig = __rest(_a, ["chainWebpack"]);
         return __assign(__assign({}, option), { simoConfig: __assign(__assign({}, restConfig), { chainWebpack: function (config) {
@@ -134,9 +113,6 @@ var Api = /** @class */ (function () {
                     return config;
                 } }) });
     };
-    /**
-     * 获取package.json信息
-     */
     Api.prototype.resolvePackage = function () {
         var pkg = this.resolve('package.json');
         if (simo_utils_1.fs.existsSync(pkg)) {
@@ -150,9 +126,6 @@ var Api = /** @class */ (function () {
         }
         return {};
     };
-    /**
-     * 读取package.json中的插件
-     */
     Api.prototype.resolvePlugins = function () {
         var plugins = [
             './webpack/webpack.base.config',
@@ -169,9 +142,6 @@ var Api = /** @class */ (function () {
             }
         });
     };
-    /**
-     * 获取webpack config
-     */
     Api.prototype.resolveWebpackConfig = function () {
         return __awaiter(this, void 0, void 0, function () {
             var config, chainWebpack;
@@ -180,20 +150,14 @@ var Api = /** @class */ (function () {
                     case 0:
                         config = new webpack_chain_1.default();
                         chainWebpack = this.simoConfig.chainWebpack;
-                        // 生成webpack配置
-                        return [4 /*yield*/, simo_utils_1.parallelToSerial(this.plugins.map(this.use(config)))];
+                        return [4, (0, simo_utils_1.parallelToSerial)(this.plugins.map(this.use(config)))];
                     case 1:
-                        // 生成webpack配置
                         _a.sent();
-                        return [2 /*return*/, chainWebpack(config).toConfig()]; // 加载配置项的webpack 配置
+                        return [2, chainWebpack(config).toConfig()];
                 }
             });
         });
     };
-    /**
-     * 注册执行插件
-     * @param {IWebpackConfig} config
-     */
     Api.prototype.use = function (config) {
         var _this = this;
         return function (plugin) {
@@ -204,7 +168,7 @@ var Api = /** @class */ (function () {
                 argv: _this.argv,
                 simoConfig: _this.simoConfig,
                 context: _this.context,
-                paths: utils_1.getPaths(_this.context),
+                paths: (0, utils_1.getPaths)(_this.context),
                 resolve: function (dir) { return _this.resolve(dir); },
                 chainWebpack: function (callback) { return callback(config); },
             };
@@ -214,4 +178,3 @@ var Api = /** @class */ (function () {
     return Api;
 }());
 exports.default = Api;
-//# sourceMappingURL=api.js.map

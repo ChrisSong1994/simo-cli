@@ -39,23 +39,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path_1 = __importDefault(require("path"));
 var simo_utils_1 = require("@chrissong/simo-utils");
-// 模版仓库
-var templateStorePath = path_1.default.join(__dirname, '../../templateStore.json');
-// 获取输入参数
+var lodash_1 = __importDefault(require("lodash"));
+var getTempStorePath_1 = __importDefault(require("./getTempStorePath"));
 var getTemplateParams = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var templatesData, templatesTypes, template;
+    var templateStorePath, templatesData, templatesTypes, template;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                templateStorePath = (0, getTempStorePath_1.default)();
                 templatesData = JSON.parse(simo_utils_1.fs.readFileSync(templateStorePath, { encoding: 'utf8' }));
-                templatesTypes = Object.keys(templatesData).map(function (key) { return ({
-                    key: key,
-                    name: key,
-                    value: key,
+                templatesTypes = templatesData.map(function (item) { return ({
+                    key: item.name,
+                    name: item.name,
+                    value: item.name,
                 }); });
-                return [4 /*yield*/, simo_utils_1.inquirer.prompt([
+                return [4, simo_utils_1.inquirer.prompt([
                         {
                             name: 'templateType',
                             message: '请选择模版?',
@@ -65,9 +64,8 @@ var getTemplateParams = function () { return __awaiter(void 0, void 0, void 0, f
                     ])];
             case 1:
                 template = _a.sent();
-                return [2 /*return*/, templatesData[template.templateType]];
+                return [2, lodash_1.default.find(templatesData, { name: template.templateType })];
         }
     });
 }); };
 exports.default = getTemplateParams;
-//# sourceMappingURL=getTplParams.js.map

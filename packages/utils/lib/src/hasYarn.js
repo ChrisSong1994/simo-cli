@@ -7,4 +7,3 @@ var which_1 = __importDefault(require("which"));
 exports.default = (function () {
     return which_1.default.sync('yarn', { nothrow: true });
 });
-//# sourceMappingURL=hasYarn.js.map

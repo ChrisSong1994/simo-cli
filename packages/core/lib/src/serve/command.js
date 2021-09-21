@@ -13,4 +13,3 @@ exports.default = {
         });
     },
 };
-//# sourceMappingURL=command.js.map

@@ -35,4 +35,3 @@ var getProxyConfig = function (proxy) {
     return result;
 };
 exports.default = getProxyConfig;
-//# sourceMappingURL=getProxy.js.map

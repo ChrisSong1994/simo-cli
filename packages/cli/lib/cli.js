@@ -46,12 +46,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -64,19 +66,13 @@ var child_process_1 = require("child_process");
 var simo_utils_1 = require("@chrissong/simo-utils");
 var lodash_1 = __importDefault(require("lodash"));
 var fkill_1 = __importDefault(require("fkill"));
-// import updateNotifier from 'update-notifier';
 var create_1 = __importDefault(require("./src/create"));
 var serve_1 = __importDefault(require("./src/serve"));
 var build_1 = __importDefault(require("./src/build"));
 var inspect_1 = __importDefault(require("./src/inspect"));
 var template_1 = __importDefault(require("./src/template"));
 var defaultPlugins = [create_1.default, serve_1.default, build_1.default, inspect_1.default, template_1.default];
-/** 命令行
- * 1.初始化命令行参数
- * 2.检查包更新情况
- * 3.获取项目配置，加载命令，监听进程
- * */
-var Cli = /** @class */ (function () {
+var Cli = (function () {
     function Cli(cwd, argv) {
         if (argv === void 0) { argv = []; }
         this.plugins = defaultPlugins;
@@ -91,20 +87,12 @@ var Cli = /** @class */ (function () {
     }
     Cli.prototype.init = function () {
         var _this = this;
-        // 检查node版本 （wWebpack 5 对 Node.js 的版本要求至少是 10.13.0 (LTS) ）
-        if (!simo_utils_1.semverGt(process.versions.node, '10.13.0')) {
+        if (!(0, simo_utils_1.semverGt)(process.versions.node, '10.13.0')) {
             simo_utils_1.logger.warn("\u8BF7\u5347\u7EA7\u60A8\u6240\u4F7F\u7528\u7684Node.js\u7248\u672C\u523010.13.0\u4EE5\u4E0A");
             process.exit(0);
         }
-        // // 检查安装包更新情况
-        // updateNotifier({
-        //   pkg: this.pkg,
-        //   updateCheckInterval: 1000 * 60 * 60 * 24 * 7,
-        // }).notify();
-        // 初始化插件
         this.plugins.forEach(function (plugin) { return plugin(_this); });
     };
-    // 读取项目package.json
     Cli.prototype.resolvePackages = function () {
         var pkgPath = path_1.default.resolve(this.cwd, 'package.json');
         if (!simo_utils_1.fs.existsSync(pkgPath))
@@ -117,10 +105,9 @@ var Cli = /** @class */ (function () {
             return {};
         }
     };
-    // 创建子进程执行
     Cli.prototype.fork = function (path, argv, options) {
         var _this = this;
-        var subprocess = child_process_1.fork(path, argv, __assign({ env: this.env }, options));
+        var subprocess = (0, child_process_1.fork)(path, argv, __assign({ env: this.env }, options));
         subprocess.on('close', function () {
             var index = _this.subprocess.findIndex(function (item) { return item === subprocess; });
             _this.subprocess.splice(index, 1);
@@ -128,10 +115,6 @@ var Cli = /** @class */ (function () {
         this.subprocess.push(subprocess);
         return subprocess;
     };
-    /**
-     * 退出进程
-     * @param {Number} code
-     **/
     Cli.prototype.exit = function (code) {
         return __awaiter(this, void 0, void 0, function () {
             var subPIds;
@@ -139,16 +122,15 @@ var Cli = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         subPIds = this.subprocess.map(function (subp) { return subp.pid; });
-                        return [4 /*yield*/, fkill_1.default(subPIds, { force: true, tree: true })];
+                        return [4, (0, fkill_1.default)(subPIds, { force: true, tree: true })];
                     case 1:
                         _a.sent();
                         process.exit(code);
-                        return [2 /*return*/];
+                        return [2];
                 }
             });
         });
     };
-    // 进程监听
     Cli.prototype.processMonitor = function () {
         var _this = this;
         var handleExit = function (signal) {
@@ -162,24 +144,21 @@ var Cli = /** @class */ (function () {
         process.on('SIGINT', handleExit);
         process.on('SIGTERM', handleExit);
     };
-    // 注册命令
     Cli.prototype.register = function (cmd, desc) {
         var args = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             args[_i - 2] = arguments[_i];
         }
         var name = cmd.split(/\s+/)[0];
-        // 只能有数字、字母、下划线、冒号组成
         if (!/^[\w]+$/.test(name)) {
             throw new Error("\u547D\u4EE4\u540D\u79F0 " + chalk_1.default.redBright(name) + " \u4E0D\u5408\u6CD5\uFF0C\u53EA\u80FD\u662F\u5B57\u6BCD\u3001\u6570\u5B57\u3001\u4E0B\u5212\u7EBF");
         }
         if (this.commands[name]) {
             throw new Error("\u547D\u4EE4 " + chalk_1.default.redBright(name) + " \u5DF2\u7ECF\u88AB\u5360\u7528");
         }
-        yargs_1.default.command.apply(yargs_1.default, __spreadArrays([cmd, desc], args));
+        yargs_1.default.command.apply(yargs_1.default, __spreadArray([cmd, desc], args, false));
         this.commands[name] = __assign({ cmd: cmd, desc: desc }, args);
     };
-    // 解析命令
     Cli.prototype.parse = function (argv) {
         this.argv = argv;
         if (this.argv.length) {
@@ -192,4 +171,3 @@ var Cli = /** @class */ (function () {
     return Cli;
 }());
 exports.default = Cli;
-//# sourceMappingURL=cli.js.map

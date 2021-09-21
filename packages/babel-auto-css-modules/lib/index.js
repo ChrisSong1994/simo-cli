@@ -8,7 +8,7 @@ function default_1() {
             ImportDeclaration: function (path, _a) {
                 var opts = _a.opts;
                 var _b = path.node, specifiers = _b.specifiers, source = _b.source;
-                if (specifiers.length && CSS_EXTNAMES.includes(path_1.extname(source.value))) {
+                if (specifiers.length && CSS_EXTNAMES.includes((0, path_1.extname)(source.value))) {
                     source.value = source.value + "?" + (opts.flag || 'modules');
                 }
             },
@@ -16,4 +16,3 @@ function default_1() {
     };
 }
 exports.default = default_1;
-//# sourceMappingURL=index.js.map

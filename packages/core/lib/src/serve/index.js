@@ -43,7 +43,8 @@ var simo_utils_1 = require("@chrissong/simo-utils");
 var path_1 = __importDefault(require("path"));
 var fkill_1 = __importDefault(require("fkill"));
 var chokidar_1 = __importDefault(require("chokidar"));
-// 创建静态服务
+var lodash_1 = require("lodash");
+var getSimoConfig_1 = __importDefault(require("../utils/getSimoConfig"));
 var createServer = function (cli) {
     return cli
         .fork(path_1.default.resolve(__dirname, './serve'), cli.argv, {
@@ -55,24 +56,12 @@ var createServer = function (cli) {
 };
 exports.default = (function (cli, argv) {
     simo_utils_1.logger.log('🚀  正在启动开发服务,请稍等...');
-    //  创建服务
+    var watchFiles = (0, getSimoConfig_1.default)(process.cwd(), process.env).watchFiles;
     var serverprocess = createServer(cli);
-    // 监听配置文件修改
-    var watcher = chokidar_1.default.watch([
-        '.env',
-        '.eslintrc',
-        '.eslintrc.js',
-        '.eslintignore',
-        '.babelrc',
-        '.babelrc.js',
-        'babel.config.js',
-        '.browserslistrc',
-        'tsconfig.json',
-        'simo.config.js',
-    ], {
+    var watcher = chokidar_1.default.watch(watchFiles, {
         cwd: cli.cwd,
     });
-    watcher.on('change', function () { return __awaiter(void 0, void 0, void 0, function () {
+    watcher.on('change', (0, lodash_1.debounce)(function () { return __awaiter(void 0, void 0, void 0, function () {
         var err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -81,18 +70,17 @@ exports.default = (function (cli, argv) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, fkill_1.default(serverprocess.pid)];
+                    return [4, (0, fkill_1.default)(serverprocess.pid)];
                 case 2:
                     _a.sent();
-                    return [3 /*break*/, 4];
+                    return [3, 4];
                 case 3:
                     err_1 = _a.sent();
-                    return [3 /*break*/, 4];
+                    return [2, simo_utils_1.logger.error(err_1.toString())];
                 case 4:
                     serverprocess = createServer(cli);
-                    return [2 /*return*/];
+                    return [2];
             }
         });
-    }); });
+    }); }, 300));
 });
-//# sourceMappingURL=index.js.map

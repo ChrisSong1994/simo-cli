@@ -21,7 +21,5 @@ yargs_1.default
     if (err)
         process.exit(1);
 });
-//   初始化命令行工具
 var cli = new cli_1.default(process.cwd());
 cli.parse(process.argv.slice(2));
-//# sourceMappingURL=index.js.map

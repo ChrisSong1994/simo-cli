@@ -81,7 +81,7 @@ var copyDirectory = function (params) {
         }
         else {
             if (file.endsWith('.tpl')) {
-                exports.copyTpl(params.target, {
+                (0, exports.copyTpl)(params.target, {
                     templatePath: absFile,
                     target: path_1.default.join(params.target, file.replace(/\.tpl$/, '')),
                     context: params.context,
@@ -95,7 +95,6 @@ var copyDirectory = function (params) {
     });
 };
 exports.copyDirectory = copyDirectory;
-// 拉取git代码
 var pullProject = function (params) { return __awaiter(void 0, void 0, void 0, function () {
     var repository, context, target, tmpdir, _a, err, res, pkgPath, pkgJson;
     return __generator(this, function (_b) {
@@ -103,12 +102,12 @@ var pullProject = function (params) { return __awaiter(void 0, void 0, void 0, f
             case 0:
                 repository = params.repository, context = params.context, target = params.target;
                 tmpdir = path_1.default.join(os_1.default.tmpdir(), 'simo');
-                return [4 /*yield*/, simo_utils_1.fs.remove(tmpdir)];
+                return [4, simo_utils_1.fs.remove(tmpdir)];
             case 1:
                 _b.sent();
                 simo_utils_1.spinner.start("\u231B \u514B\u9686\u9879\u76EE");
-                return [4 /*yield*/, simo_utils_1.errorCapture(new Promise(function (resolve, reject) {
-                        git_clone_1.default(repository, tmpdir, function (err) {
+                return [4, (0, simo_utils_1.errorCapture)(new Promise(function (resolve, reject) {
+                        (0, git_clone_1.default)(repository, tmpdir, function (err) {
                             simo_utils_1.spinner.stop();
                             if (!err) {
                                 simo_utils_1.logger.done("\u514B\u9686\u6A21\u677F " + simo_utils_1.chalk.yellow(repository + ")") + " \u6210\u529F");
@@ -124,17 +123,16 @@ var pullProject = function (params) { return __awaiter(void 0, void 0, void 0, f
                 _a = _b.sent(), err = _a[0], res = _a[1];
                 if (err)
                     process.exit(1);
-                //  复制代码
                 simo_utils_1.spinner.start("\u231B \u514B\u9686\u4EE3\u7801");
                 pkgPath = path_1.default.resolve(tmpdir, './package.json');
-                return [4 /*yield*/, simo_utils_1.fs.readJson(pkgPath)];
+                return [4, simo_utils_1.fs.readJson(pkgPath)];
             case 3:
                 pkgJson = _b.sent();
                 pkgJson = __assign(__assign({}, pkgJson), context);
-                return [4 /*yield*/, simo_utils_1.fs.writeJson(pkgPath, pkgJson, { spaces: 2 })];
+                return [4, simo_utils_1.fs.writeJson(pkgPath, pkgJson, { spaces: 2 })];
             case 4:
                 _b.sent();
-                return [4 /*yield*/, Promise.all(simo_utils_1.fs.readdirSync(tmpdir).map(function (file) {
+                return [4, Promise.all(simo_utils_1.fs.readdirSync(tmpdir).map(function (file) {
                         return simo_utils_1.fs.move(path_1.default.join(tmpdir, file), path_1.default.join(target, file), {
                             overwrite: true,
                         });
@@ -142,9 +140,8 @@ var pullProject = function (params) { return __awaiter(void 0, void 0, void 0, f
             case 5:
                 _b.sent();
                 simo_utils_1.spinner.stop();
-                return [2 /*return*/];
+                return [2];
         }
     });
 }); };
 exports.pullProject = pullProject;
-//# sourceMappingURL=generator.js.map

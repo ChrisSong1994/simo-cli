@@ -13,4 +13,3 @@ var getPaths = function (base) {
     };
 };
 exports.default = getPaths;
-//# sourceMappingURL=getPaths.js.map

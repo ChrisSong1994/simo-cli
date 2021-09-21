@@ -10,22 +10,26 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var path_1 = __importDefault(require("path"));
 var simo_utils_1 = require("@chrissong/simo-utils");
 var webpack_1 = require("webpack");
 var html_webpack_plugin_1 = __importDefault(require("html-webpack-plugin"));
 var eslint_webpack_plugin_1 = __importDefault(require("eslint-webpack-plugin"));
-var lodash_webpack_plugin_1 = __importDefault(require("lodash-webpack-plugin"));
+var webpack_build_notifier_1 = __importDefault(require("webpack-build-notifier"));
+var node_polyfill_webpack_plugin_1 = __importDefault(require("node-polyfill-webpack-plugin"));
 var lodash_1 = __importDefault(require("lodash"));
 var webpackbar_1 = __importDefault(require("webpackbar"));
 exports.default = (function (api) {
@@ -33,12 +37,12 @@ exports.default = (function (api) {
         var simoConfig = api.simoConfig, context = api.context, paths = api.paths, env = api.env;
         var useTypescript = simo_utils_1.fs.existsSync(paths.appTsConfigPath);
         var isDevelopment = env.NODE_ENV === 'development';
-        var define = simoConfig.define, target = simoConfig.target, alias = simoConfig.alias, pages = simoConfig.pages, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, externals = simoConfig.externals, output = simoConfig.output, parallel = simoConfig.parallel, browsersList = simoConfig.browsersList, extraBabelOptions = simoConfig.extraBabelOptions, fastRefresh = simoConfig.fastRefresh;
-        // 设置context
-        config.context(context).target(target);
-        // output配置
-        config.output.merge(__assign({ publicPath: publicPath, path: api.resolve(lodash_1.default.get(output, 'path', 'dist')) }, lodash_1.default.omit(output, ['publicPath', 'path'])));
-        // resolve 配置
+        var define = simoConfig.define, target = simoConfig.target, alias = simoConfig.alias, pages = simoConfig.pages, publicPath = simoConfig.publicPath, inlineLimit = simoConfig.inlineLimit, output = simoConfig.output, outputEnvironment = simoConfig.outputEnvironment, parallel = simoConfig.parallel, browsersList = simoConfig.browsersList, extraBabelOptions = simoConfig.extraBabelOptions, fastRefresh = simoConfig.fastRefresh, buildNotifier = simoConfig.buildNotifier;
+        config
+            .context(context)
+            .target(isDevelopment ? 'web' : target)
+            .cache({ type: 'filesystem', maxAge: 604800000 });
+        config.output.merge(__assign({ publicPath: publicPath, path: api.resolve(lodash_1.default.get(output, 'path', 'dist')), environment: outputEnvironment }, lodash_1.default.omit(output, ['publicPath', 'path'])));
         config.resolve
             .when(alias, function (config) {
             Object.keys(alias).forEach(function (key) {
@@ -58,10 +62,6 @@ exports.default = (function (api) {
             '.sass',
             'css',
         ]);
-        // loader 配置
-        /**
-         * thread-loader  babel-loader
-         */
         var jsRule = config.module
             .rule('compile')
             .test(/\.(js|mjs|jsx|ts|tsx)$/)
@@ -72,23 +72,21 @@ exports.default = (function (api) {
         jsRule
             .use('babel-loader')
             .loader('babel-loader')
-            .options(__assign({ cacheDirectory: true, sourceType: 'unambiguous', presets: __spreadArrays([
+            .options(__assign({ exclude: /(node_modules)/, cacheDirectory: true, sourceType: 'unambiguous', presets: __spreadArray([
                 [
                     require.resolve('@chrissong/babel-preset-simo'),
                     {
-                        targets: browsersList,
+                        targets: browsersList.join(','),
                         typescript: useTypescript,
                         refresh: fastRefresh,
                         isDev: isDevelopment,
                     },
                 ]
-            ], __spreadArrays(lodash_1.default.get(extraBabelOptions, 'presets', []))), plugins: __spreadArrays(lodash_1.default.get(extraBabelOptions, 'plugins', [])).filter(Boolean) }, lodash_1.default.omit(extraBabelOptions, ['presets', 'plugins'])));
-        // 匹配规则配置
+            ], lodash_1.default.get(extraBabelOptions, 'presets', []), true), plugins: __spreadArray([], lodash_1.default.get(extraBabelOptions, 'plugins', []), true).filter(Boolean) }, lodash_1.default.omit(extraBabelOptions, ['presets', 'plugins'])));
         config.module
             .rule('modules')
             .test(/\.m?jsx?$/)
             .resolve.set('fullySpecified', false);
-        // 图片
         config.module
             .rule('images')
             .test(/\.(png|jpe?g|gif|webp|ico)(\?.*)?$/)
@@ -106,7 +104,6 @@ exports.default = (function (api) {
                 },
             },
         });
-        // 单独抽出svg 文件
         config.module
             .rule('svg')
             .test(/\.(svg)(\?.*)?$/)
@@ -116,7 +113,6 @@ exports.default = (function (api) {
             name: 'static/[name].[hash:8].[ext]',
             esModule: false,
         });
-        // 字体文件
         config.module
             .rule('fonts')
             .test(/\.(eot|woff|woff2|ttf)(\?.*)?$/)
@@ -126,20 +122,27 @@ exports.default = (function (api) {
             name: 'static/[name].[hash:8].[ext]',
             esModule: false,
         });
-        // 文档字符串
         config.module
             .rule('plaintext')
             .test(/\.(txt|text|md)$/)
             .use('raw-loader')
             .loader(require.resolve('raw-loader'));
-        //  排除依赖
-        config.when(externals, function (config) {
-            config.externals(externals);
+        config
+            .plugin('webpack-node-polyfill')
+            .use(node_polyfill_webpack_plugin_1.default, [{ excludeAliases: ['console'] }]);
+        config.when(Boolean(buildNotifier), function (config) {
+            var opts = {
+                title: 'simo build',
+                logo: path_1.default.resolve(__dirname, '../statics/webpack_logo.ico'),
+            };
+            if (typeof buildNotifier === 'string') {
+                opts = __assign(__assign({}, opts), { title: buildNotifier });
+            }
+            else if (typeof buildNotifier === 'object') {
+                opts = __assign(__assign({}, opts), buildNotifier);
+            }
+            config.plugin('build-notifier').use(webpack_build_notifier_1.default, [opts]);
         });
-        // 插件配置
-        /**
-         * eslint 插件配置
-         * */
         config.plugin('eslint').use(eslint_webpack_plugin_1.default, [
             {
                 context: context,
@@ -148,46 +151,41 @@ exports.default = (function (api) {
                 cache: true,
             },
         ]);
-        /**
-         * 自定义常量 .env优先
-         */
         var newEnvs = __assign(__assign({}, define), env);
         var stringfyEnvs = {};
         Object.keys(newEnvs).forEach(function (key) { return (stringfyEnvs[key] = JSON.stringify(newEnvs[key])); });
         config.plugin('define').use(webpack_1.DefinePlugin, [stringfyEnvs]);
-        /**
-         * 编译进度
-         */
-        config.plugin('progress').use(webpackbar_1.default);
-        /**
-         * 忽略moment locale文件
-         */
+        config.plugin('progress').use(webpackbar_1.default, [
+            isDevelopment
+                ? {
+                    name: 'simo serve',
+                    color: 'green',
+                }
+                : {
+                    name: 'simo build',
+                    color: 'orange',
+                },
+        ]);
         config.plugin('ignore').use(webpack_1.IgnorePlugin, [
             {
                 resourceRegExp: /^\.\/locale$/,
                 contextRegExp: /moment$/,
             },
         ]);
-        /**
-         * lodash精简
-         * */
-        config.plugin('lodash').use(lodash_webpack_plugin_1.default);
-        /**
-         * 模版加载
-         */
         config.when(pages, function (config) {
             var _loop_1 = function (key) {
-                var _a = pages[key], entry = _a.entry, template = _a.template, htmlWebpackPluginOptions = _a.htmlWebpackPluginOptions;
+                var _a = pages[key], entry = _a.entry, template = _a.template, _b = _a.htmlWebpackPluginOptions, htmlWebpackPluginOptions = _b === void 0 ? {} : _b;
                 if (Array.isArray(entry)) {
                     entry.forEach(function (en) { return config.entry(key).add(api.resolve(en)); });
                 }
                 else {
                     config.entry(key).add(api.resolve(entry));
                 }
-                // 模版
-                config.plugin("html-template-" + key).use(html_webpack_plugin_1.default, [
-                    __assign({ filename: key + ".html", template: api.resolve(template), inject: Reflect.has(pages[key], 'htmlWebpackPluginOptions') ? true : false, chunks: [key] }, htmlWebpackPluginOptions),
-                ]);
+                if (template) {
+                    config.plugin("html-template-" + key).use(html_webpack_plugin_1.default, [
+                        __assign({ filename: key + ".html", template: api.resolve(template), inject: true, chunks: [key] }, htmlWebpackPluginOptions),
+                    ]);
+                }
             };
             for (var key in pages) {
                 _loop_1(key);
@@ -195,4 +193,3 @@ exports.default = (function (api) {
         });
     });
 });
-//# sourceMappingURL=webpack.base.config.js.map

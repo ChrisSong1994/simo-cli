@@ -33,4 +33,3 @@ function mergeConfig(defaultConfig) {
     return ret;
 }
 exports.default = mergeConfig;
-//# sourceMappingURL=mergeConfig.js.map

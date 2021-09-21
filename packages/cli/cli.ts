@@ -100,7 +100,7 @@ export default class Cli {
    **/
   public async exit(code: number) {
     const subPIds = this.subprocess.map((subp) => subp.pid);
-    await fkill(subPIds, { force: true, tree: true });
+    await fkill(subPIds as number[], { force: true, tree: true });
     process.exit(code);
   }
 

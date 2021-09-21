@@ -54,43 +54,38 @@ var terser_webpack_plugin_1 = __importDefault(require("terser-webpack-plugin"));
 var webpack_bundle_analyzer_1 = require("webpack-bundle-analyzer");
 var clean_webpack_plugin_1 = require("clean-webpack-plugin");
 var copy_webpack_plugin_1 = __importDefault(require("copy-webpack-plugin"));
+var lodash_1 = __importDefault(require("lodash"));
 var cssLoader_1 = __importDefault(require("./cssLoader"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, copyPath, output, publicPath, browsersList, parallel;
+        var _a, copyPath, output, publicPath, browsersList, parallel, cssExtract, externals;
         return __generator(this, function (_b) {
             if (api.mode !== 'production')
-                return [2 /*return*/];
-            _a = api.simoConfig, copyPath = _a.copyPath, output = _a.output, publicPath = _a.publicPath, browsersList = _a.browsersList, parallel = _a.parallel;
-            // 加载样式
-            cssLoader_1.default(config, {
+                return [2];
+            _a = api.simoConfig, copyPath = _a.copyPath, output = _a.output, publicPath = _a.publicPath, browsersList = _a.browsersList, parallel = _a.parallel, cssExtract = _a.cssExtract, externals = _a.externals;
+            (0, cssLoader_1.default)(config, {
                 isProd: true,
                 sourceMap: false,
-                filename: '[name].[contenthash:8].css',
+                cssExtract: cssExtract,
+                filename: '[name].css',
                 chunkFilename: '[id].css',
                 publicPath: publicPath,
                 browsersList: browsersList,
             });
-            /**
-             * 配置模式与devtool
-             * 输出文件名设置
-             */
             config
                 .watch(false)
                 .mode('production')
                 .devtool(api.argv.sourcemap ? 'source-map' : false)
-                .output.filename('[name].[contenthash:8].js')
+                .output.filename(lodash_1.default.get(output, 'filename') || '[name].[contenthash:8].js')
                 .chunkFilename('[id].js');
-            /**
-             * 依赖打包大小分析
-             */
+            config.when(externals, function (config) {
+                config.externals(externals);
+            });
             config.when(api.argv.report, function (config) {
                 config.plugin('bundle-analyzer').use(webpack_bundle_analyzer_1.BundleAnalyzerPlugin);
             });
-            // 静态文件拷贝
             config.when(copyPath, function () {
                 if (typeof copyPath === 'string') {
-                    // 字符串路径将作为目录被拷贝到输出目录
                     config.plugin('static-copy').use(copy_webpack_plugin_1.default, [
                         {
                             patterns: [
@@ -104,7 +99,6 @@ exports.default = (function (api) {
                         },
                     ]);
                 }
-                // 数据将作为patterns值配置
                 if (Array.isArray(copyPath)) {
                     config.plugin('static-copy').use(copy_webpack_plugin_1.default, [
                         {
@@ -113,21 +107,9 @@ exports.default = (function (api) {
                     ]);
                 }
             });
-            /**
-             * 删除打包文件
-             * */
             config.plugin('clean').use(clean_webpack_plugin_1.CleanWebpackPlugin);
-            /**
-             * 当文件过大时，不输出优化提示
-             */
             config.performance.hints(false);
-            /**
-             * 设置压缩代码
-             */
             config.optimization.minimize(true);
-            /**
-             * splitchunks
-             */
             config.optimization.splitChunks({
                 chunks: 'async',
                 minSize: 20000,
@@ -149,17 +131,13 @@ exports.default = (function (api) {
                     },
                 },
             });
-            /**
-             * 压缩js
-             */
             config.optimization.minimizer('terser').use(terser_webpack_plugin_1.default, [
                 {
                     parallel: parallel,
                     extractComments: false,
                 },
             ]);
-            return [2 /*return*/];
+            return [2];
         });
     }); });
 });
-//# sourceMappingURL=webpack.prod.config.js.map

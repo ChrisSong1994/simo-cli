@@ -12,4 +12,3 @@ exports.default = (function () {
         return false;
     }
 });
-//# sourceMappingURL=hasMultipleCores.js.map

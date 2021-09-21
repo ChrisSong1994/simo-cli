@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.errorCapture = exports.hasMultipleCores = exports.hasYarn = exports.mergeConfig = exports.parallelToSerial = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.semverGt = exports.logger = exports.findProcess = exports.which = exports.clipboardy = exports.address = exports.inquirer = exports.cliui = exports.rimraf = exports.execa = exports.chalk = exports.deepmerge = exports.open = exports.fs = void 0;
+exports.getUserHome = exports.rimrafPromify = exports.copyFiles = exports.errorCapture = exports.hasMultipleCores = exports.hasYarn = exports.mergeConfig = exports.parallelToSerial = exports.spinner = exports.loadEnv = exports.updateNotifier = exports.semverGt = exports.logger = exports.findProcess = exports.which = exports.clipboardy = exports.address = exports.inquirer = exports.cliui = exports.rimraf = exports.execa = exports.chalk = exports.deepmerge = exports.open = exports.fs = void 0;
 var fs_extra_1 = __importDefault(require("fs-extra"));
 exports.fs = fs_extra_1.default;
 var open_1 = __importDefault(require("open"));
@@ -67,4 +67,9 @@ var hasMultipleCores_1 = __importDefault(require("./src/hasMultipleCores"));
 exports.hasMultipleCores = hasMultipleCores_1.default;
 var errorCapture_1 = __importDefault(require("./src/errorCapture"));
 exports.errorCapture = errorCapture_1.default;
-//# sourceMappingURL=index.js.map
+var copyFiles_1 = __importDefault(require("./src/copyFiles"));
+exports.copyFiles = copyFiles_1.default;
+var rimrafPromify_1 = __importDefault(require("./src/rimrafPromify"));
+exports.rimrafPromify = rimrafPromify_1.default;
+var getUserHome_1 = __importDefault(require("./src/getUserHome"));
+exports.getUserHome = getUserHome_1.default;

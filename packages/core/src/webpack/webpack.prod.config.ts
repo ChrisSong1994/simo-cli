@@ -25,6 +25,7 @@ export default (api: any) => {
     cssLoader(config, {
       isProd: true,
       sourceMap: false,
+      // @ts-ignore
       cssExtract: cssExtract,
       filename: '[name].css',
       chunkFilename: '[id].css',
@@ -130,6 +131,7 @@ export default (api: any) => {
     /**
      * 压缩js
      */
+    // @ts-ignore
     config.optimization.minimizer('terser').use(TerserPlugin, [
       {
         parallel: parallel,

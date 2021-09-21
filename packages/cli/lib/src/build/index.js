@@ -17,7 +17,6 @@ exports.default = (function (cli) {
             describe: '是否生成source map',
         });
     }, function (argv) {
-        simo_core_1.build(cli, argv);
+        (0, simo_core_1.build)(cli, argv);
     });
 });
-//# sourceMappingURL=index.js.map

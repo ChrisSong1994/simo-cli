@@ -1,11 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * simo template ls  查看模版列表
- * simo template add  --name  --repository  --description 注册模版仓库
- * simo template delete  --name  删除仓库
- *
- */
 var create_simo_app_1 = require("@chrissong/create-simo-app");
 var simo_utils_1 = require("@chrissong/simo-utils");
 exports.default = (function (cli) {
@@ -38,4 +32,3 @@ exports.default = (function (cli) {
         }
     });
 });
-//# sourceMappingURL=index.js.map

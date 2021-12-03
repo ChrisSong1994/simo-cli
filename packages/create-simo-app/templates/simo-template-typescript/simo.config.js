@@ -17,9 +17,9 @@ const simoConfig = (env) => {
     },
     port: 8020,
     define: {
-      DOC_URL: "https://git.shinemo.com/projects/XNPM/repos/simo-cli/browse",
-      API_URL: "https://git.shinemo.com/projects/XNPM/repos/simo-cli/browse/docs/config.md",
-      GUID_URL: "https://git.shinemo.com/projects/XNPM/repos/simo-cli/browse/docs/guide.md",
+      DOC_URL: "https://github.com/ChrisSong1994/simo-cli",
+      API_URL: "https://github.com/ChrisSong1994/simo-cli/blob/main/docs/config.md",
+      GUID_URL: "https://github.com/ChrisSong1994/simo-cli/blob/main/docs/guide.md",
     },
     pages: {
       // 必选：页面的入口和模版配置

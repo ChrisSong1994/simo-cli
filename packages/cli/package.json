@@ -1,6 +1,6 @@
 {
   "name": "@chrissong/simo-cli",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "命令行工具 ",
   "main": "index.ts",
   "author": "chrissong",
@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "@babel/core": "^7.12.10",
-    "@chrissong/create-simo-app": "0.0.2",
-    "@chrissong/eslint-config-simo": "0.0.8",
-    "@chrissong/simo-core": "0.0.2",
-    "@chrissong/simo-utils": "0.0.2",
+    "@chrissong/create-simo-app": "^0.0.5",
+    "@chrissong/eslint-config-simo": "^0.0.8",
+    "@chrissong/simo-core": "^0.0.2",
+    "@chrissong/simo-utils": "^0.0.2",
     "chalk": "^4.1.0",
     "chokidar": "^3.4.3",
     "fkill": "^7.0.1",

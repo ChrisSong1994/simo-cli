@@ -16,7 +16,8 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
-    "@chrissong/eslint-config-simo":"latest"
+    "@chrissong/simo-cli": "^0.0.5",
+    "@chrissong/eslint-config-simo":"^0.0.8",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",

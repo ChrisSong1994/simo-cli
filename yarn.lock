@@ -1023,17 +1023,20 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@chrissong/babel-preset-simo@^0.0.2":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@chrissong/babel-preset-simo/-/babel-preset-simo-0.0.1.tgz#ee1dff737f81477e01b7b17d6155c4db8b143c4f"
-  integrity sha512-cidCZRp1gVcQAqMMao9Z3p2GRKQxms/DHNlr4372wYWqrCEk7Y/nFEtJB3CAUvE9qfwpqMq0hkVKFWV+0l3UIg==
+  version "0.0.2"
+  resolved "https://registry.npm.alibaba-inc.com/@chrissong/babel-preset-simo/download/@chrissong/babel-preset-simo-0.0.2.tgz#b8520fb1d395c95ec687a0e4c214024927adf0a5"
+  integrity sha1-uFIPsdOVyV7Gh6DkwhQCSSet8KU=
   dependencies:
-    "@babel/core" "^7.12.10"
+    "@babel/plugin-proposal-decorators" "^7.12.12"
+    "@babel/plugin-proposal-export-default-from" "^7.12.1"
     "@babel/plugin-syntax-dynamic-import" "^7.8.3"
+    "@babel/plugin-transform-runtime" "^7.12.10"
     "@babel/preset-env" "^7.12.11"
     "@babel/preset-react" "^7.12.10"
     "@babel/preset-typescript" "^7.12.7"
     "@babel/runtime" "^7.12.5"
-    deepmerge "^4.2.2"
+    "@chrissong/babel-auto-css-modules" "0.0.2"
+    react-refresh "^0.10.0"
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"

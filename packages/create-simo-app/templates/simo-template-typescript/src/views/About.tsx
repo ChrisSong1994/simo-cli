@@ -1,6 +1,4 @@
-/* eslint-disable react/jsx-no-target-blank */
-/* eslint-disable no-undef */
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 export default function About() {
   return (

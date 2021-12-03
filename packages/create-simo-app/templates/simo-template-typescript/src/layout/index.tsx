@@ -13,7 +13,7 @@ const App = () => {
           <nav className={styles["App-nav"]}>
             <ul>
               <li>
-                <Link to="/">Aboutaaaaa</Link>
+                <Link to="/">About</Link>
               </li>
               <li>
                 <Link to="/guide">Guide</Link>

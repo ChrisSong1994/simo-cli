@@ -1,7 +1,7 @@
 import { hasMultipleCores } from '@chrissong/simo-utils';
 
 export default {
-  target: ['web','es5'], // 可选：默认 ['web', 'es5']
+  target: ['web', 'es5'], // 可选：默认 ['web', 'es5']
   // copyPath: 'src/statics', // 可选：string|object[] 静态文件拷贝目录
   output: {
     path: 'dist',
@@ -35,6 +35,7 @@ export default {
   // },
   port: 8080, // 可选：开发静态服务端口号：默认是8080，假如端口占用默认加一
   host: 'localhost', // 可选：静态服务的host
+  open: true, // 可选：是否自动打开浏览器
   inlineLimit: 1000, // 可选： 图片被打包称号base64大小限制
   proxy: {
     // 可选：配置代理能力

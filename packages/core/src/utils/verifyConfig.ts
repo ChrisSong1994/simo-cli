@@ -19,6 +19,7 @@ const schema = Joi.object({
   port: Joi.number().integer().min(0),
   proxy: Joi.object(),
   publicPath: Joi.string(),
+  open: Joi.boolean(),
   output: Joi.object({
     path: Joi.string().required(),
     filename: Joi.string(),

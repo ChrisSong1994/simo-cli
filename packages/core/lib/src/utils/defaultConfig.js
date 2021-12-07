@@ -20,6 +20,7 @@ exports.default = {
     publicPath: './',
     port: 8080,
     host: 'localhost',
+    open: true,
     inlineLimit: 1000,
     proxy: {},
     devtool: 'cheap-module-source-map',

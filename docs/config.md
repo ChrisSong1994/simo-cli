@@ -264,6 +264,13 @@ module.exports = (env) => {
 
 打包后的静态文件访问路径将会是`服务域名/cdn/xxx.js`
 
+## open
+
+- Type: `boolean`
+- Default:`true` 
+
+是否自动打开浏览器
+
 ## output
 
 - Type: `object`

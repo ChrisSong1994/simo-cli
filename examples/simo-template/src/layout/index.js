@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Button } from 'antd'
 
 import logo from 'ROOT/statics/images/logo.png';
 import styles from './index.less';
@@ -10,6 +11,8 @@ const App = () => {
       <div className={styles['App']}>
         <header className={styles['App-header']}>
           <img className={styles['App-logo']} alt="logo" src={logo} />
+
+          <Button type="primary"> 主题样式 </Button>
           <nav className={styles['App-nav']}>
             <ul>
               <li>

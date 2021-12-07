@@ -17,6 +17,7 @@ declare const _default: {
     publicPath: string;
     port: number;
     host: string;
+    open: boolean;
     inlineLimit: number;
     proxy: {};
     devtool: string;

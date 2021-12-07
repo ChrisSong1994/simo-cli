@@ -16,6 +16,7 @@ const simoConfig = (env) => {
       ROOT: "./src",
     },
     port: 8020,
+    open:false,
     define: {
       DOC_URL: JSON.stringify("https://github.com/ChrisSong1994/simo-cli"),
       API_URL: JSON.stringify("https://github.com/ChrisSong1994/simo-cli"),
@@ -33,7 +34,6 @@ const simoConfig = (env) => {
         },
       },
     },
-
     chainWebpack: (config) => {
       // 可选：webpack 链式配置回调
       // 删除插件

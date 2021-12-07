@@ -20,7 +20,7 @@ export default (api: any) => {
     if (!isDevelopment) return;
 
     const { simoConfig, paths } = api;
-    const { port, host, proxy, browsersList, devtool, tsTypeCheck, fastRefresh } = simoConfig;
+    const { port, host, proxy, browsersList, devtool, tsTypeCheck, fastRefresh, open } = simoConfig;
 
     const useTypescript = fs.existsSync(paths.appTsConfigPath);
 
@@ -50,7 +50,7 @@ export default (api: any) => {
       .port(port)
       .host(host)
       .hot(true)
-      .open(true)
+      .open(open)
       .progress(false)
       .stats(false)
       .clientLogLevel('none')

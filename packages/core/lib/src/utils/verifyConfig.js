@@ -23,6 +23,7 @@ var schema = joi_1.default.object({
     port: joi_1.default.number().integer().min(0),
     proxy: joi_1.default.object(),
     publicPath: joi_1.default.string(),
+    open: joi_1.default.boolean(),
     output: joi_1.default.object({
         path: joi_1.default.string().required(),
         filename: joi_1.default.string(),

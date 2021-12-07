@@ -19,7 +19,7 @@ exports.default = (function (api) {
         if (!isDevelopment)
             return;
         var simoConfig = api.simoConfig, paths = api.paths;
-        var port = simoConfig.port, host = simoConfig.host, proxy = simoConfig.proxy, browsersList = simoConfig.browsersList, devtool = simoConfig.devtool, tsTypeCheck = simoConfig.tsTypeCheck, fastRefresh = simoConfig.fastRefresh;
+        var port = simoConfig.port, host = simoConfig.host, proxy = simoConfig.proxy, browsersList = simoConfig.browsersList, devtool = simoConfig.devtool, tsTypeCheck = simoConfig.tsTypeCheck, fastRefresh = simoConfig.fastRefresh, open = simoConfig.open;
         var useTypescript = simo_utils_1.fs.existsSync(paths.appTsConfigPath);
         (0, cssLoader_1.default)(config, {
             isProd: false,
@@ -38,7 +38,7 @@ exports.default = (function (api) {
             .port(port)
             .host(host)
             .hot(true)
-            .open(true)
+            .open(open)
             .progress(false)
             .stats(false)
             .clientLogLevel('none')

@@ -250,6 +250,7 @@ export default (api: any) => {
               inject: true,
               chunks: [key],
               ...htmlWebpackPluginOptions,
+              alwaysWriteToDisk: true,
             },
           ]);
         }

@@ -15,6 +15,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
-    "@chrissong/eslint-config-simo": "latest"
+    "@chrissong/eslint-config-simo": "latest",
+    "html-webpack-harddisk-plugin": "^2.0.0"
   }
 }

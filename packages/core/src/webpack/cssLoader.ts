@@ -50,7 +50,7 @@ export default (
       const cssLoaderOptions = {
         modules: modules
           ? {
-              localIdentName: '[path][name]-[local]_[hash:base64:5]',
+              localIdentName: '[name]_[hash:base64:5]',
             }
           : false, // 开启css module
         sourceMap,

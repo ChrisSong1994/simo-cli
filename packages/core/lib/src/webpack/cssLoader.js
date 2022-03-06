@@ -24,7 +24,7 @@ exports.default = (function (config, _a) {
             var cssLoaderOptions = {
                 modules: modules
                     ? {
-                        localIdentName: '[path][name]-[local]_[hash:base64:5]',
+                        localIdentName: '[name]_[hash:base64:5]',
                     }
                     : false,
                 sourceMap: sourceMap,

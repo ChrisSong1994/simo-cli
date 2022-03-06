@@ -183,7 +183,7 @@ exports.default = (function (api) {
                 }
                 if (template) {
                     config.plugin("html-template-" + key).use(html_webpack_plugin_1.default, [
-                        __assign({ filename: key + ".html", template: api.resolve(template), inject: true, chunks: [key] }, htmlWebpackPluginOptions),
+                        __assign(__assign({ filename: key + ".html", template: api.resolve(template), inject: true, chunks: [key] }, htmlWebpackPluginOptions), { alwaysWriteToDisk: true }),
                     ]);
                 }
             };

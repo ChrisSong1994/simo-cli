@@ -2,6 +2,8 @@
 /**
  * @param {Object} env  运行时环境变量
  */
+const path = require("path");
+const HtmlWebpackHardiskPlugin = require("html-webpack-harddisk-plugin");
 
 const simoConfig = (env) => {
   const { NODE_ENV } = env;
@@ -16,7 +18,7 @@ const simoConfig = (env) => {
       ROOT: "./src",
     },
     port: 8020,
-    open:false,
+    open: false,
     define: {
       DOC_URL: JSON.stringify("https://github.com/ChrisSong1994/simo-cli"),
       API_URL: JSON.stringify("https://github.com/ChrisSong1994/simo-cli"),
@@ -29,6 +31,7 @@ const simoConfig = (env) => {
         entry: "./src/index.js", // 页面入口文件
         template: "./public/index.html", // 页面html模板文件
         htmlWebpackPluginOptions: {
+          alwaysWriteToDisk: true,
           // 可选：配置html内变量
           // PUBLIC_URL: './',
         },
@@ -37,7 +40,11 @@ const simoConfig = (env) => {
     chainWebpack: (config) => {
       // 可选：webpack 链式配置回调
       // 删除插件
-      // config.plugins.delete('progress');
+      config.plugin("html-webpack-harddisk-plugin").use(HtmlWebpackHardiskPlugin, [
+        {
+          outputPath: path.resolve(__dirname, "dist"),
+        },
+      ]);
     },
   };
 };

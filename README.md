@@ -27,5 +27,8 @@ yarn global add  @chrissong/simo-cli
 
 ### TODO
 - [x] 使用react-refresh 进行react组件模块热更新
+- [ ] 调整css modules 生成的类名值
+- [ ] 增加一些后台模版的使用
+- [ ] 做一个微服务平台  
 
 

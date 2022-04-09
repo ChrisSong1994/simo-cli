@@ -35,65 +35,50 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var simo_utils_1 = require("@chrissong/simo-utils");
-var path_1 = __importDefault(require("path"));
-var fkill_1 = __importDefault(require("fkill"));
-var chokidar_1 = __importDefault(require("chokidar"));
-var lodash_1 = require("lodash");
-var utils_1 = require("../utils");
-var createServer = function (cli) {
-    return cli
-        .fork(path_1.default.resolve(__dirname, './serve'), cli.argv, {
-        cwd: cli.cwd,
-        env: cli.env,
-        stdio: 'inherit',
-    })
-        .on('message', function (msg) { return msg === 'EXIT_WITH_ERROR' && cli.exit(1); });
+var util_1 = require("./util");
+var updateMockData = function (app, mockData) {
+    for (var _i = 0, mockData_1 = mockData; _i < mockData_1.length; _i++) {
+        var mock_1 = mockData_1[_i];
+        var method = mock_1.method, re = mock_1.re, handler = mock_1.handler;
+        app[method](re, handler);
+    }
 };
-exports.default = (function (cli, argv) {
-    simo_utils_1.logger.log('🚀  正在启动开发服务,请稍等...');
-    var watchFiles = (0, utils_1.getSimoConfig)(process.cwd(), process.env).watchFiles;
-    var serverprocess = createServer(cli);
-    function updateServer() {
-        return __awaiter(this, void 0, void 0, function () {
-            var err_1;
+var mock = function (cwd, app, options) {
+    console.log(cwd, app, options);
+    if (options) {
+        var ignore = __spreadArray([
+            'node_modules/**'
+        ], ((options === null || options === void 0 ? void 0 : options.exclude) || []), true);
+        var _a = (0, util_1.getMockData)(cwd, ignore), mockData = _a.mockData, mockWatcherPaths = _a.mockWatcherPaths;
+        (0, util_1.cleanRequireCache)(mockWatcherPaths);
+        updateMockData(app, mockData);
+        var watcher_1 = simo_utils_1.chokidar.watch(mockWatcherPaths, {
+            ignoreInitial: true,
+        });
+        watcher_1.on('all', simo_utils_1.lodash.debounce(function () {
+            process.send('SIMO_SERVER_UPDATE');
+        }, 300));
+        process.once('SIGINT', function () { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        simo_utils_1.logger.log('🚀  检测到配置文件变化,服务正在自动重启...');
-                        _a.label = 1;
+                    case 0: return [4, watcher_1.close()];
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4, (0, fkill_1.default)(serverprocess.pid)];
-                    case 2:
                         _a.sent();
-                        return [3, 4];
-                    case 3:
-                        err_1 = _a.sent();
-                        return [2, simo_utils_1.logger.error(err_1.toString())];
-                    case 4:
-                        serverprocess = createServer(cli);
                         return [2];
                 }
             });
-        });
+        }); });
     }
-    var watcher = chokidar_1.default.watch(watchFiles, {
-        cwd: cli.cwd,
-    });
-    watcher.on('change', (0, lodash_1.debounce)(function () { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            updateServer();
-            return [2];
-        });
-    }); }, 300));
-    serverprocess.on('message', function (msg) {
-        if (msg === 'SIMO_SERVER_UPDATE') {
-            updateServer();
-        }
-    });
-});
+};
+exports.default = mock;

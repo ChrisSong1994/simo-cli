@@ -14,6 +14,9 @@ const simoConfig = (env) => {
       path: "dist",
       filename: isProd ? "[name].bundle.js" : "[name].js",
     },
+    mock: {
+      path: "./mock", // 从./mock获取mock数据
+    },
     alias: {
       ROOT: "./src",
     },

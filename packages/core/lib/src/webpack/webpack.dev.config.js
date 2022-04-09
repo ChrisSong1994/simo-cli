@@ -13,13 +13,14 @@ var simo_utils_1 = require("@chrissong/simo-utils");
 var node_notifier_1 = __importDefault(require("node-notifier"));
 var cssLoader_1 = __importDefault(require("./cssLoader"));
 var utils_1 = require("../utils");
+var mock_1 = __importDefault(require("../mock"));
 exports.default = (function (api) {
     api.chainWebpack(function (config) {
         var isDevelopment = api.env.NODE_ENV === 'development';
         if (!isDevelopment)
             return;
-        var simoConfig = api.simoConfig, paths = api.paths;
-        var port = simoConfig.port, host = simoConfig.host, proxy = simoConfig.proxy, browsersList = simoConfig.browsersList, devtool = simoConfig.devtool, tsTypeCheck = simoConfig.tsTypeCheck, fastRefresh = simoConfig.fastRefresh, open = simoConfig.open;
+        var simoConfig = api.simoConfig, paths = api.paths, context = api.context;
+        var port = simoConfig.port, host = simoConfig.host, proxy = simoConfig.proxy, browsersList = simoConfig.browsersList, devtool = simoConfig.devtool, tsTypeCheck = simoConfig.tsTypeCheck, fastRefresh = simoConfig.fastRefresh, open = simoConfig.open, mock = simoConfig.mock;
         var useTypescript = simo_utils_1.fs.existsSync(paths.appTsConfigPath);
         (0, cssLoader_1.default)(config, {
             isProd: false,
@@ -32,6 +33,9 @@ exports.default = (function (api) {
         });
         config.mode('development').devtool(devtool);
         config.devServer
+            .before(function (app) {
+            (0, mock_1.default)(context, app, mock);
+        })
             .contentBase(api.resolve('public'))
             .watchContentBase(true)
             .publicPath('')

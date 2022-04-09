@@ -18,6 +18,7 @@ var schema = joi_1.default.object({
     fastRefresh: joi_1.default.boolean(),
     host: joi_1.default.string(),
     inlineLimit: joi_1.default.number(),
+    mock: joi_1.default.object(),
     pages: joi_1.default.object().required(),
     parallel: joi_1.default.boolean(),
     port: joi_1.default.number().integer().min(0),

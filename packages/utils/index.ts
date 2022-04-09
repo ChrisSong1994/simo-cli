@@ -11,6 +11,12 @@ import clipboardy from 'clipboardy';
 import which from 'which';
 import findProcess from 'find-process';
 import semverGt from 'semver/functions/gt';
+import glob from 'glob';
+import pathToRegexp from 'path-to-regexp'
+import bodyParser from 'body-parser';
+import multer from 'multer'
+import chokidar from 'chokidar'
+import lodash from 'lodash'
 
 import logger from './src/logger';
 import updateNotifier from './src/updateNotifier';
@@ -23,10 +29,16 @@ import hasMultipleCores from './src/hasMultipleCores';
 import errorCapture from './src/errorCapture';
 import copyFiles from './src/copyFiles';
 import rimrafPromify from './src/rimrafPromify';
-import getUserHome from './src/getUserHome'
+import getUserHome from './src/getUserHome';
 
 export {
   fs,
+  glob,
+  pathToRegexp,
+  bodyParser,
+  multer,
+  chokidar,
+  lodash,
   open,
   deepmerge,
   chalk,
@@ -50,5 +62,5 @@ export {
   errorCapture,
   copyFiles,
   rimrafPromify,
-  getUserHome
+  getUserHome,
 };

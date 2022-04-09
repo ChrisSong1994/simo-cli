@@ -14,7 +14,6 @@ yargs_1.default
     .alias('version', 'v')
     .wrap(null)
     .fail(function (msg, err, yargs) {
-    debugger;
     yargs.showHelp();
     console.log(err);
     simo_utils_1.logger.error(msg);

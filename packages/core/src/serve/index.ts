@@ -3,7 +3,7 @@ import path from 'path';
 import fkill from 'fkill';
 import chokidar from 'chokidar';
 import { debounce } from 'lodash';
-import getSimoConfig from '../utils/getSimoConfig';
+import { getSimoConfig, event } from '../utils';
 
 // 创建静态服务
 const createServer = (cli: any) => {
@@ -23,6 +23,17 @@ export default (cli: any, argv: any) => {
   //  创建服务
   let serverprocess = createServer(cli);
 
+  async function updateServer() {
+    logger.log('🚀  检测到配置文件变化,服务正在自动重启...');
+    try {
+      await fkill(serverprocess.pid);
+    } catch (err) {
+      return logger.error((err as Error).toString());
+    }
+
+    serverprocess = createServer(cli);
+  }
+
   // 监听配置文件
   const watcher = chokidar.watch(watchFiles, {
     cwd: cli.cwd,
@@ -31,14 +42,13 @@ export default (cli: any, argv: any) => {
   watcher.on(
     'change',
     debounce(async () => {
-      logger.log('🚀  检测到配置文件变化,服务正在自动重启...');
-      try {
-        await fkill(serverprocess.pid);
-      } catch (err) {
-        return logger.error((err as Error).toString());
-      }
-
-      serverprocess = createServer(cli);
+      updateServer();
     }, 300),
   );
+
+  serverprocess.on('message', (msg: string) => {
+    if (msg === 'SIMO_SERVER_UPDATE') {
+      updateServer();
+    }
+  });
 };

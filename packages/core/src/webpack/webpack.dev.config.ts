@@ -13,14 +13,16 @@ import notifier from 'node-notifier';
 import cssLoader from './cssLoader';
 import { IWebpackConfig } from '../../type';
 import { getProxy } from '../utils';
+import mockServer from '../mock';
 
 export default (api: any) => {
   api.chainWebpack((config: IWebpackConfig) => {
     const isDevelopment = api.env.NODE_ENV === 'development';
     if (!isDevelopment) return;
 
-    const { simoConfig, paths } = api;
-    const { port, host, proxy, browsersList, devtool, tsTypeCheck, fastRefresh, open } = simoConfig;
+    const { simoConfig, paths, context } = api;
+    const { port, host, proxy, browsersList, devtool, tsTypeCheck, fastRefresh, open, mock } =
+      simoConfig;
 
     const useTypescript = fs.existsSync(paths.appTsConfigPath);
 
@@ -44,6 +46,9 @@ export default (api: any) => {
      * devServer
      */
     config.devServer
+      .before((app: any) => {
+        mockServer(context, app, mock);
+      })
       .contentBase(api.resolve('public'))
       .watchContentBase(true) // 检测public下文件变动
       .publicPath('')

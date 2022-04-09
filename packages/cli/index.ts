@@ -10,7 +10,6 @@ yargs
   .alias('version', 'v')
   .wrap(null)
   .fail((msg, err, yargs) => {
-    debugger
     yargs.showHelp();
     console.log(err)
     logger.error(msg);

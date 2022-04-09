@@ -57,6 +57,7 @@ export default {
       },
     },
   },
+  // mock:{path:'',exclude:''}, // 可选：mock数据
   parallel: hasMultipleCores(), // 可选：默认自检 是否使用多核
   browsersList: ['> 1%', 'last 2 versions', 'not ie <= 10'], // 可选: 浏览器规则配置
   extraBabelOptions: {

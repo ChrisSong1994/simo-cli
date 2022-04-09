@@ -180,6 +180,21 @@ module.exports = {
 
 配置图片文件是否走 base64 编译的阈值。默认是 10000 字节，少于他会被编译为 base64 编码，否则会生成单独的文件。
 
+## mock
+
+- Type:`object`
+- Default: `undefined`
+
+默认不开启 mock 功能
+
+```js
+module.exports = {
+  mock: {
+    exclude: ['./mock/ignore'], // 忽略mock文件夹
+  },
+};
+```
+
 ## pages
 
 - Type:`object`
@@ -267,7 +282,7 @@ module.exports = (env) => {
 ## open
 
 - Type: `boolean`
-- Default:`true` 
+- Default:`true`
 
 是否自动打开浏览器
 

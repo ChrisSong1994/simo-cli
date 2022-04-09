@@ -14,6 +14,7 @@ const schema = Joi.object({
   fastRefresh: Joi.boolean(),
   host: Joi.string(),
   inlineLimit: Joi.number(),
+  mock: Joi.object(),
   pages: Joi.object().required(),
   parallel: Joi.boolean(),
   port: Joi.number().integer().min(0),

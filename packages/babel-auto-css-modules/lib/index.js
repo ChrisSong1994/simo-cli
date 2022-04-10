@@ -9,7 +9,7 @@ function default_1() {
                 var opts = _a.opts;
                 var _b = path.node, specifiers = _b.specifiers, source = _b.source;
                 if (specifiers.length && CSS_EXTNAMES.includes((0, path_1.extname)(source.value))) {
-                    source.value = source.value + "?" + (opts.flag || 'modules');
+                    source.value = "".concat(source.value, "?").concat(opts.flag || 'modules');
                 }
             },
         },

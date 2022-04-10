@@ -28,7 +28,7 @@ exports.default = (function (cwd, env) {
         returnRelative: false,
     });
     if (!configFile) {
-        throw new Error(cwd + " \u8DEF\u5F84\u4E0B\u4E0D\u5B58\u5728 simo-cli \u7684\u914D\u7F6E\u6587\u4EF6");
+        throw new Error("".concat(cwd, " \u8DEF\u5F84\u4E0B\u4E0D\u5B58\u5728 simo-cli \u7684\u914D\u7F6E\u6587\u4EF6"));
     }
     var config = require(path_1.default.resolve(cwd, configFile));
     if (typeof config === 'function') {
@@ -39,7 +39,7 @@ exports.default = (function (cwd, env) {
     }
     var _a = (0, verifyConfig_1.default)(config), error = _a.error, value = _a.value;
     if (error) {
-        simo_utils_1.logger.error("\u914D\u7F6E\u9879\u9519\u8BEF:" + error);
+        simo_utils_1.logger.error("\u914D\u7F6E\u9879\u9519\u8BEF:".concat(error));
         process.exit(1);
     }
     else {

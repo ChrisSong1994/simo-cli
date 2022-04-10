@@ -55,7 +55,6 @@ var updateMockData = function (app, mockData) {
     }
 };
 var mock = function (cwd, app, options) {
-    console.log(cwd, app, options);
     if (options) {
         var ignore = __spreadArray([
             'node_modules/**'

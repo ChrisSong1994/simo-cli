@@ -54,7 +54,7 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
                 targetDir = path_1.default.resolve(cli.cwd, argv.name);
                 result = (0, validate_npm_package_name_1.default)(argv.name);
                 if (!result.validForNewPackages) {
-                    console.error(simo_utils_1.chalk.red("Invalid project name: \"" + argv.name + "\""));
+                    console.error(simo_utils_1.chalk.red("Invalid project name: \"".concat(argv.name, "\"")));
                     result.errors &&
                         result.errors.forEach(function (err) {
                             console.error(simo_utils_1.chalk.red.dim('Error: ' + err));
@@ -69,7 +69,7 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
                 return [4, simo_utils_1.inquirer.prompt([
                         {
                             name: 'isOverWrite',
-                            message: "\u5F53\u524D\u6587\u4EF6\u5939\u5DF2\u5B58\u5728" + simo_utils_1.chalk.cyan(argv.name) + ",\u662F\u5426\u8986\u76D6?",
+                            message: "\u5F53\u524D\u6587\u4EF6\u5939\u5DF2\u5B58\u5728".concat(simo_utils_1.chalk.cyan(argv.name), ",\u662F\u5426\u8986\u76D6?"),
                             type: 'confirm',
                             default: true,
                         },
@@ -77,7 +77,7 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
             case 1:
                 isOverWrite = (_a.sent()).isOverWrite;
                 if (!isOverWrite) return [3, 3];
-                simo_utils_1.logger.log("\n\u5220\u9664\u76EE\u5F55 " + simo_utils_1.chalk.cyan(targetDir) + "...");
+                simo_utils_1.logger.log("\n\u5220\u9664\u76EE\u5F55 ".concat(simo_utils_1.chalk.cyan(targetDir), "..."));
                 return [4, simo_utils_1.fs.remove(targetDir)];
             case 2:
                 _a.sent();
@@ -100,10 +100,10 @@ var create = function (cli, argv) { return __awaiter(void 0, void 0, void 0, fun
             case 8: return [4, (0, createSimoApp_1.default)(targetDir, templateParams, pkgParams, pkgManagerParams)];
             case 9:
                 _a.sent();
-                simo_utils_1.logger.log("\uD83C\uDF89  Successfully created project " + simo_utils_1.chalk.yellow(argv.name) + ".");
+                simo_utils_1.logger.log("\uD83C\uDF89  Successfully created project ".concat(simo_utils_1.chalk.yellow(argv.name), "."));
                 simo_utils_1.logger.log("\uD83D\uDC49  Get started with the following commands:\n\n" +
-                    simo_utils_1.chalk.cyan(" " + simo_utils_1.chalk.gray('$') + " cd " + argv.name + "\n") +
-                    simo_utils_1.chalk.cyan(" " + simo_utils_1.chalk.gray('$') + " " + (pkgManagerParams.pkgManager === 'yarn' ? 'yarn serve' : 'npm run serve')));
+                    simo_utils_1.chalk.cyan(" ".concat(simo_utils_1.chalk.gray('$'), " cd ").concat(argv.name, "\n")) +
+                    simo_utils_1.chalk.cyan(" ".concat(simo_utils_1.chalk.gray('$'), " ").concat(pkgManagerParams.pkgManager === 'yarn' ? 'yarn serve' : 'npm run serve')));
                 return [2];
         }
     });

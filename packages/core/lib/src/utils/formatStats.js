@@ -42,7 +42,7 @@ var formatStats = function (stats, dir, api) {
         return (size / 1024).toFixed(2) + ' KiB';
     }
     function makeRow(a, b, c) {
-        return "  " + a + "\t  " + b + "\t " + c;
+        return "  ".concat(a, "\t  ").concat(b, "\t ").concat(c);
     }
     function formatChunks(chunks) {
         return chunks.join(',');
@@ -52,10 +52,10 @@ var formatStats = function (stats, dir, api) {
         assets
             .map(function (asset) {
             return makeRow(/js$/.test(asset.name)
-                ? simo_utils_1.chalk.green(dir + "/" + asset.name)
-                : simo_utils_1.chalk.blue(dir + "/" + asset.name), formatSize(asset.size), formatChunks(Array.from(asset.chunkNames)));
+                ? simo_utils_1.chalk.green("".concat(dir, "/").concat(asset.name))
+                : simo_utils_1.chalk.blue("".concat(dir, "/").concat(asset.name)), formatSize(asset.size), formatChunks(Array.from(asset.chunkNames)));
         })
             .join("\n"));
-    return "\n" + ui.toString() + "\n";
+    return "\n".concat(ui.toString(), "\n");
 };
 exports.default = formatStats;

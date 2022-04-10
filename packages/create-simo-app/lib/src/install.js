@@ -50,8 +50,8 @@ exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, v
     var args, cmd;
     return __generator(this, function (_a) {
         args = PACKAGE_MANAGER_CONFIG[pkgManager];
-        cmd = pkgManager + " " + args.join(' ');
-        simo_utils_1.logger.log("\uD83D\uDE80  \u5B89\u88C5\u9879\u76EE\u4F9D\u8D56 " + simo_utils_1.chalk.cyan(cmd) + "\uFF0C\u8BF7\u7A0D\u7B49...");
+        cmd = "".concat(pkgManager, " ").concat(args.join(' '));
+        simo_utils_1.logger.log("\uD83D\uDE80  \u5B89\u88C5\u9879\u76EE\u4F9D\u8D56 ".concat(simo_utils_1.chalk.cyan(cmd), "\uFF0C\u8BF7\u7A0D\u7B49..."));
         return [2, new Promise(function (resolve, reject) {
                 var child = (0, simo_utils_1.execa)(pkgManager, args, {
                     cwd: targetDir,
@@ -73,7 +73,7 @@ exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, v
                 }
                 child.on('close', function (code) {
                     if (code !== 0) {
-                        reject("pkgManager failed: " + pkgManager + " " + args.join(' '));
+                        reject("pkgManager failed: ".concat(pkgManager, " ").concat(args.join(' ')));
                         return;
                     }
                     resolve();
@@ -83,14 +83,14 @@ exports.default = (function (targetDir, pkgManager) { return __awaiter(void 0, v
 }); });
 function renderProgressBar(curr, total) {
     var ratio = Math.min(Math.max(curr / total, 0), 1);
-    var bar = " " + curr + "/" + total;
+    var bar = " ".concat(curr, "/").concat(total);
     var availableSpace = Math.max(0, process.stderr.columns - bar.length - 3);
     var width = Math.min(total, availableSpace);
     var completeLength = Math.round(width * ratio);
     var complete = '#'.repeat(completeLength);
     var incomplete = '-'.repeat(width - completeLength);
     toStartOfLine(process.stderr);
-    process.stderr.write("[" + complete + incomplete + "]" + bar);
+    process.stderr.write("[".concat(complete).concat(incomplete, "]").concat(bar));
 }
 function toStartOfLine(stream) {
     if (!simo_utils_1.chalk.supportsColor) {

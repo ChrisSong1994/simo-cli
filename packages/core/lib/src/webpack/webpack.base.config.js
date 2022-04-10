@@ -182,8 +182,8 @@ exports.default = (function (api) {
                     config.entry(key).add(api.resolve(entry));
                 }
                 if (template) {
-                    config.plugin("html-template-" + key).use(html_webpack_plugin_1.default, [
-                        __assign(__assign({ filename: key + ".html", template: api.resolve(template), inject: true, chunks: [key] }, htmlWebpackPluginOptions), { alwaysWriteToDisk: true }),
+                    config.plugin("html-template-".concat(key)).use(html_webpack_plugin_1.default, [
+                        __assign(__assign({ filename: "".concat(key, ".html"), template: api.resolve(template), inject: true, chunks: [key] }, htmlWebpackPluginOptions), { alwaysWriteToDisk: true }),
                     ]);
                 }
             };

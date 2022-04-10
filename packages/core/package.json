@@ -1,6 +1,6 @@
 {
   "name": "@chrissong/simo-core",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.0.0",
     "@chrissong/babel-preset-simo": "^0.0.2",
-    "@chrissong/simo-utils": "^0.0.4",
+    "@chrissong/simo-utils": "^0.0.6",
     "autoprefixer": "9.8.6",
     "babel-eslint": "^10.0.0",
     "babel-loader": "^8.2.2",
@@ -64,12 +64,12 @@
     "thread-loader": "^3.0.1",
     "type-fest": "^1.0.2",
     "url-loader": "^4.1.1",
-    "webpack": "^5.47.0",
+    "webpack": "5.47.0",
     "webpack-build-notifier": "^2.2.1",
     "webpack-bundle-analyzer": "^4.4.0",
     "webpack-chain": "^6.5.1",
     "webpack-dev-server": "3.11.2",
-    "webpackbar": "^5.0.2",
+    "webpackbar": "5.0.0-3",
     "yargs": "^16.1.0"
   },
   "devDependencies": {

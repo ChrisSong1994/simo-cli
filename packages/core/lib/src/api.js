@@ -120,7 +120,7 @@ var Api = (function () {
                 return require(pkg);
             }
             catch (e) {
-                simo_utils_1.logger.error("\u8BFB\u53D6 " + pkg + " \u5931\u8D25");
+                simo_utils_1.logger.error("\u8BFB\u53D6 ".concat(pkg, " \u5931\u8D25"));
                 return {};
             }
         }
@@ -137,7 +137,7 @@ var Api = (function () {
                 return require(id).default;
             }
             catch (err) {
-                simo_utils_1.logger.error("\u63D2\u4EF6 " + id + " \u52A0\u8F7D\u5931\u8D25");
+                simo_utils_1.logger.error("\u63D2\u4EF6 ".concat(id, " \u52A0\u8F7D\u5931\u8D25"));
                 throw err;
             }
         });

@@ -101,7 +101,7 @@ var Cli = (function () {
             return require(pkgPath);
         }
         catch (err) {
-            simo_utils_1.logger.error("\u8BFB\u53D6" + pkgPath + "\u5931\u8D25\uFF01");
+            simo_utils_1.logger.error("\u8BFB\u53D6".concat(pkgPath, "\u5931\u8D25\uFF01"));
             return {};
         }
     };
@@ -134,7 +134,7 @@ var Cli = (function () {
     Cli.prototype.processMonitor = function () {
         var _this = this;
         var handleExit = function (signal) {
-            simo_utils_1.logger.done("\uD83D\uDE4B \u63A5\u53D7\u5230\u4FE1\u53F7\uFF1A" + signal + " \u5373\u5C06\u9000\u51FA\u7A0B\u5E8F...");
+            simo_utils_1.logger.done("\uD83D\uDE4B \u63A5\u53D7\u5230\u4FE1\u53F7\uFF1A".concat(signal, " \u5373\u5C06\u9000\u51FA\u7A0B\u5E8F..."));
             _this.subprocess.forEach(function (subprocess) {
                 if (!subprocess.killed)
                     subprocess.kill();
@@ -151,10 +151,10 @@ var Cli = (function () {
         }
         var name = cmd.split(/\s+/)[0];
         if (!/^[\w]+$/.test(name)) {
-            throw new Error("\u547D\u4EE4\u540D\u79F0 " + chalk_1.default.redBright(name) + " \u4E0D\u5408\u6CD5\uFF0C\u53EA\u80FD\u662F\u5B57\u6BCD\u3001\u6570\u5B57\u3001\u4E0B\u5212\u7EBF");
+            throw new Error("\u547D\u4EE4\u540D\u79F0 ".concat(chalk_1.default.redBright(name), " \u4E0D\u5408\u6CD5\uFF0C\u53EA\u80FD\u662F\u5B57\u6BCD\u3001\u6570\u5B57\u3001\u4E0B\u5212\u7EBF"));
         }
         if (this.commands[name]) {
-            throw new Error("\u547D\u4EE4 " + chalk_1.default.redBright(name) + " \u5DF2\u7ECF\u88AB\u5360\u7528");
+            throw new Error("\u547D\u4EE4 ".concat(chalk_1.default.redBright(name), " \u5DF2\u7ECF\u88AB\u5360\u7528"));
         }
         yargs_1.default.command.apply(yargs_1.default, __spreadArray([cmd, desc], args, false));
         this.commands[name] = __assign({ cmd: cmd, desc: desc }, args);

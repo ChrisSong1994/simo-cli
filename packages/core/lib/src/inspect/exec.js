@@ -53,13 +53,13 @@ exports.default = (function (options) { return __awaiter(void 0, void 0, void 0,
                 config = _a.sent();
                 result = JSON.stringify(config, undefined, 2);
                 if (!options.argv.filename) return [3, 9];
-                targetFile = api.resolve(options.argv.filename + ".json");
+                targetFile = api.resolve("".concat(options.argv.filename, ".json"));
                 if (!simo_utils_1.fs.existsSync(targetFile)) return [3, 6];
                 simo_utils_1.spinner.pause();
                 return [4, simo_utils_1.inquirer.prompt([
                         {
                             name: 'isOverWrite',
-                            message: "\u5F53\u524D\u6587\u4EF6\u5939\u5DF2\u5B58\u5728" + simo_utils_1.chalk.cyan(options.argv.filename + ".json") + ",\u662F\u5426\u8986\u76D6?",
+                            message: "\u5F53\u524D\u6587\u4EF6\u5939\u5DF2\u5B58\u5728".concat(simo_utils_1.chalk.cyan("".concat(options.argv.filename, ".json")), ",\u662F\u5426\u8986\u76D6?"),
                             type: 'confirm',
                             default: true,
                         },

@@ -11,15 +11,8 @@ export default (api: any) => {
   api.chainWebpack(async (config: IWebpackConfig) => {
     if (api.mode !== 'production') return;
 
-    const {
-      copyPath,
-      output,
-      publicPath,
-      browsersList,
-      parallel,
-      cssExtract,
-      externals,
-    } = api.simoConfig;
+    const { copyPath, output, publicPath, browsersList, parallel, cssExtract, externals } =
+      api.simoConfig;
 
     // 加载样式
     cssLoader(config, {
@@ -131,8 +124,8 @@ export default (api: any) => {
     /**
      * 压缩js
      */
-    // @ts-ignore
     config.optimization.minimizer('terser').use(TerserPlugin, [
+      // @ts-ignore
       {
         parallel: parallel,
         extractComments: false,

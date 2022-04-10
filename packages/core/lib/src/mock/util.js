@@ -51,7 +51,7 @@ function parseKey(key) {
         method = splited[0].toLowerCase();
         path = splited[1];
     }
-    (0, assert_1.default)(VALID_METHODS.includes(method), "Invalid method " + method + " for path " + path + ", please check your mock files.");
+    (0, assert_1.default)(VALID_METHODS.includes(method), "Invalid method ".concat(method, " for path ").concat(path, ", please check your mock files."));
     return {
         method: method,
         path: path,
@@ -86,7 +86,7 @@ var normalizeConfig = function (config) {
     return Object.keys(config).reduce(function (memo, key) {
         var handler = config[key];
         var type = typeof handler;
-        (0, assert_1.default)(type === 'function' || type === 'object', "mock value of " + key + " should be function or object, but got " + type);
+        (0, assert_1.default)(type === 'function' || type === 'object', "mock value of ".concat(key, " should be function or object, but got ").concat(type));
         var _a = parseKey(key), method = _a.method, path = _a.path;
         var keys = [];
         var re = (0, simo_utils_1.pathToRegexp)(path, keys);

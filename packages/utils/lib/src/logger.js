@@ -7,7 +7,7 @@ var chalk_1 = __importDefault(require("chalk"));
 var format = function (label, msg) {
     return msg
         .split('\n')
-        .map(function (line, i) { return (i === 0 ? label + " " + line : line.padStart(chalk_1.default.reset(label).length)); })
+        .map(function (line, i) { return (i === 0 ? "".concat(label, " ").concat(line) : line.padStart(chalk_1.default.reset(label).length)); })
         .join('\n');
 };
 var log = function (msg) {

@@ -60,7 +60,7 @@ var simo_utils_1 = require("@chrissong/simo-utils");
 var copyTpl = function (cwd, params) {
     var tpl = simo_utils_1.fs.readFileSync(params.templatePath, 'utf-8');
     var content = mustache_1.default.render(tpl, params.context);
-    console.log(simo_utils_1.chalk.green('Write:') + " " + path_1.default.relative(cwd, params.target));
+    console.log("".concat(simo_utils_1.chalk.green('Write:'), " ").concat(path_1.default.relative(cwd, params.target)));
     simo_utils_1.fs.writeFileSync(params.target, content, 'utf-8');
 };
 exports.copyTpl = copyTpl;
@@ -88,7 +88,7 @@ var copyDirectory = function (params) {
                 });
             }
             else {
-                console.log(simo_utils_1.chalk.green('Copy: ') + " " + file);
+                console.log("".concat(simo_utils_1.chalk.green('Copy: '), " ").concat(file));
                 simo_utils_1.fs.copyFileSync(absFile, absTarget);
             }
         }
@@ -110,11 +110,11 @@ var pullProject = function (params) { return __awaiter(void 0, void 0, void 0, f
                         (0, git_clone_1.default)(repository, tmpdir, function (err) {
                             simo_utils_1.spinner.stop();
                             if (!err) {
-                                simo_utils_1.logger.done("\u514B\u9686\u6A21\u677F " + simo_utils_1.chalk.yellow(repository + ")") + " \u6210\u529F");
+                                simo_utils_1.logger.done("\u514B\u9686\u6A21\u677F ".concat(simo_utils_1.chalk.yellow("".concat(repository, ")")), " \u6210\u529F"));
                                 return resolve(tmpdir);
                             }
                             else {
-                                simo_utils_1.logger.error("\u514B\u9686\u6A21\u677F " + simo_utils_1.chalk.yellow(repository + ")") + " \u5931\u8D25");
+                                simo_utils_1.logger.error("\u514B\u9686\u6A21\u677F ".concat(simo_utils_1.chalk.yellow("".concat(repository, ")")), " \u5931\u8D25"));
                                 return reject(err);
                             }
                         });

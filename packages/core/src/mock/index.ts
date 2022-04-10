@@ -14,7 +14,6 @@ const updateMockData = (app: any, mockData: any[]) => {
  * *
  */
 const mock = (cwd: string, app: any, options: any) => {
-  console.log(cwd, app, options);
   if (options) {
     const ignore = [
       // ignore mock files under node_modules

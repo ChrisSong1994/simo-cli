@@ -56,7 +56,7 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
             case 2:
                 result = _a.sent();
                 if (result.length) {
-                    simo_utils_1.logger.warn("\u26D4 \u7AEF\u53E3\u53F7 " + simo_utils_1.chalk.underline(config.devServer.port) + " \u88AB\u5360\u7528\uFF0C\u8BF7\u4FEE\u6539\u7AEF\u53E3\u53F7\uFF01");
+                    simo_utils_1.logger.warn("\u26D4 \u7AEF\u53E3\u53F7 ".concat(simo_utils_1.chalk.underline(config.devServer.port), " \u88AB\u5360\u7528\uFF0C\u8BF7\u4FEE\u6539\u7AEF\u53E3\u53F7\uFF01"));
                     return [2, Promise.reject()];
                 }
                 return [2, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
@@ -70,11 +70,11 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
                                     return reject(err);
                                 resolve(null);
                                 if (api.argv.open) {
-                                    (0, simo_utils_1.open)("http://" + config.devServer.host + ":" + config.devServer.port);
+                                    (0, simo_utils_1.open)("http://".concat(config.devServer.host, ":").concat(config.devServer.port));
                                 }
                                 else {
-                                    var localUrl = "http://" + config.devServer.host + ":" + config.devServer.port;
-                                    var lanUrl = "http://" + simo_utils_1.address.ip() + ":" + config.devServer.port;
+                                    var localUrl = "http://".concat(config.devServer.host, ":").concat(config.devServer.port);
+                                    var lanUrl = "http://".concat(simo_utils_1.address.ip(), ":").concat(config.devServer.port);
                                     var copied = '';
                                     try {
                                         simo_utils_1.clipboardy.writeSync(localUrl);
@@ -83,7 +83,7 @@ var server = function (options) { return __awaiter(void 0, void 0, void 0, funct
                                     catch (e) {
                                         copied = simo_utils_1.chalk.red("(copy to clipboard failed)");
                                     }
-                                    simo_utils_1.logger.log("\n      App running at:\n       - Local: " + simo_utils_1.chalk.cyan(localUrl) + " " + copied + "\n       " + (isDefaultHost ? " - Network: " + simo_utils_1.chalk.cyan(lanUrl) + " \n" : '') + "\n      Note that the development build is not optimized.\n      To create a production build, use " + simo_utils_1.chalk.cyan((0, simo_utils_1.hasYarn)() ? 'yarn build' : 'npm build') + ".\n        ");
+                                    simo_utils_1.logger.log("\n      App running at:\n       - Local: ".concat(simo_utils_1.chalk.cyan(localUrl), " ").concat(copied, "\n       ").concat(isDefaultHost ? " - Network: ".concat(simo_utils_1.chalk.cyan(lanUrl), " \n") : '', "\n      Note that the development build is not optimized.\n      To create a production build, use ").concat(simo_utils_1.chalk.cyan((0, simo_utils_1.hasYarn)() ? 'yarn build' : 'npm build'), ".\n        "));
                                 }
                             });
                             return [2];

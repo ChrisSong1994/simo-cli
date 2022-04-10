@@ -80,7 +80,7 @@ var template = function (cli, argv) { return __awaiter(void 0, void 0, void 0, f
         };
         addTemplate = function () {
             if (lodash_1.default.find(templatesData, { name: name })) {
-                return simo_utils_1.logger.error("The template named " + simo_utils_1.chalk.red(name) + " is exist!");
+                return simo_utils_1.logger.error("The template named ".concat(simo_utils_1.chalk.red(name), " is exist!"));
             }
             else {
                 templatesData.push({
@@ -92,22 +92,22 @@ var template = function (cli, argv) { return __awaiter(void 0, void 0, void 0, f
                 simo_utils_1.fs.writeFileSync(templateStorePath, JSON.stringify(templatesData, null, 2), {
                     encoding: 'utf8',
                 });
-                simo_utils_1.logger.done("The template named " + simo_utils_1.chalk.green(name) + " has been added!");
+                simo_utils_1.logger.done("The template named ".concat(simo_utils_1.chalk.green(name), " has been added!"));
             }
         };
         removeTemplate = function () {
             if (!lodash_1.default.find(templatesData, { name: name })) {
-                return simo_utils_1.logger.error("The template named " + simo_utils_1.chalk.red(name) + " is not exist!");
+                return simo_utils_1.logger.error("The template named ".concat(simo_utils_1.chalk.red(name), " is not exist!"));
             }
             if (lodash_1.default.find(templatesData, { name: name }).isBuiltIn) {
-                return simo_utils_1.logger.warn("The template named " + simo_utils_1.chalk.yellow(name) + " is built template,can`t be remove!");
+                return simo_utils_1.logger.warn("The template named ".concat(simo_utils_1.chalk.yellow(name), " is built template,can`t be remove!"));
             }
             else {
                 var newTemplatesData = templatesData.filter(function (v) { return v.name !== name; });
                 simo_utils_1.fs.writeFileSync(templateStorePath, JSON.stringify(newTemplatesData, null, 2), {
                     encoding: 'utf8',
                 });
-                simo_utils_1.logger.done("The template named " + simo_utils_1.chalk.yellow(name) + " has been removed!");
+                simo_utils_1.logger.done("The template named ".concat(simo_utils_1.chalk.yellow(name), " has been removed!"));
             }
         };
         switch (action) {

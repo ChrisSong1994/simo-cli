@@ -51,7 +51,7 @@ var createSimoApp = function (targetDir, tplParams, pkgParams, pkgManagerParams)
                 pkgManager = pkgManagerParams.pkgManager;
                 if (!isBuiltIn) return [3, 1];
                 (0, generator_1.copyDirectory)({
-                    path: path_1.default.resolve(__dirname, "../../" + repository),
+                    path: path_1.default.resolve(__dirname, "../../".concat(repository)),
                     context: { pkgParams: pkgParams },
                     target: targetDir,
                 });

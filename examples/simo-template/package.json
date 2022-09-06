@@ -4,7 +4,8 @@
   "description": "ss",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "simo build -r",
+    "build:analyze": "simo build -r"
   },
   "author": "",
   "license": "ISC",

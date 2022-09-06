@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksimo_tmp=self.webpackChunksimo_tmp||[]).push([[278],{278:function(e,t,n){n.r(t),n.d(t,{default:function(){return s}});var r=n(804),i=n.n(r);function s(){return i().createElement("h3",null,"查看 @chrissong/simo-cli 配置项请",i().createElement("a",{target:"_blank",rel:"noreferrer",href:'"https://github.com/ChrisSong1994/simo-cli"'},"前往"))}}}]);

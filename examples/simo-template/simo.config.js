@@ -40,6 +40,12 @@ const simoConfig = (env) => {
         },
       },
     },
+    externals: {
+      react: "React",
+      "react-dom": "ReactDOM",
+      moment: "moment",
+      antd: "antd",
+    },
     chainWebpack: (config) => {
       // 可选：webpack 链式配置回调
       // 删除插件
